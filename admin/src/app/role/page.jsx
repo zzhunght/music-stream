@@ -1,9 +1,9 @@
 import React from 'react'
 
-function page() {
+function Role() {
   return (
     <div>Role</div>
   )
 }
 
-export default page
+export default Role

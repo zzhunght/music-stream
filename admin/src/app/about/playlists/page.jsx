@@ -1,9 +1,9 @@
 import React from 'react'
 
-function page() {
+function Playlists() {
   return (
     <div>Playlists</div>
   )
 }
 
-export default page
+export default Playlists

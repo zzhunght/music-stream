@@ -1,9 +1,9 @@
 import React from 'react'
 
-function page() {
+function Analytics() {
   return (
     <div>Analytics</div>
   )
 }
 
-export default page
+export default Analytics

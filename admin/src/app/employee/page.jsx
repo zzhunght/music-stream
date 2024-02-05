@@ -1,4 +1,4 @@
-const page = () => {
+const Employee = () => {
     return (
         <>
             Employee
@@ -6,4 +6,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Employee;

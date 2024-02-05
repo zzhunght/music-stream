@@ -1,4 +1,4 @@
-const page = () => {
+const Account = () => {
     return (
         <>
             Account
@@ -6,4 +6,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Account;

@@ -1,9 +1,9 @@
 import React from 'react'
 
-function page() {
+function Albums() {
   return (
     <div>Albums</div>
   )
 }
 
-export default page
+export default Albums

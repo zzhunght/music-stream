@@ -72,6 +72,9 @@ const personalMenus = [
 ]
 
 const Sidebar = () => {
+
+
+
     return (
         <div className='fixed top-0 left-0 bg-[#ECEEF2] w-64 h-screen shadow-lg z-10'>
             <div className='flex flex-col space-y-5'>
