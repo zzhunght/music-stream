@@ -18,6 +18,11 @@ module.exports = {
     },
     extend: {
       colors: {
+        sidebar: {
+          active: "#8A2BE2",
+          background: "#CDCBDA",
+          iconColor: "",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

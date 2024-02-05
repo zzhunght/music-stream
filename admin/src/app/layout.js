@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +17,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
           <ThemeProvider attribute='class' defaultTheme='light'>
-            <div className="flex">
+            <div className="flex h-screen w-full h-full">
               <Sidebar/>
-              <div className="flex-col w-[100%]">
+              <div className="flex flex-col w-full h-full ml-64 p-4">
                 <Header/>
                 {children}
               </div>
