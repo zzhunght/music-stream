@@ -1,9 +1,8 @@
 'use client';
 
-import Logo from '../Logo'
-
-import { LayoutDashboard, Disc, User, UserCog, LayoutTemplate, ScatterChart } from 'lucide-react'
+import { LayoutDashboard, Disc, User, UserCog, LayoutTemplate, ScatterChart, Settings } from 'lucide-react'
 import SidebarItem from './SidebarItem'
+import AvatarCard from '../avatarcard/AvatarCard';
 
 const itemsMenu = [
     {
@@ -43,6 +42,10 @@ const itemsMenu = [
         path: '/account',
         icon: User
     },
+    
+]
+
+const advancedMenus = [
     {
         name: 'Employee',
         path: '/employee',
@@ -60,16 +63,39 @@ const itemsMenu = [
     },
 ]
 
+const personalMenus = [
+    {
+        name: 'Settings',
+        path: '/settings',
+        icon: Settings,
+    },
+]
+
 const Sidebar = () => {
     return (
         <div className='fixed top-0 left-0 bg-[#ECEEF2] w-64 h-screen shadow-lg z-10'>
-            <div className='flex flex-col space-y-10'>
-                <div className='w-full flex justify-center items-center'>
-                    <Logo/>
+            <div className='flex flex-col space-y-5'>
+                <div className='w-full flex justify-between items-center h-[80px]'>
+                    <AvatarCard/>
                 </div>
                 
                 <div className='flex flex-col space-y-1'>
+                    <p className='text-xs ml-5 text-sidebar-color'>
+                        Common
+                    </p>
                     {itemsMenu.map((item) => (
+                        <SidebarItem key={item.path} item={item}/>
+                    ))}
+                    <p className='text-xs ml-5 text-sidebar-color'>
+                        Advanced
+                    </p>
+                    {advancedMenus.map((item) => (
+                        <SidebarItem key={item.path} item={item}/>
+                    ))}
+                    <p className='text-xs ml-5 text-sidebar-color'>
+                        Personal
+                    </p>
+                    {personalMenus.map((item) => (
                         <SidebarItem key={item.path} item={item}/>
                     ))}
                 </div>

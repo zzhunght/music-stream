@@ -22,6 +22,7 @@ module.exports = {
           active: "#8A2BE2",
           background: "#CDCBDA",
           iconColor: "",
+          color: "rgba(8, 36, 49, 70%)"
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -40,7 +40,7 @@ const SidebarItem = props => {
                 onClick={onClick}
             >
                 <div className="flex items-center space-x-2">
-                    <Icon size={28}/>
+                    <Icon size={24}/>
                     <p className={`text-sm ${isActive && "font-semibold"}`}>
                         {name}
                     </p>
@@ -55,7 +55,7 @@ const SidebarItem = props => {
             {expanded && 
                 items &&
                 items.length > 0 &&
-                <div className="flex flex-col space-y-4 ml-10">
+                <div className="flex flex-col space-y-4 ml-[52px]">
                     {items.map(item => (
                         <SubmenuItem key={item.path} item={item}/>
                     ))}

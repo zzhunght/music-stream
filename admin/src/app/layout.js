@@ -17,14 +17,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
           <ThemeProvider attribute='class' defaultTheme='light'>
-            <div className="flex h-screen w-full h-full">
+            <div className="flex h-screen w-full">
               <Sidebar/>
               <div className="flex flex-col w-full h-full ml-64 p-4">
                 <Header/>
                 {children}
+                <Footer/>
               </div>
             </div>
-              <Footer/>
           </ThemeProvider>
         </body>
     </html>
