@@ -20,8 +20,8 @@ export default function RootLayout({ children }) {
             <div className="flex h-screen w-full">
               <Sidebar/>
               <div className="flex flex-col w-full h-full ml-64 p-4">
-                <Header/>
-                {children}
+                {/* <Header/> */}
+                <div className="p-10">{children}</div>
                 <Footer/>
               </div>
             </div>
