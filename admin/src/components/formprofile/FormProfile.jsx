@@ -1,3 +1,4 @@
+import SaveCancel from "../savecancel/SaveCancel";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -49,14 +50,7 @@ const FormProfile = () => {
                     <Input type="password" id="password" placeholder="Password" />
                 </div>
             </div>
-            <div className="flex items-start space-x-6">
-                <Button variant="destructive">
-                    Cancel
-                </Button>
-                <Button variant="save">
-                    Save
-                </Button>
-            </div>
+            <SaveCancel/>
         </form>
     )
 }
