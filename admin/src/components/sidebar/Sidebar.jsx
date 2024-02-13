@@ -20,8 +20,8 @@ const itemsMenu = [
                 path: '/about'
             },
             {
-                name: 'Authors',
-                path: '/about/authors'
+                name: 'Artists',
+                path: '/about/artists'
             },
             {
                 name: 'Categories',
