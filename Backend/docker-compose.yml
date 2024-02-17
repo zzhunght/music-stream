@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  postgres:
+    container_name: postgres_music
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: music123
+      POSTGRES_DB: music_app
+      PGDATA: /data/postgres
+    volumes:
+       - postgres-db:/data/postgres
+    ports:
+      - "5434:5432"
+
+
+volumes:
+  postgres-db:
+    driver: local
