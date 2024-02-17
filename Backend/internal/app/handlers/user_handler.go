@@ -173,3 +173,7 @@ func ResendOTP(c *gin.Context) {
 	}
 
 }
+
+func Login(c *gin.Context) {
+
+}
