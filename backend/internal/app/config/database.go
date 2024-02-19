@@ -9,10 +9,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-var DB *sqlc.Queries
 var conn *pgx.Conn
 
-func InitDB() {
+func InitDB() (DB *sqlc.Queries) {
 
 	ctx := context.Background()
 	conn, err := pgx.Connect(ctx, "postgresql://postgres:music123@localhost:5434/music_app")
@@ -24,6 +23,7 @@ func InitDB() {
 		log.Fatal("Failed to ping database:", err)
 	}
 	fmt.Println("Connected to database successfully.")
+	return DB
 }
 
 func CloseDB() {

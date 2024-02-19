@@ -1,9 +1,8 @@
-package handlers
+package api
 
 import (
 	"fmt"
-	"music-app-backend/internal/app/config"
-	"music-app-backend/internal/app/utils"
+	"music-app-backend/internal/app/helper"
 	"music-app-backend/sqlc"
 	"time"
 
@@ -41,7 +40,7 @@ func ListUsers(c *gin.Context) {
 	})
 }
 
-func Register(c *gin.Context) {
+func (s *Server) Register(c *gin.Context) {
 	var requestBody RegisterRequest
 	// Đọc dữ liệu từ body của request và gán vào biến requestBody
 	err := c.BindJSON(&requestBody)
@@ -85,8 +84,8 @@ func Register(c *gin.Context) {
 			Valid:  true,
 		},
 	}
-	utils.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
-	new_acc, err := config.DB.CreateAccount(c, form)
+	s.mailsender.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
+	new_acc, err := s.store.CreateAccount(c, form)
 	if err != nil {
 		// Xử lý lỗi nếu có
 		c.JSON(400, gin.H{
@@ -102,7 +101,7 @@ func Register(c *gin.Context) {
 
 }
 
-func VerifyOTP(c *gin.Context) {
+func (s *Server) VerifyOTP(c *gin.Context) {
 	var requestBody VerifyOTPRequest
 
 	err := c.BindJSON(&requestBody)
@@ -118,7 +117,7 @@ func VerifyOTP(c *gin.Context) {
 		})
 	}
 
-	key, err := config.DB.GetSecretKey(c, requestBody.Email)
+	key, err := s.store.GetSecretKey(c, requestBody.Email)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": err.Error(),
@@ -137,7 +136,7 @@ func VerifyOTP(c *gin.Context) {
 
 }
 
-func ResendOTP(c *gin.Context) {
+func (s *Server) ResendOTP(c *gin.Context) {
 	var requestBody ResendOTPRequest
 
 	err := c.BindJSON(&requestBody)
@@ -153,7 +152,7 @@ func ResendOTP(c *gin.Context) {
 		})
 	}
 
-	key, err := config.DB.GetSecretKey(c, requestBody.Email)
+	key, err := s.store.GetSecretKey(c, requestBody.Email)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": err.Error(),
@@ -164,7 +163,7 @@ func ResendOTP(c *gin.Context) {
 	fmt.Println("OTP", otp)
 	fmt.Println("KEY", key.String)
 	fmt.Println("valid", valid)
-	utils.SendMailOTP(requestBody.Email, "Mã OTP xác thực của bạn là : "+otp)
+	s.mailsender.SendMailOTP(requestBody.Email, "Mã OTP xác thực của bạn là : "+otp)
 	if valid {
 		c.JSON(200, gin.H{
 			"message": "Xác thực thành công",
@@ -174,6 +173,34 @@ func ResendOTP(c *gin.Context) {
 
 }
 
-func Login(c *gin.Context) {
+func (s *Server) Login(c *gin.Context) {
+	var requestBody LoginRequest
 
+	err := c.BindJSON(&requestBody)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "Invalid login request",
+		})
+	}
+
+	if requestBody.Email == "" || requestBody.Password == "" {
+		c.JSON(400, gin.H{
+			"error": "Invalid login request",
+		})
+	}
+
+	acc, _ := s.store.GetAccount(c, requestBody.Email)
+
+	validate := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(requestBody.Password))
+	if validate != nil {
+		c.JSON(400, gin.H{
+			"error": "Incorrect username or password",
+		})
+	}
+	access_token, _ := helper.CreateToken(acc.Email)
+	c.JSON(200, gin.H{
+		"message": "Login successful",
+		"data":    acc,
+		"token":   access_token,
+	})
 }
