@@ -13,7 +13,7 @@ type Account struct {
 	Name      string           `json:"name"`
 	Email     string           `json:"email"`
 	Password  string           `json:"password"`
-	RoleID    pgtype.Int4      `json:"role_id"`
+	RoleID    int32            `json:"role_id"`
 	SecretKey pgtype.Text      `json:"secret_key"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
@@ -85,7 +85,7 @@ type PlaylistSong struct {
 
 type Role struct {
 	ID        int32            `json:"id"`
-	Name      pgtype.Text      `json:"name"`
+	Name      string           `json:"name"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
 }

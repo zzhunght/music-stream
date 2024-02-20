@@ -11,14 +11,19 @@ type MailSender struct {
 	mail *gomail.Dialer
 }
 
-func NewMailSender() *MailSender {
+func NewMailSender(config *Config) *MailSender {
 	return &MailSender{
-		mail: ConfigMail(),
+		mail: ConfigMail(config),
 	}
 }
 
-func ConfigMail() *gomail.Dialer {
-	d := gomail.NewDialer("smtp.gmail.com", 587, "hung18072002ht@gmail.com", "lrobejftgpgmjqez")
+func ConfigMail(config *Config) *gomail.Dialer {
+	d := gomail.NewDialer(
+		config.MailSenderHost,
+		config.MailSenderPort,
+		config.MailSenderUsername,
+		config.MailSenderPassword,
+	)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	return d
 }

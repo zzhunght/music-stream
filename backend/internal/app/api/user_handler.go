@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"music-app-backend/internal/app/helper"
 	"music-app-backend/sqlc"
 	"time"
 
@@ -197,7 +196,8 @@ func (s *Server) Login(c *gin.Context) {
 			"error": "Incorrect username or password",
 		})
 	}
-	access_token, _ := helper.CreateToken(acc.Email)
+	access_token, _ := s.token_maker.CreateToken(acc.Email, acc.Role)
+
 	c.JSON(200, gin.H{
 		"message": "Login successful",
 		"data":    acc,

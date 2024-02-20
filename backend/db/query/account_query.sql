@@ -21,6 +21,6 @@ SELECT secret_key FROM accounts
 WHERE email = $1 LIMIT 1;
 
 -- name: GetAccount :one
-SELECT * FROM accounts WHERE email = $1;
+SELECT a.*,r."name" as role  FROM accounts a INNER JOIN roles r ON a.role_id = r.id WHERE email = $1;
 
 

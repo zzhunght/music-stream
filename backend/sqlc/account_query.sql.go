@@ -70,12 +70,24 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (C
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT id, name, email, password, role_id, secret_key, created_at, updated_at FROM accounts WHERE email = $1
+SELECT a.id, a.name, a.email, a.password, a.role_id, a.secret_key, a.created_at, a.updated_at,r."name" as role  FROM accounts a INNER JOIN roles r ON a.role_id = r.id WHERE email = $1
 `
 
-func (q *Queries) GetAccount(ctx context.Context, email string) (Account, error) {
+type GetAccountRow struct {
+	ID        int32            `json:"id"`
+	Name      string           `json:"name"`
+	Email     string           `json:"email"`
+	Password  string           `json:"password"`
+	RoleID    int32            `json:"role_id"`
+	SecretKey pgtype.Text      `json:"secret_key"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+	Role      string           `json:"role"`
+}
+
+func (q *Queries) GetAccount(ctx context.Context, email string) (GetAccountRow, error) {
 	row := q.db.QueryRow(ctx, getAccount, email)
-	var i Account
+	var i GetAccountRow
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
@@ -85,6 +97,7 @@ func (q *Queries) GetAccount(ctx context.Context, email string) (Account, error)
 		&i.SecretKey,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Role,
 	)
 	return i, err
 }

@@ -11,10 +11,10 @@ import (
 
 var conn *pgx.Conn
 
-func InitDB() (DB *sqlc.Queries) {
+func InitDB(dns string) (DB *sqlc.Queries) {
 
 	ctx := context.Background()
-	conn, err := pgx.Connect(ctx, "postgresql://postgres:music123@localhost:5434/music_app")
+	conn, err := pgx.Connect(ctx, dns)
 	if err != nil {
 		log.Fatal(err)
 	}
