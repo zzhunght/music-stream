@@ -2,7 +2,9 @@ package api
 
 import (
 	"fmt"
+	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/sqlc"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -202,5 +204,15 @@ func (s *Server) Login(c *gin.Context) {
 		"message": "Login successful",
 		"data":    acc,
 		"token":   access_token,
+	})
+}
+
+func (s *Server) GetUser(c *gin.Context) {
+
+	authPayload := c.MustGet(api.AuthorizationPayloadKey)
+	fmt.Print(authPayload)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": authPayload,
 	})
 }

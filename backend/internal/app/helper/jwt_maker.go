@@ -44,7 +44,7 @@ func (t *Token) CreateToken(email string, role string) (string, error) {
 		Role:      role,
 		Email:     email,
 		IssuedAt:  time.Now(),
-		ExpiredAt: time.Now().Add(60 * time.Minute),
+		ExpiredAt: time.Now(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, new_payload)
 	tokenString, err := token.SignedString([]byte(t.secret_key))
@@ -68,6 +68,15 @@ func (t *Token) VerifyToken(token string) (*TokenPayload, error) {
 		fmt.Println(err)
 	}
 	claims, ok := jwt_token.Claims.(*TokenPayload)
+
+	expired := claims.Valid()
+	if !ok {
+		return nil, ErrInvalidToken
+	}
+	if expired != nil {
+		return nil, expired
+	}
+
 	if ok {
 		fmt.Println(claims.Email, claims.RegisteredClaims.Issuer)
 	} else {
