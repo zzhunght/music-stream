@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 var (
@@ -19,6 +20,7 @@ type Token struct {
 }
 
 type TokenPayload struct {
+	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email"`
 	Role      string    `json:"role"`
 	IssuedAt  time.Time `json:"issued_at"`
@@ -39,20 +41,21 @@ func NewTokenMaker(secretkey string) *Token {
 	}
 }
 
-func (t *Token) CreateToken(email string, role string) (string, error) {
-	new_payload := &TokenPayload{
+func (t *Token) CreateToken(email string, role string, duration time.Duration) (string, *TokenPayload, error) {
+	payload := &TokenPayload{
+		ID:        uuid.New(),
 		Role:      role,
 		Email:     email,
 		IssuedAt:  time.Now(),
-		ExpiredAt: time.Now(),
+		ExpiredAt: time.Now().Add(duration),
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, new_payload)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 	tokenString, err := token.SignedString([]byte(t.secret_key))
 
 	if err != nil {
 		fmt.Println("error signing token: ", err)
 	}
-	return tokenString, err
+	return tokenString, payload, err
 }
 
 func (t *Token) VerifyToken(token string) (*TokenPayload, error) {
@@ -65,7 +68,7 @@ func (t *Token) VerifyToken(token string) (*TokenPayload, error) {
 	}
 	jwt_token, err := jwt.ParseWithClaims(token, &TokenPayload{}, keyFunc)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 	claims, ok := jwt_token.Claims.(*TokenPayload)
 

@@ -10,8 +10,24 @@ func (s *Server) UserRouter() {
 		user.POST("/verify-otp", s.VerifyOTP)
 		user.POST("/send-otp", s.ResendOTP)
 		user.POST("/login", s.Login)
+		user.POST("/refresh-token", s.RenewToken)
 		user.Use(api.Authentication(s.token_maker))
 		user.GET("/", s.GetUser)
 	}
 
+}
+
+func (s *Server) AdminRouter() {
+	admin := s.router.Group("/admin")
+	{
+		admin.POST("/artists", s.CreateArtist)
+	}
+}
+
+func (s *Server) PublicRouter() {
+
+	public := s.router.Group("/public")
+	{
+		public.GET("/artists", s.GetArtists)
+	}
 }

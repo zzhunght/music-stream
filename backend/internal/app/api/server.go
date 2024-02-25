@@ -32,8 +32,23 @@ func NewServer(store *sqlc.Queries, config *utils.Config) *Server {
 
 func (s *Server) setupRouter() {
 	s.UserRouter()
+	s.AdminRouter()
+	s.PublicRouter()
 }
 
 func (s *Server) Run(address string) {
 	s.router.Run(address)
+}
+
+func SuccessResponse(data any, messgae string) gin.H {
+	return gin.H{
+		"data":    data,
+		"messgae": messgae,
+	}
+}
+
+func ErrorResponse(err error) gin.H {
+	return gin.H{
+		"error": err.Error(),
+	}
 }

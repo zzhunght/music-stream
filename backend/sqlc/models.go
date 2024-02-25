@@ -5,6 +5,7 @@
 package sqlc
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -21,65 +22,65 @@ type Account struct {
 
 type Album struct {
 	ID          int32            `json:"id"`
-	ArtistID    pgtype.Int4      `json:"artist_id"`
-	Name        pgtype.Text      `json:"name"`
+	ArtistID    int32            `json:"artist_id"`
+	Name        string           `json:"name"`
 	ReleaseDate interface{}      `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
 type AlbumsSong struct {
 	ID        int32            `json:"id"`
-	SongID    pgtype.Int4      `json:"song_id"`
-	AlbumID   pgtype.Int4      `json:"album_id"`
+	SongID    int32            `json:"song_id"`
+	AlbumID   int32            `json:"album_id"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type Artist struct {
 	ID        int32            `json:"id"`
-	Name      pgtype.Text      `json:"name"`
+	Name      string           `json:"name"`
 	AvatarUrl pgtype.Text      `json:"avatar_url"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type ArtistFollow struct {
 	ID        int32            `json:"id"`
-	AccountID pgtype.Int4      `json:"account_id"`
-	ArtistID  pgtype.Int4      `json:"artist_id"`
+	AccountID int32            `json:"account_id"`
+	ArtistID  int32            `json:"artist_id"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type Category struct {
 	ID        int32            `json:"id"`
-	Name      pgtype.Text      `json:"name"`
+	Name      string           `json:"name"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type FavoriteAlbum struct {
 	ID        int32            `json:"id"`
-	AccountID pgtype.Int4      `json:"account_id"`
-	AlbumID   pgtype.Int4      `json:"album_id"`
+	AccountID int32            `json:"account_id"`
+	AlbumID   int32            `json:"album_id"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type FavoriteSong struct {
 	ID        int32            `json:"id"`
-	AccountID pgtype.Int4      `json:"account_id"`
-	SongID    pgtype.Int4      `json:"song_id"`
+	AccountID int32            `json:"account_id"`
+	SongID    int32            `json:"song_id"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
 type Playlist struct {
 	ID          int32            `json:"id"`
-	Name        pgtype.Int4      `json:"name"`
-	AccountID   pgtype.Int4      `json:"account_id"`
+	Name        int32            `json:"name"`
+	AccountID   int32            `json:"account_id"`
 	Description pgtype.Text      `json:"description"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
 type PlaylistSong struct {
 	ID         int32            `json:"id"`
-	PlaylistID pgtype.Int4      `json:"playlist_id"`
-	SongID     pgtype.Int4      `json:"song_id"`
+	PlaylistID int32            `json:"playlist_id"`
+	SongID     int32            `json:"song_id"`
 	CreatedAt  pgtype.Timestamp `json:"created_at"`
 }
 
@@ -88,6 +89,16 @@ type Role struct {
 	Name      string           `json:"name"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+}
+
+type Session struct {
+	ID           uuid.UUID        `json:"id"`
+	Email        string           `json:"email"`
+	ClientAgent  string           `json:"client_agent"`
+	RefreshToken string           `json:"refresh_token"`
+	ClientIp     string           `json:"client_ip"`
+	IsBlock      pgtype.Bool      `json:"is_block"`
+	ExpiredAt    pgtype.Timestamp `json:"expired_at"`
 }
 
 type Song struct {
@@ -104,14 +115,14 @@ type Song struct {
 
 type SongCategory struct {
 	ID         int32            `json:"id"`
-	SongID     pgtype.Int4      `json:"song_id"`
-	CategoryID pgtype.Int4      `json:"category_id"`
+	SongID     int32            `json:"song_id"`
+	CategoryID int32            `json:"category_id"`
 	CreatedAt  pgtype.Timestamp `json:"created_at"`
 }
 
 type SongsArtist struct {
 	ID       int32       `json:"id"`
-	SongID   pgtype.Int4 `json:"song_id"`
-	ArtistID pgtype.Int4 `json:"artist_id"`
+	SongID   int32       `json:"song_id"`
+	ArtistID int32       `json:"artist_id"`
 	Owner    pgtype.Bool `json:"owner"`
 }

@@ -1,14 +1,20 @@
 package utils
 
-import "github.com/spf13/viper"
+import (
+	"time"
+
+	"github.com/spf13/viper"
+)
 
 type Config struct {
-	DatabaseDestination string `mapstructure:"DATABASE_DESTINATION"`
-	MailSenderHost      string `mapstructure:"MAIL_HOST"`
-	MailSenderPort      int    `mapstructure:"MAIL_PORT"`
-	MailSenderUsername  string `mapstructure:"MAIL_USERNAME"`
-	MailSenderPassword  string `mapstructure:"MAIL_PASSWORD"`
-	JwtSecretKey        string `mapstructure:"JWT_SECRET_KEY"`
+	DatabaseDestination  string        `mapstructure:"DATABASE_DESTINATION"`
+	MailSenderHost       string        `mapstructure:"MAIL_HOST"`
+	MailSenderPort       int           `mapstructure:"MAIL_PORT"`
+	MailSenderUsername   string        `mapstructure:"MAIL_USERNAME"`
+	MailSenderPassword   string        `mapstructure:"MAIL_PASSWORD"`
+	JwtSecretKey         string        `mapstructure:"JWT_SECRET_KEY"`
+	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }
 
 func LoadEnv(path string) (c *Config, err error) {

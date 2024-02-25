@@ -32,6 +32,13 @@ type LoginRequest struct {
 	Email    string `json:"email"`
 }
 
+type LoginResponse struct {
+	SessionID    any                `json:"session_id"`
+	User         sqlc.GetAccountRow `json:"user"`
+	AccessToken  string             `json:"access_token"`
+	RefreshToken string             `json:"refresh_token"`
+}
+
 // ListUsers là handler cho việc liệt kê các users
 func ListUsers(c *gin.Context) {
 
@@ -197,13 +204,45 @@ func (s *Server) Login(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"error": "Incorrect username or password",
 		})
+		return
 	}
-	access_token, _ := s.token_maker.CreateToken(acc.Email, acc.Role)
+	access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.Role, s.config.AccessTokenDuration)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	refresh_token, rf_payload, err := s.token_maker.CreateToken(acc.Email, acc.Role, s.config.RefreshTokenDuration)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	session, err := s.store.CreateSession(c, sqlc.CreateSessionParams{
+		ID:           rf_payload.ID,
+		Email:        rf_payload.Email,
+		RefreshToken: refresh_token,
+		ExpiredAt: pgtype.Timestamp{
+			Time:  rf_payload.ExpiredAt,
+			Valid: true,
+		},
+		ClientAgent: c.Request.UserAgent(),
+		ClientIp:    c.ClientIP(),
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := &LoginResponse{
+		SessionID:    session.ID,
+		User:         acc,
+		AccessToken:  access_token,
+		RefreshToken: refresh_token,
+	}
 
 	c.JSON(200, gin.H{
 		"message": "Login successful",
-		"data":    acc,
-		"token":   access_token,
+		"data":    resp,
 	})
 }
 
