@@ -19,7 +19,6 @@ ORDER BY sqlc.arg(order_by)::text
 LIMIT COALESCE(sqlc.arg(size)::int, 50)
 OFFSET COALESCE(sqlc.arg(start)::int, 0);
 
-
 -- name: DeleteArtist :exec
 
 DELETE from artist WHERE id in (sqlc.slice(ids));

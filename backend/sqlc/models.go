@@ -24,7 +24,7 @@ type Album struct {
 	ID          int32            `json:"id"`
 	ArtistID    int32            `json:"artist_id"`
 	Name        string           `json:"name"`
-	ReleaseDate interface{}      `json:"release_date"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
@@ -108,7 +108,7 @@ type Song struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate interface{}      `json:"release_date"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 }

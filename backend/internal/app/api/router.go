@@ -29,5 +29,7 @@ func (s *Server) PublicRouter() {
 	public := s.router.Group("/public")
 	{
 		public.GET("/artists", s.GetArtists)
+		public.GET("/categories", s.GetCategories)
+		public.GET("/songs", s.SearchSong)
 	}
 }
