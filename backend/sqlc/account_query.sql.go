@@ -12,14 +12,15 @@ import (
 )
 
 const checkEmailExists = `-- name: CheckEmailExists :one
-SELECT email FROM accounts
+SELECT id FROM accounts
 WHERE email = $1 LIMIT 1
 `
 
-func (q *Queries) CheckEmailExists(ctx context.Context, email string) (string, error) {
+func (q *Queries) CheckEmailExists(ctx context.Context, email string) (int32, error) {
 	row := q.db.QueryRow(ctx, checkEmailExists, email)
-	err := row.Scan(&email)
-	return email, err
+	var id int32
+	err := row.Scan(&id)
+	return id, err
 }
 
 const createAccount = `-- name: CreateAccount :one

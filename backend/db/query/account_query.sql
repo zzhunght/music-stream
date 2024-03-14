@@ -13,7 +13,7 @@ INSERT INTO accounts (
 
 
 -- name: CheckEmailExists :one
-SELECT email FROM accounts
+SELECT id FROM accounts
 WHERE email = $1 LIMIT 1;
 
 -- name: GetSecretKey :one

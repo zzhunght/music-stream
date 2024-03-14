@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/sqlc"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pquerna/otp/totp"
 	"golang.org/x/crypto/bcrypt"
@@ -51,7 +53,7 @@ func ListUsers(c *gin.Context) {
 func (s *Server) Register(c *gin.Context) {
 	var requestBody RegisterRequest
 	// Đọc dữ liệu từ body của request và gán vào biến requestBody
-	err := c.BindJSON(&requestBody)
+	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		// Xử lý lỗi nếu có
 		c.JSON(400, gin.H{
@@ -65,9 +67,18 @@ func (s *Server) Register(c *gin.Context) {
 		})
 		return
 	}
+
+	_, err = s.store.CheckEmailExists(c, requestBody.Email)
+
+	if err != pgx.ErrNoRows {
+		c.JSON(409, ErrorResponse(errors.New("email already exists")))
+		return
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println("Error hashing password:", err)
+		c.JSON(400, ErrorResponse(err))
 		return
 	}
 	// tạo secret key
@@ -82,7 +93,7 @@ func (s *Server) Register(c *gin.Context) {
 		})
 		return
 	}
-	otp, _ := totp.GenerateCode(secret.Secret(), time.Now())
+	// otp, _ := totp.GenerateCode(secret.Secret(), time.Now())
 	form := sqlc.CreateAccountParams{
 		Name:     requestBody.Name,
 		Email:    requestBody.Email,
@@ -92,12 +103,18 @@ func (s *Server) Register(c *gin.Context) {
 			Valid:  true,
 		},
 	}
-	s.mailsender.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
-	new_acc, err := s.store.CreateAccount(c, form)
+	// s.mailsender.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
+	arg := sqlc.CreateAccountWithTxParams{
+		Params: form,
+		AfterFunction: func(email string) error {
+			return s.task_client.DeliveryEmailTaskTask(email)
+		},
+	}
+	new_acc, err := s.store.CreateAccountWithTx(c, arg)
 	if err != nil {
 		// Xử lý lỗi nếu có
 		c.JSON(400, gin.H{
-			"error": "Some thing went wrong",
+			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
 		})
 		return
 	}

@@ -6,31 +6,31 @@ import (
 	"log"
 	"music-app-backend/sqlc"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var conn *pgx.Conn
+var Conn *pgxpool.Pool
 
-func InitDB(dns string) (DB *sqlc.Queries) {
+func InitDB(dns string) (DB *sqlc.SQLStore) {
 
 	ctx := context.Background()
-	conn, err := pgx.Connect(ctx, dns)
+	Conn, err := pgxpool.New(ctx, dns)
 	if err != nil {
 		log.Fatal(err)
 	}
-	DB = sqlc.New(conn)
-	if err := conn.Ping(ctx); err != nil {
+	DB = sqlc.NewStore(Conn)
+	if err := Conn.Ping(ctx); err != nil {
 		log.Fatal("Failed to ping database:", err)
 	}
 	fmt.Println("Connected to database successfully.")
 	return DB
 }
 
-func CloseDB() {
-	ctx := context.Background()
-	if conn != nil {
-		if err := conn.Close(ctx); err != nil {
-			log.Println("Failed to close database connection:", err)
-		}
-	}
-}
+// func CloseDB() {
+// 	ctx := context.Background()
+// 	if Conn != nil {
+// 		if err := Conn.Close(ctx); err != nil {
+// 			log.Println("Failed to close database connection:", err)
+// 		}
+// 	}
+// }

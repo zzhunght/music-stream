@@ -10,7 +10,7 @@ import (
 )
 
 type Server struct {
-	store       *sqlc.Queries
+	store       *sqlc.SQLStore
 	router      *gin.Engine
 	mailsender  *utils.MailSender
 	config      *utils.Config
@@ -18,7 +18,7 @@ type Server struct {
 	task_client *worker.DeliveryTaskClient
 }
 
-func NewServer(store *sqlc.Queries, config *utils.Config, task_client *worker.DeliveryTaskClient) *Server {
+func NewServer(store *sqlc.SQLStore, config *utils.Config, task_client *worker.DeliveryTaskClient) *Server {
 
 	r := gin.Default()
 	server := &Server{

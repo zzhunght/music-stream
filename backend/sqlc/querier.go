@@ -12,7 +12,7 @@ import (
 )
 
 type Querier interface {
-	CheckEmailExists(ctx context.Context, email string) (string, error)
+	CheckEmailExists(ctx context.Context, email string) (int32, error)
 	CreateAccount(ctx context.Context, arg CreateAccountParams) (CreateAccountRow, error)
 	CreateArtist(ctx context.Context, arg CreateArtistParams) (Artist, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)

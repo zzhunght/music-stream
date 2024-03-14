@@ -18,11 +18,11 @@ func main() {
 	redisOpt := asynq.RedisClientOpt{
 		Addr: env.RedisUrl,
 	}
-	task_client := worker.NewDeliveryTaskClient(redisOpt)
+	taskClient := worker.NewDeliveryTaskClient(redisOpt)
 	go StartRedisWorker(redisOpt)
 	store := config.InitDB(env.DatabaseDestination)
-	server := api.NewServer(store, env, task_client)
-	defer config.CloseDB()
+	server := api.NewServer(store, env, taskClient)
+	// defer config.CloseDB()
 	server.Run(":8080")
 }
 
