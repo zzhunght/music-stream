@@ -13,6 +13,14 @@ services:
     ports:
       - "5434:5432"
 
+  redis:
+    container_name: redis_music_queue
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+
+
 
 volumes:
   postgres-db:

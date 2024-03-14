@@ -4,6 +4,7 @@ import (
 	"music-app-backend/internal/app/helper"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/sqlc"
+	"music-app-backend/worker"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,15 +15,17 @@ type Server struct {
 	mailsender  *utils.MailSender
 	config      *utils.Config
 	token_maker *helper.Token
+	task_client *worker.DeliveryTaskClient
 }
 
-func NewServer(store *sqlc.Queries, config *utils.Config) *Server {
+func NewServer(store *sqlc.Queries, config *utils.Config, task_client *worker.DeliveryTaskClient) *Server {
 
 	r := gin.Default()
 	server := &Server{
 		store:       store,
 		config:      config,
 		token_maker: helper.NewTokenMaker(config.JwtSecretKey),
+		task_client: task_client,
 	}
 	server.mailsender = utils.NewMailSender(server.config)
 	server.router = r

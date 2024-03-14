@@ -171,7 +171,9 @@ func (s *Server) ResendOTP(c *gin.Context) {
 	fmt.Println("OTP", otp)
 	fmt.Println("KEY", key.String)
 	fmt.Println("valid", valid)
-	s.mailsender.SendMailOTP(requestBody.Email, "Mã OTP xác thực của bạn là : "+otp)
+	// go s.mailsender.SendMailOTP(requestBody.Email, "Mã OTP xác thực của bạn là : "+otp)
+
+	s.task_client.DeliveryEmailTaskTask(requestBody.Email)
 	if valid {
 		c.JSON(200, gin.H{
 			"message": "Xác thực thành công",

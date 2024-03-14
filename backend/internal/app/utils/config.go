@@ -15,6 +15,7 @@ type Config struct {
 	JwtSecretKey         string        `mapstructure:"JWT_SECRET_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	RedisUrl             string        `mapstructure:"REDIS_URL"`
 }
 
 func LoadEnv(path string) (c *Config, err error) {
