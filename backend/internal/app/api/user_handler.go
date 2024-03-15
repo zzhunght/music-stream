@@ -6,12 +6,12 @@ import (
 	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/sqlc"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pquerna/otp/totp"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -129,74 +129,46 @@ func (s *Server) Register(c *gin.Context) {
 func (s *Server) VerifyOTP(c *gin.Context) {
 	var requestBody VerifyOTPRequest
 
-	err := c.BindJSON(&requestBody)
+	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Invalid request body",
-		})
+		c.JSON(400, ErrorResponse(errors.New("invalid request body")))
+		return
 	}
-	if requestBody.Email == "" || requestBody.Otp == "" {
-		c.JSON(400, gin.H{
-			"error": "Invalid request body",
-		})
+	key, err := s.store.GetSecretKey(c, requestBody.Email)
+	log.Info().Str("otp ", requestBody.Otp).Msg("")
+	log.Info().Str("key ", key.String).Msg("")
+	if err != nil {
+		c.JSON(400, ErrorResponse(err))
+		return
 	}
 
-	key, err := s.store.GetSecretKey(c, requestBody.Email)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-	}
-	print("otp ", requestBody.Otp)
-	print("key ", key.String)
 	valid := totp.Validate(requestBody.Otp, key.String)
-	fmt.Print("valid", valid)
+	log.Info().Any("valid", valid).Msg("")
 	if valid {
 		c.JSON(200, gin.H{
 			"message": "Xác thực thành công",
 			"data":    true,
 		})
+		return
 	}
-
+	c.JSON(401, ErrorResponse(errors.New("Xác thực thất bại")))
 }
 
 func (s *Server) ResendOTP(c *gin.Context) {
 	var requestBody ResendOTPRequest
-
-	err := c.BindJSON(&requestBody)
+	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		// Xử lý lỗi nếu có
 		c.JSON(400, gin.H{
 			"error": "Invalid request body",
 		})
 	}
-	if requestBody.Email == "" {
-		c.JSON(400, gin.H{
-			"error": "Invalid request body",
-		})
-	}
-
-	key, err := s.store.GetSecretKey(c, requestBody.Email)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-	}
-	otp, _ := totp.GenerateCode(key.String, time.Now())
-	valid := totp.Validate(otp, key.String)
-	fmt.Println("OTP", otp)
-	fmt.Println("KEY", key.String)
-	fmt.Println("valid", valid)
-	// go s.mailsender.SendMailOTP(requestBody.Email, "Mã OTP xác thực của bạn là : "+otp)
-
 	s.task_client.DeliveryEmailTaskTask(requestBody.Email)
-	if valid {
-		c.JSON(200, gin.H{
-			"message": "Xác thực thành công",
-			"data":    true,
-		})
-	}
+	c.JSON(200, gin.H{
+		"message": "Một OTP đã được gửi đến email của bạn",
+		"data":    true,
+	})
 
 }
 

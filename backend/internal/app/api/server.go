@@ -18,8 +18,12 @@ type Server struct {
 	task_client *worker.DeliveryTaskClient
 }
 
-func NewServer(store *sqlc.SQLStore, config *utils.Config, task_client *worker.DeliveryTaskClient) *Server {
-
+func NewServer(
+	store *sqlc.SQLStore,
+	config *utils.Config,
+	task_client *worker.DeliveryTaskClient,
+	mailsender *utils.MailSender,
+) *Server {
 	r := gin.Default()
 	server := &Server{
 		store:       store,
@@ -27,7 +31,7 @@ func NewServer(store *sqlc.SQLStore, config *utils.Config, task_client *worker.D
 		token_maker: helper.NewTokenMaker(config.JwtSecretKey),
 		task_client: task_client,
 	}
-	server.mailsender = utils.NewMailSender(server.config)
+	server.mailsender = mailsender
 	server.router = r
 	server.setupRouter()
 	return server

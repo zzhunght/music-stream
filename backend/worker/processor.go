@@ -1,15 +1,24 @@
 package worker
 
-import "github.com/hibiken/asynq"
+import (
+	"music-app-backend/internal/app/utils"
+	"music-app-backend/sqlc"
+
+	"github.com/hibiken/asynq"
+)
 
 type ProcessorRedisTasks struct {
 	client *asynq.Server
+	mailer *utils.MailSender
+	store  *sqlc.SQLStore
 }
 
-func NewProcessorTaskClient(opts asynq.RedisClientOpt) *ProcessorRedisTasks {
+func NewProcessorTaskClient(opts asynq.RedisClientOpt, mailer *utils.MailSender, store *sqlc.SQLStore) *ProcessorRedisTasks {
 	client := asynq.NewServer(opts, asynq.Config{})
 	return &ProcessorRedisTasks{
 		client: client,
+		mailer: mailer,
+		store:  store,
 	}
 }
 

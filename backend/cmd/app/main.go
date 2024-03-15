@@ -4,6 +4,7 @@ import (
 	"music-app-backend/internal/app/api"
 	"music-app-backend/internal/app/config"
 	"music-app-backend/internal/app/utils"
+	"music-app-backend/sqlc"
 	"music-app-backend/worker"
 
 	"github.com/hibiken/asynq"
@@ -19,16 +20,17 @@ func main() {
 		Addr: env.RedisUrl,
 	}
 	taskClient := worker.NewDeliveryTaskClient(redisOpt)
-	go StartRedisWorker(redisOpt)
+	mailsender := utils.NewMailSender(env)
 	store := config.InitDB(env.DatabaseDestination)
-	server := api.NewServer(store, env, taskClient)
+	go StartRedisWorker(redisOpt, mailsender, store)
+	server := api.NewServer(store, env, taskClient, mailsender)
 	// defer config.CloseDB()
 	server.Run(":8080")
 }
 
-func StartRedisWorker(redisOpts asynq.RedisClientOpt) {
+func StartRedisWorker(redisOpts asynq.RedisClientOpt, mailer *utils.MailSender, store *sqlc.SQLStore) {
 	log.Info().Msg("Start Task processor")
-	client := worker.NewProcessorTaskClient(redisOpts)
+	client := worker.NewProcessorTaskClient(redisOpts, mailer, store)
 	err := client.Start()
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot start worker")
