@@ -12,6 +12,7 @@ import (
 )
 
 type Querier interface {
+	AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
 	CreateAccount(ctx context.Context, arg CreateAccountParams) (CreateAccountRow, error)
 	CreateArtist(ctx context.Context, arg CreateArtistParams) (Artist, error)
@@ -25,9 +26,12 @@ type Querier interface {
 	GetRandomSong(ctx context.Context) ([]Song, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]Song, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
+	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error
 	SearchSong(ctx context.Context, search pgtype.Text) ([]Song, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
+	VerifyAccount(ctx context.Context, email string) (Account, error)
 }
 
 var _ Querier = (*Queries)(nil)

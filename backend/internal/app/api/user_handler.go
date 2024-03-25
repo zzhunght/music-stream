@@ -146,6 +146,7 @@ func (s *Server) VerifyOTP(c *gin.Context) {
 	valid := totp.Validate(requestBody.Otp, key.String)
 	log.Info().Any("valid", valid).Msg("")
 	if valid {
+		s.store.VerifyAccount(c, requestBody.Email)
 		c.JSON(200, gin.H{
 			"message": "Xác thực thành công",
 			"data":    true,

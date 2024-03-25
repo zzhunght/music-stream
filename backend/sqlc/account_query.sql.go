@@ -71,7 +71,7 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (C
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT a.id, a.name, a.email, a.password, a.role_id, a.secret_key, a.created_at, a.updated_at,r."name" as role  FROM accounts a INNER JOIN roles r ON a.role_id = r.id WHERE email = $1
+SELECT a.id, a.name, a.email, a.password, a.role_id, a.is_verify, a.secret_key, a.created_at, a.updated_at,r."name" as role  FROM accounts a INNER JOIN roles r ON a.role_id = r.id WHERE email = $1
 `
 
 type GetAccountRow struct {
@@ -80,6 +80,7 @@ type GetAccountRow struct {
 	Email     string           `json:"email"`
 	Password  string           `json:"password"`
 	RoleID    int32            `json:"role_id"`
+	IsVerify  bool             `json:"is_verify"`
 	SecretKey pgtype.Text      `json:"secret_key"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
@@ -95,6 +96,7 @@ func (q *Queries) GetAccount(ctx context.Context, email string) (GetAccountRow, 
 		&i.Email,
 		&i.Password,
 		&i.RoleID,
+		&i.IsVerify,
 		&i.SecretKey,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -113,4 +115,27 @@ func (q *Queries) GetSecretKey(ctx context.Context, email string) (pgtype.Text, 
 	var secret_key pgtype.Text
 	err := row.Scan(&secret_key)
 	return secret_key, err
+}
+
+const verifyAccount = `-- name: VerifyAccount :one
+UPDATE accounts
+SET is_verify = true
+WHERE email = $1 RETURNING id, name, email, password, role_id, is_verify, secret_key, created_at, updated_at
+`
+
+func (q *Queries) VerifyAccount(ctx context.Context, email string) (Account, error) {
+	row := q.db.QueryRow(ctx, verifyAccount, email)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.Password,
+		&i.RoleID,
+		&i.IsVerify,
+		&i.SecretKey,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

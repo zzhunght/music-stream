@@ -11,6 +11,21 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const associateSongArtist = `-- name: AssociateSongArtist :exec
+INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, $3)
+`
+
+type AssociateSongArtistParams struct {
+	SongID   int32 `json:"song_id"`
+	ArtistID int32 `json:"artist_id"`
+	Owner    bool  `json:"owner"`
+}
+
+func (q *Queries) AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error {
+	_, err := q.db.Exec(ctx, associateSongArtist, arg.SongID, arg.ArtistID, arg.Owner)
+	return err
+}
+
 const createSong = `-- name: CreateSong :one
 INSERT INTO songs (
     name,
@@ -96,6 +111,65 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]Song, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const getSongBySongCategory = `-- name: GetSongBySongCategory :many
+SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at from  songs 
+WHERE id in (
+    SELECT song_id from song_categories WHERE category_id = $1
+) LIMIT COALESCE($3::int, 50)
+OFFSET COALESCE($2::int, 0)
+`
+
+type GetSongBySongCategoryParams struct {
+	CategoryID int32 `json:"category_id"`
+	Start      int32 `json:"start"`
+	Size       int32 `json:"size"`
+}
+
+func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]Song, error) {
+	rows, err := q.db.Query(ctx, getSongBySongCategory, arg.CategoryID, arg.Start, arg.Size)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Song{}
+	for rows.Next() {
+		var i Song
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Thumbnail,
+			&i.Path,
+			&i.Lyrics,
+			&i.Duration,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const removeAssociateSongArtist = `-- name: RemoveAssociateSongArtist :exec
+
+DELETE FROM songs_artist  WHERE artist_id = $1 AND song_id = $2
+`
+
+type RemoveAssociateSongArtistParams struct {
+	ArtistID int32 `json:"artist_id"`
+	SongID   int32 `json:"song_id"`
+}
+
+func (q *Queries) RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error {
+	_, err := q.db.Exec(ctx, removeAssociateSongArtist, arg.ArtistID, arg.SongID)
+	return err
 }
 
 const searchSong = `-- name: SearchSong :many

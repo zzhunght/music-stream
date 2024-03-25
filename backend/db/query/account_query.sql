@@ -23,4 +23,8 @@ WHERE email = $1 LIMIT 1;
 -- name: GetAccount :one
 SELECT a.*,r."name" as role  FROM accounts a INNER JOIN roles r ON a.role_id = r.id WHERE email = $1;
 
+-- name: VerifyAccount :one
+UPDATE accounts
+SET is_verify = true
+WHERE email = $1 RETURNING *;
 

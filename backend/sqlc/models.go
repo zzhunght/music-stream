@@ -15,6 +15,7 @@ type Account struct {
 	Email     string           `json:"email"`
 	Password  string           `json:"password"`
 	RoleID    int32            `json:"role_id"`
+	IsVerify  bool             `json:"is_verify"`
 	SecretKey pgtype.Text      `json:"secret_key"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
@@ -121,8 +122,8 @@ type SongCategory struct {
 }
 
 type SongsArtist struct {
-	ID       int32       `json:"id"`
-	SongID   int32       `json:"song_id"`
-	ArtistID int32       `json:"artist_id"`
-	Owner    pgtype.Bool `json:"owner"`
+	ID       int32 `json:"id"`
+	SongID   int32 `json:"song_id"`
+	ArtistID int32 `json:"artist_id"`
+	Owner    bool  `json:"owner"`
 }

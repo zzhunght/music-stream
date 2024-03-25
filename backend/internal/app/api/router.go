@@ -21,6 +21,9 @@ func (s *Server) AdminRouter() {
 	admin := s.router.Group("/admin")
 	{
 		admin.POST("/artists", s.CreateArtist)
+		admin.POST("/song", s.CreateArtist)
+		admin.POST("/associate-song-artist", s.AssociateSongArtist)
+		admin.POST("/remove-associate-song-artist", s.RemoveAssociateSongArtist)
 	}
 }
 
@@ -31,5 +34,6 @@ func (s *Server) PublicRouter() {
 		public.GET("/artists", s.GetArtists)
 		public.GET("/categories", s.GetCategories)
 		public.GET("/songs", s.SearchSong)
+		public.GET("/songs_by_categories/:categories_id", s.GetSongByCategories)
 	}
 }
