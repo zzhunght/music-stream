@@ -1,4 +1,11 @@
 
+-- name: GetSongs :many
+
+SELECT * FROM songs
+OFFSET COALESCE(sqlc.arg(start)::int, 0)
+LIMIT COALESCE(sqlc.arg(size)::int, 20);
+
+
 -- name: GetRandomSong :many
 SELECT * FROM songs
 Order by RAND()
@@ -25,6 +32,13 @@ INSERT INTO songs (
     $6
 ) RETURNING * ;
 
+-- name: UpdateSong :one
+
+UPDATE songs 
+SET name = sqlc.arg(name), thumbnail = sqlc.arg(thumbnail), 
+path = sqlc.arg(path), lyrics = sqlc.arg(lyrics), duration = sqlc.arg(duration), release_date = sqlc.arg(release_date)
+WHERE id = sqlc.arg(id)
+RETURNING * ;
 
 -- name: GetSongBySongCategory :many
 SELECT * from  songs 

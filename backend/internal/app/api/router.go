@@ -20,8 +20,19 @@ func (s *Server) UserRouter() {
 func (s *Server) AdminRouter() {
 	admin := s.router.Group("/admin")
 	{
-		admin.POST("/artists", s.CreateArtist)
+		//  admin artists
+		admin.GET("/artists", s.GetArtists)
+		admin.POST("/artists/", s.CreateArtist)
+		admin.PUT("/artists/:artist_id", s.UpdateArtist)
+		admin.DELETE("/artists/:artist_id", s.DeleteArtist)
+
+		// admin songs
+		admin.GET("/song", s.GetSong)
 		admin.POST("/song", s.CreateArtist)
+		admin.PUT("/song", s.CreateArtist)
+		admin.DELETE("/song", s.CreateArtist)
+		//
+
 		admin.POST("/associate-song-artist", s.AssociateSongArtist)
 		admin.POST("/remove-associate-song-artist", s.RemoveAssociateSongArtist)
 	}

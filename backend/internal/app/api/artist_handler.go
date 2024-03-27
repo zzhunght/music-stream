@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"music-app-backend/sqlc"
 	"net/http"
 	"strconv"
@@ -8,6 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type CreateArtistRequest struct {
+	Name      string `json:"name" binding:"required"`
+	AvatarUrl string `json:"avatar_url" binding:"required"`
+}
+
+type UpdateArtistRequest struct {
+	Name      string `json:"name" binding:"required"`
+	AvatarUrl string `json:"avatar_url" binding:"required"`
+}
 
 func (s *Server) GetArtists(c *gin.Context) {
 	seach := c.DefaultQuery("search", "")
@@ -29,4 +40,84 @@ func (s *Server) GetArtists(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, SuccessResponse(artist, "Get artists"))
+}
+func (s *Server) CreateArtist(c *gin.Context) {
+
+	var body CreateArtistRequest
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
+		fmt.Println("erorrrrrr :>>>>>>>>>>>>>")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not valid body"})
+		return
+	}
+
+	fmt.Println("data :", body)
+	new_art, err := s.store.CreateArtist(c, sqlc.CreateArtistParams{
+		Name: body.Name,
+		AvatarUrl: pgtype.Text{
+			String: body.AvatarUrl,
+			Valid:  true,
+		},
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, SuccessResponse(new_art, "Tạo nghệ sĩ thành công"))
+}
+
+func (s *Server) UpdateArtist(c *gin.Context) {
+	artist_id, _ := c.Params.Get("artist_id")
+	id, err := strconv.Atoi(artist_id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	var body UpdateArtistRequest
+	err = c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not valid body"})
+		return
+	}
+
+	new_art, err := s.store.UpdateArtist(c, sqlc.UpdateArtistParams{
+		ID:   int32(id),
+		Name: body.Name,
+		AvatarUrl: pgtype.Text{
+			String: body.AvatarUrl,
+			Valid:  true,
+		},
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, SuccessResponse(new_art, "Tạo nghệ sĩ thành công"))
+}
+
+func (s *Server) DeleteArtist(c *gin.Context) {
+	artist_id, _ := c.Params.Get("artist_id")
+	id, err := strconv.Atoi(artist_id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	var body UpdateArtistRequest
+	err = c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not valid body"})
+		return
+	}
+
+	err = s.store.DeleteArtist(c, int32(id))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Not valid body"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, SuccessResponse(1, "Xóa nghệ sĩ thành công"))
 }

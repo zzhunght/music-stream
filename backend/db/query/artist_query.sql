@@ -21,4 +21,8 @@ OFFSET COALESCE(sqlc.arg(start)::int, 0);
 
 -- name: DeleteArtist :exec
 
+DELETE from artist WHERE id = $1;
+
+-- name: DeleteManyArtist :exec
+
 DELETE from artist WHERE id in (sqlc.slice(ids));

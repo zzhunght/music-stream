@@ -37,11 +37,21 @@ func (q *Queries) CreateArtist(ctx context.Context, arg CreateArtistParams) (Art
 
 const deleteArtist = `-- name: DeleteArtist :exec
 
+DELETE from artist WHERE id = $1
+`
+
+func (q *Queries) DeleteArtist(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteArtist, id)
+	return err
+}
+
+const deleteManyArtist = `-- name: DeleteManyArtist :exec
+
 DELETE from artist WHERE id in ($1)
 `
 
-func (q *Queries) DeleteArtist(ctx context.Context, ids []int32) error {
-	_, err := q.db.Exec(ctx, deleteArtist, ids)
+func (q *Queries) DeleteManyArtist(ctx context.Context, ids []int32) error {
+	_, err := q.db.Exec(ctx, deleteManyArtist, ids)
 	return err
 }
 

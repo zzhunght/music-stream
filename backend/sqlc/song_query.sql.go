@@ -157,6 +157,48 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 	return items, nil
 }
 
+const getSongs = `-- name: GetSongs :many
+
+SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
+OFFSET COALESCE($1::int, 0)
+LIMIT COALESCE($2::int, 20)
+`
+
+type GetSongsParams struct {
+	Start int32 `json:"start"`
+	Size  int32 `json:"size"`
+}
+
+func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]Song, error) {
+	rows, err := q.db.Query(ctx, getSongs, arg.Start, arg.Size)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Song{}
+	for rows.Next() {
+		var i Song
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Thumbnail,
+			&i.Path,
+			&i.Lyrics,
+			&i.Duration,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const removeAssociateSongArtist = `-- name: RemoveAssociateSongArtist :exec
 
 DELETE FROM songs_artist  WHERE artist_id = $1 AND song_id = $2
@@ -205,4 +247,48 @@ func (q *Queries) SearchSong(ctx context.Context, search pgtype.Text) ([]Song, e
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateSong = `-- name: UpdateSong :one
+
+UPDATE songs 
+SET name = $1, thumbnail = $2, 
+path = $3, lyrics = $4, duration = $5, release_date = $6
+WHERE id = $7
+RETURNING id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at
+`
+
+type UpdateSongParams struct {
+	Name        string      `json:"name"`
+	Thumbnail   pgtype.Text `json:"thumbnail"`
+	Path        pgtype.Text `json:"path"`
+	Lyrics      pgtype.Text `json:"lyrics"`
+	Duration    pgtype.Int4 `json:"duration"`
+	ReleaseDate pgtype.Date `json:"release_date"`
+	ID          int32       `json:"id"`
+}
+
+func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, error) {
+	row := q.db.QueryRow(ctx, updateSong,
+		arg.Name,
+		arg.Thumbnail,
+		arg.Path,
+		arg.Lyrics,
+		arg.Duration,
+		arg.ReleaseDate,
+		arg.ID,
+	)
+	var i Song
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Thumbnail,
+		&i.Path,
+		&i.Lyrics,
+		&i.Duration,
+		&i.ReleaseDate,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

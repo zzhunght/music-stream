@@ -19,7 +19,8 @@ type Querier interface {
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateSong(ctx context.Context, arg CreateSongParams) (Song, error)
 	CreateSongCategories(ctx context.Context, name string) (Category, error)
-	DeleteArtist(ctx context.Context, ids []int32) error
+	DeleteArtist(ctx context.Context, id int32) error
+	DeleteManyArtist(ctx context.Context, ids []int32) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
 	GetAccount(ctx context.Context, email string) (GetAccountRow, error)
 	GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error)
@@ -28,9 +29,11 @@ type Querier interface {
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]Song, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
+	GetSongs(ctx context.Context, arg GetSongsParams) ([]Song, error)
 	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error
 	SearchSong(ctx context.Context, search pgtype.Text) ([]Song, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
+	UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, error)
 	VerifyAccount(ctx context.Context, email string) (Account, error)
 }
 
