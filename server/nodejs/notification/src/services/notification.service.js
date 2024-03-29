@@ -7,8 +7,8 @@ class NotificaionService {
   async createNotification(data) {
     try {
       // get list follower of artists
-      const artists = await RPCRequest("SHOP_RPC", {
-        event: "GET_SHOP",
+      const artists = await RPCRequest(process.env.ARTISTS_RPC, {
+        event: "GET_ARTISTS",
         data: {
           shopId: data.shopId,
         },
@@ -16,11 +16,23 @@ class NotificaionService {
 
       console.log(artists);
       // console.log("Data notiservice: ", data);
+      let content;
+      if (data.type === "SHOP-001") {
+        content = `Artists ${artists.name} has just released a new song: ${data.content}`;
+      }
+
+      const notiData = {
+        type: data.type,
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        content: content,
+        read: false,
+      };
 
       //create notification
-      // const notification = await findNotificationById(data);
+      const notification = await findNotificationById(notiData);
 
-      return data;
+      return notification;
     } catch (error) {
       throw error;
     }

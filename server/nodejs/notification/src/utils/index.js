@@ -1,7 +1,10 @@
 const amqplib = require("amqplib");
 const { v4: uuid4 } = require("uuid");
+const { Types } = require("mongoose");
 
 let amqplibConnection = null;
+
+const convertToObjectIdMongoDB = (id) => new Types.ObjectId(id);
 
 const createChannelMsgQueue = async () => {
   if (amqplibConnection === null) {
@@ -116,4 +119,5 @@ module.exports = {
   getChannel,
   subscribeMessage,
   RPCRequest,
+  convertToObjectIdMongoDB,
 };
