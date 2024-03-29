@@ -77,6 +77,15 @@ func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, e
 	return i, err
 }
 
+const deleteSong = `-- name: DeleteSong :exec
+DELETE FROM songs  WHERE id = $1
+`
+
+func (q *Queries) DeleteSong(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteSong, id)
+	return err
+}
+
 const getRandomSong = `-- name: GetRandomSong :many
 SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
 Order by RAND()

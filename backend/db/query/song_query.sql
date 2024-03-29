@@ -54,3 +54,7 @@ INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, $3);
 -- name: RemoveAssociateSongArtist :exec
 
 DELETE FROM songs_artist  WHERE artist_id = $1 AND song_id = $2;
+
+
+-- name: DeleteSong :exec
+DELETE FROM songs  WHERE id = $1;

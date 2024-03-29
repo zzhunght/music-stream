@@ -72,3 +72,59 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, SuccessResponse(new_song, "Created song successfully"))
 }
+
+func (s *Server) UpdateSong(ctx *gin.Context) {
+	song_id, err := strconv.Atoi(ctx.Param("song_id"))
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		return
+	}
+	var body CreateSongRequest
+
+	err = ctx.ShouldBindJSON(&body)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		return
+	}
+
+	new_song, err := s.store.UpdateSong(ctx, sqlc.UpdateSongParams{
+		ID:        int32(song_id),
+		Name:      body.Name,
+		Path:      utils.ConvertStringToText(body.Path),
+		Thumbnail: utils.ConvertStringToText(body.Thumbnail),
+		Lyrics:    utils.ConvertStringToText(body.Lyrics),
+		Duration: pgtype.Int4{
+			Int32: body.Duration,
+			Valid: true,
+		},
+		ReleaseDate: pgtype.Date{
+			Time:  body.ReleaseDate,
+			Valid: true,
+		},
+	})
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, SuccessResponse(new_song, "Updated song successfully"))
+}
+
+func (s *Server) DeleteSong(ctx *gin.Context) {
+	song_id, err := strconv.Atoi(ctx.Param("song_id"))
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		return
+	}
+
+	err = s.store.DeleteSong(ctx, int32(song_id))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, SuccessResponse(true, "Updated song successfully"))
+}

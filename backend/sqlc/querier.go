@@ -16,12 +16,14 @@ type Querier interface {
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
 	CreateAccount(ctx context.Context, arg CreateAccountParams) (CreateAccountRow, error)
 	CreateArtist(ctx context.Context, arg CreateArtistParams) (Artist, error)
+	CreateCategories(ctx context.Context, name string) (Category, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateSong(ctx context.Context, arg CreateSongParams) (Song, error)
-	CreateSongCategories(ctx context.Context, name string) (Category, error)
 	DeleteArtist(ctx context.Context, id int32) error
+	DeleteCategories(ctx context.Context, id int32) error
 	DeleteManyArtist(ctx context.Context, ids []int32) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
+	DeleteSong(ctx context.Context, id int32) error
 	GetAccount(ctx context.Context, email string) (GetAccountRow, error)
 	GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error)
 	GetRandomSong(ctx context.Context) ([]Song, error)
@@ -33,6 +35,7 @@ type Querier interface {
 	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error
 	SearchSong(ctx context.Context, search pgtype.Text) ([]Song, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
+	UpdateCategories(ctx context.Context, arg UpdateCategoriesParams) (Category, error)
 	UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, error)
 	VerifyAccount(ctx context.Context, email string) (Account, error)
 }

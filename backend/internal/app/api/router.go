@@ -27,12 +27,14 @@ func (s *Server) AdminRouter() {
 		admin.DELETE("/artists/:artist_id", s.DeleteArtist)
 
 		// admin songs
-		admin.GET("/song", s.GetSong)
-		admin.POST("/song", s.CreateArtist)
-		admin.PUT("/song", s.CreateArtist)
-		admin.DELETE("/song", s.CreateArtist)
-		//
+		admin.GET("/categories", s.GetCategories)
+		admin.POST("/categories", s.CreateCategory)
+		admin.PUT("/categories", s.UpdateCategory)
+		admin.DELETE("/categories/:category_id", s.DeleteCategory)
 
+		// admin categories
+
+		// song associated
 		admin.POST("/associate-song-artist", s.AssociateSongArtist)
 		admin.POST("/remove-associate-song-artist", s.RemoveAssociateSongArtist)
 	}
