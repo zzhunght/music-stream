@@ -101,6 +101,22 @@ const dataRequest = async (RPC_QUEUE_NAME, requestPayload, uuid) => {
         corelationId: uuid,
       }
     );
+
+    return new Promise((resolve, reject) => {
+      channel.consume(
+        q.queue,
+        (msg) => {
+          if (msg.properties.corelationId === uuid) {
+            resolve(msg.content.toString());
+          } else {
+            reject("Data not found!");
+          }
+        },
+        {
+          noAck: true,
+        }
+      );
+    });
   } catch (error) {
     console.log(error);
   }
