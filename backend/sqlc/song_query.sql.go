@@ -170,7 +170,7 @@ const getSongs = `-- name: GetSongs :many
 
 SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
 OFFSET COALESCE($1::int, 0)
-LIMIT COALESCE($2::int, 20)
+LIMIT COALESCE($2::int, 50)
 `
 
 type GetSongsParams struct {

@@ -24,6 +24,7 @@ type Account struct {
 type Album struct {
 	ID          int32            `json:"id"`
 	ArtistID    int32            `json:"artist_id"`
+	Thumbnail   string           `json:"thumbnail"`
 	Name        string           `json:"name"`
 	ReleaseDate pgtype.Date      `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`

@@ -3,7 +3,7 @@
 
 SELECT * FROM songs
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
-LIMIT COALESCE(sqlc.arg(size)::int, 20);
+LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 
 -- name: GetRandomSong :many
