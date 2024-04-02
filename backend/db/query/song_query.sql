@@ -1,7 +1,9 @@
 
 -- name: GetSongs :many
 
-SELECT * FROM songs
+SELECT s.*, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
@@ -12,8 +14,13 @@ Order by RAND()
 limit 12;
 
 -- name: SearchSong :many
-SELECT * FROM songs
-where name ilike sqlc.narg(search) || '%';
+SELECT s.*, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+where name ilike sqlc.narg(search) || '%'
+OFFSET COALESCE(sqlc.arg(start)::int, 0)
+LIMIT COALESCE(sqlc.arg(size)::int, 50)
+;
 
 -- name: CreateSong :one
 INSERT INTO songs (

@@ -9,13 +9,13 @@ INSERT INTO albums (
     $1,
     $2,
     $3,
-    $4
+    sqlc.arg(release_date)::date
 ) RETURNING *;
 
 
 -- name: CountAlbumsByArtistID :one
 SELECT COUNT(*) AS total_rows FROM albums WHERE artist_id = $1;
--- name: GetAlbumByArtistID :one
+-- name: GetAlbumByArtistID :many
 SELECT * FROM albums WHERE artist_id = $1;
 
 -- name: CountAlbums :one
@@ -34,13 +34,13 @@ SELECT * FROM albums where name ilike sqlc.narg(search) || '%'
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
--- name: UpdateAlbum :exec
+-- name: UpdateAlbum :one
 UPDATE albums SET
     name = $2,
     artist_id = $3,
     thumbnail = $4,
     release_date = $5
-WHERE id = $1;
+WHERE id = $1 RETURNING *;
 
 -- name: DeleteAlbum :exec
 DELETE FROM albums WHERE id = $1;
@@ -51,12 +51,18 @@ INSERT INTO albums_songs (
     song_id
 ) VALUES($1, $2);
 
--- name: RemoveSongToAlbum :exec
+-- name: AddManySongToAlbum :exec
 INSERT INTO albums_songs (
     album_id,
     song_id
-) VALUES($1, $2);
+)  VALUES (  
+  $1,  
+  unnest(@song_ids::int[])  
+);
+
+-- name: RemoveSongFromAlbum :exec
+DELETE FROM albums_songs WHERE id = ANY($1::int[]);
 
 
 -- name: GetAlbumSong :many
-SELECT s.* from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.id = $1;
+SELECT s.* from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.album_id = $1;

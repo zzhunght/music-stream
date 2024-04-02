@@ -11,12 +11,17 @@ import (
 )
 
 func (s *Server) SearchSong(ctx *gin.Context) {
-
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
 	search := ctx.DefaultQuery("search", "")
 	fmt.Println("query : >>>>>>>>>> ", search)
-	songs, err := s.store.SearchSong(ctx, pgtype.Text{
-		String: search,
-		Valid:  true,
+	songs, err := s.store.SearchSong(ctx, sqlc.SearchSongParams{
+		Size:  int32(size),
+		Start: (int32(page) - 1) * int32(size),
+		Search: pgtype.Text{
+			String: search,
+			Valid:  true,
+		},
 	})
 
 	if err != nil {

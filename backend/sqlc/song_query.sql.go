@@ -168,7 +168,9 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 
 const getSongs = `-- name: GetSongs :many
 
-SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
 OFFSET COALESCE($1::int, 0)
 LIMIT COALESCE($2::int, 50)
 `
@@ -178,15 +180,28 @@ type GetSongsParams struct {
 	Size  int32 `json:"size"`
 }
 
-func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]Song, error) {
+type GetSongsRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+}
+
+func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error) {
 	rows, err := q.db.Query(ctx, getSongs, arg.Start, arg.Size)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetSongsRow{}
 	for rows.Next() {
-		var i Song
+		var i GetSongsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -197,6 +212,7 @@ func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]Song, err
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
 		); err != nil {
 			return nil, err
 		}
@@ -224,19 +240,42 @@ func (q *Queries) RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssoc
 }
 
 const searchSong = `-- name: SearchSong :many
-SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
 where name ilike $1 || '%'
+OFFSET COALESCE($2::int, 0)
+LIMIT COALESCE($3::int, 50)
 `
 
-func (q *Queries) SearchSong(ctx context.Context, search pgtype.Text) ([]Song, error) {
-	rows, err := q.db.Query(ctx, searchSong, search)
+type SearchSongParams struct {
+	Search pgtype.Text `json:"search"`
+	Start  int32       `json:"start"`
+	Size   int32       `json:"size"`
+}
+
+type SearchSongRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+}
+
+func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error) {
+	rows, err := q.db.Query(ctx, searchSong, arg.Search, arg.Start, arg.Size)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []SearchSongRow{}
 	for rows.Next() {
-		var i Song
+		var i SearchSongRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -247,6 +286,7 @@ func (q *Queries) SearchSong(ctx context.Context, search pgtype.Text) ([]Song, e
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
 		); err != nil {
 			return nil, err
 		}

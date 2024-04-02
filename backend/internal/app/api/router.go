@@ -22,17 +22,32 @@ func (s *Server) AdminRouter() {
 	{
 		//  admin artists
 		admin.GET("/artists", s.GetArtists)
+		admin.GET("/artists/album/:artist_id", s.GetAlbumByArtistId)
 		admin.POST("/artists/", s.CreateArtist)
 		admin.PUT("/artists/:artist_id", s.UpdateArtist)
 		admin.DELETE("/artists/:artist_id", s.DeleteArtist)
 
-		// admin songs
+		// admin categories
 		admin.GET("/categories", s.GetCategories)
 		admin.POST("/categories", s.CreateCategory)
 		admin.PUT("/categories", s.UpdateCategory)
 		admin.DELETE("/categories/:category_id", s.DeleteCategory)
 
-		// admin categories
+		// admin song
+		admin.GET("/song", s.GetSong)
+		admin.POST("/song", s.CreateSong)
+		admin.PUT("/song/:song_id", s.UpdateSong)
+		admin.DELETE("/song/:song_id", s.DeleteSong)
+
+		// album
+		admin.GET("/album", s.GetAlbums)
+		admin.GET("/album/:album_id", s.GetAlbumSong)
+		admin.POST("/album", s.CreateAlbum)
+		admin.POST("/album/add-song", s.AddSongToAlbum)
+		admin.POST("/album/remove-song", s.RemoveSongFromAlbum)
+		// admin.POST("/album", s.CreateAlbum)
+		admin.PUT("/album/:album_id", s.UpdateAlbum)
+		admin.DELETE("/album/:album_id", s.DeleteAlbum)
 
 		// song associated
 		admin.POST("/associate-song-artist", s.AssociateSongArtist)

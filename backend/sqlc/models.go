@@ -5,6 +5,8 @@
 package sqlc
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -26,7 +28,7 @@ type Album struct {
 	ArtistID    int32            `json:"artist_id"`
 	Thumbnail   string           `json:"thumbnail"`
 	Name        string           `json:"name"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate time.Time        `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 

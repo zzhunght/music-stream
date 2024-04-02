@@ -20,6 +20,11 @@ type UpdateArtistRequest struct {
 	AvatarUrl string `json:"avatar_url" binding:"required"`
 }
 
+type ArtistResponse struct {
+	Data  []sqlc.Artist `json:"data"`
+	Count int32         `json:"count"`
+}
+
 func (s *Server) GetArtists(c *gin.Context) {
 	seach := c.DefaultQuery("search", "")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -34,12 +39,19 @@ func (s *Server) GetArtists(c *gin.Context) {
 		},
 		OrderBy: "name ASC",
 	})
+	count, err := s.store.CountListArtists(c, pgtype.Text{
+		String: seach,
+		Valid:  true,
+	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-
-	c.JSON(http.StatusOK, SuccessResponse(artist, "Get artists"))
+	data := ArtistResponse{
+		Data:  artist,
+		Count: int32(count),
+	}
+	c.JSON(http.StatusOK, SuccessResponse(data, "Get artists"))
 }
 func (s *Server) CreateArtist(c *gin.Context) {
 

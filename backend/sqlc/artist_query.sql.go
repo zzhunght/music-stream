@@ -11,6 +11,19 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countListArtists = `-- name: CountListArtists :one
+SELECT count(*) as total_rows
+FROM artist 
+WHERE name ILIKE $1 || '%'
+`
+
+func (q *Queries) CountListArtists(ctx context.Context, nameSearch pgtype.Text) (int64, error) {
+	row := q.db.QueryRow(ctx, countListArtists, nameSearch)
+	var total_rows int64
+	err := row.Scan(&total_rows)
+	return total_rows, err
+}
+
 const createArtist = `-- name: CreateArtist :one
 INSERT INTO artist (
     name,

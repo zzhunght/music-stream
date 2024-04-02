@@ -79,7 +79,7 @@ CREATE TABLE "albums" (
   "thumbnail" varchar NOT NULL,
   "name" varchar NOT NULL,
   "release_date" date NOT NULL,
-  "created_at" timestamp DEFAULT (now())
+  "created_at" timestamp DEFAULT (now()) 
 );
 
 CREATE TABLE "albums_songs" (

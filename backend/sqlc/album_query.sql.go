@@ -7,9 +7,30 @@ package sqlc
 
 import (
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const addManySongToAlbum = `-- name: AddManySongToAlbum :exec
+INSERT INTO albums_songs (
+    album_id,
+    song_id
+)  VALUES (  
+  $1,  
+  unnest($2::int[])  
+)
+`
+
+type AddManySongToAlbumParams struct {
+	AlbumID int32   `json:"album_id"`
+	SongIds []int32 `json:"song_ids"`
+}
+
+func (q *Queries) AddManySongToAlbum(ctx context.Context, arg AddManySongToAlbumParams) error {
+	_, err := q.db.Exec(ctx, addManySongToAlbum, arg.AlbumID, arg.SongIds)
+	return err
+}
 
 const addSongToAlbum = `-- name: AddSongToAlbum :exec
 INSERT INTO albums_songs (
@@ -71,15 +92,15 @@ INSERT INTO albums (
     $1,
     $2,
     $3,
-    $4
+    $4::date
 ) RETURNING id, artist_id, thumbnail, name, release_date, created_at
 `
 
 type CreateAlbumParams struct {
-	Name        string      `json:"name"`
-	ArtistID    int32       `json:"artist_id"`
-	Thumbnail   string      `json:"thumbnail"`
-	ReleaseDate pgtype.Date `json:"release_date"`
+	Name        string    `json:"name"`
+	ArtistID    int32     `json:"artist_id"`
+	Thumbnail   string    `json:"thumbnail"`
+	ReleaseDate time.Time `json:"release_date"`
 }
 
 func (q *Queries) CreateAlbum(ctx context.Context, arg CreateAlbumParams) (Album, error) {
@@ -110,30 +131,43 @@ func (q *Queries) DeleteAlbum(ctx context.Context, id int32) error {
 	return err
 }
 
-const getAlbumByArtistID = `-- name: GetAlbumByArtistID :one
+const getAlbumByArtistID = `-- name: GetAlbumByArtistID :many
 SELECT id, artist_id, thumbnail, name, release_date, created_at FROM albums WHERE artist_id = $1
 `
 
-func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) (Album, error) {
-	row := q.db.QueryRow(ctx, getAlbumByArtistID, artistID)
-	var i Album
-	err := row.Scan(
-		&i.ID,
-		&i.ArtistID,
-		&i.Thumbnail,
-		&i.Name,
-		&i.ReleaseDate,
-		&i.CreatedAt,
-	)
-	return i, err
+func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Album, error) {
+	rows, err := q.db.Query(ctx, getAlbumByArtistID, artistID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Album{}
+	for rows.Next() {
+		var i Album
+		if err := rows.Scan(
+			&i.ID,
+			&i.ArtistID,
+			&i.Thumbnail,
+			&i.Name,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getAlbumSong = `-- name: GetAlbumSong :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.id = $1
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.album_id = $1
 `
 
-func (q *Queries) GetAlbumSong(ctx context.Context, id int32) ([]Song, error) {
-	rows, err := q.db.Query(ctx, getAlbumSong, id)
+func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]Song, error) {
+	rows, err := q.db.Query(ctx, getAlbumSong, albumID)
 	if err != nil {
 		return nil, err
 	}
@@ -200,47 +234,48 @@ func (q *Queries) GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, 
 	return items, nil
 }
 
-const removeSongToAlbum = `-- name: RemoveSongToAlbum :exec
-INSERT INTO albums_songs (
-    album_id,
-    song_id
-) VALUES($1, $2)
+const removeSongFromAlbum = `-- name: RemoveSongFromAlbum :exec
+DELETE FROM albums_songs WHERE id = ANY($1::int[])
 `
 
-type RemoveSongToAlbumParams struct {
-	AlbumID int32 `json:"album_id"`
-	SongID  int32 `json:"song_id"`
-}
-
-func (q *Queries) RemoveSongToAlbum(ctx context.Context, arg RemoveSongToAlbumParams) error {
-	_, err := q.db.Exec(ctx, removeSongToAlbum, arg.AlbumID, arg.SongID)
+func (q *Queries) RemoveSongFromAlbum(ctx context.Context, dollar_1 []int32) error {
+	_, err := q.db.Exec(ctx, removeSongFromAlbum, dollar_1)
 	return err
 }
 
-const updateAlbum = `-- name: UpdateAlbum :exec
+const updateAlbum = `-- name: UpdateAlbum :one
 UPDATE albums SET
     name = $2,
     artist_id = $3,
     thumbnail = $4,
     release_date = $5
-WHERE id = $1
+WHERE id = $1 RETURNING id, artist_id, thumbnail, name, release_date, created_at
 `
 
 type UpdateAlbumParams struct {
-	ID          int32       `json:"id"`
-	Name        string      `json:"name"`
-	ArtistID    int32       `json:"artist_id"`
-	Thumbnail   string      `json:"thumbnail"`
-	ReleaseDate pgtype.Date `json:"release_date"`
+	ID          int32     `json:"id"`
+	Name        string    `json:"name"`
+	ArtistID    int32     `json:"artist_id"`
+	Thumbnail   string    `json:"thumbnail"`
+	ReleaseDate time.Time `json:"release_date"`
 }
 
-func (q *Queries) UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) error {
-	_, err := q.db.Exec(ctx, updateAlbum,
+func (q *Queries) UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album, error) {
+	row := q.db.QueryRow(ctx, updateAlbum,
 		arg.ID,
 		arg.Name,
 		arg.ArtistID,
 		arg.Thumbnail,
 		arg.ReleaseDate,
 	)
-	return err
+	var i Album
+	err := row.Scan(
+		&i.ID,
+		&i.ArtistID,
+		&i.Thumbnail,
+		&i.Name,
+		&i.ReleaseDate,
+		&i.CreatedAt,
+	)
+	return i, err
 }

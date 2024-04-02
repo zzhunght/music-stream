@@ -109,7 +109,7 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, SuccessResponse(new_song, "Updated song successfully"))
+	ctx.JSON(http.StatusCreated, SuccessResponse(new_song, "Cập nhật bài hát thành công"))
 }
 
 func (s *Server) DeleteSong(ctx *gin.Context) {
@@ -126,5 +126,5 @@ func (s *Server) DeleteSong(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, SuccessResponse(true, "Updated song successfully"))
+	ctx.JSON(http.StatusCreated, SuccessResponse(true, "Xóa bài hát thành công"))
 }
