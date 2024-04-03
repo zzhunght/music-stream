@@ -19,6 +19,7 @@ type CreateSongRequest struct {
 	Lyrics      string    `json:"lyrics" binding:"required"`
 	Duration    int32     `json:"duration" binding:"required"`
 	ReleaseDate time.Time `json:"release_date" binding:"required"`
+	ArtistID    int32     `json:"artist_id" binding:"required"`
 }
 
 func (s *Server) GetSong(ctx *gin.Context) {
@@ -51,19 +52,22 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 		return
 	}
 
-	new_song, err := s.store.CreateSong(ctx, sqlc.CreateSongParams{
-		Name:      body.Name,
-		Path:      utils.ConvertStringToText(body.Path),
-		Thumbnail: utils.ConvertStringToText(body.Thumbnail),
-		Lyrics:    utils.ConvertStringToText(body.Lyrics),
-		Duration: pgtype.Int4{
-			Int32: body.Duration,
-			Valid: true,
+	new_song, err := s.store.CreateSongWithTx(ctx, sqlc.CreateSongWithTxParams{
+		CreateSongBody: sqlc.CreateSongParams{
+			Name:      body.Name,
+			Path:      utils.ConvertStringToText(body.Path),
+			Thumbnail: utils.ConvertStringToText(body.Thumbnail),
+			Lyrics:    utils.ConvertStringToText(body.Lyrics),
+			Duration: pgtype.Int4{
+				Int32: body.Duration,
+				Valid: true,
+			},
+			ReleaseDate: pgtype.Date{
+				Time:  body.ReleaseDate,
+				Valid: true,
+			},
 		},
-		ReleaseDate: pgtype.Date{
-			Time:  body.ReleaseDate,
-			Valid: true,
-		},
+		ArtistID: body.ArtistID,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))

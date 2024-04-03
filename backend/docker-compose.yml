@@ -11,16 +11,33 @@ services:
     volumes:
        - postgres-db:/data/postgres
     ports:
-      - "5434:5432"
+      - "5432:5432"
+    networks:
+      - music-networks
 
   redis:
     container_name: redis_music_queue
     image: redis:latest
     ports:
       - "6379:6379"
+    networks:
+      - music-networks
+
+  golang_app:
+    container_name: go-be
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - music-networks
+    depends_on:
+      - redis
+      - postgres
 
 
-
+networks:
+  music-networks:
+    driver: bridge
 
 volumes:
   postgres-db:

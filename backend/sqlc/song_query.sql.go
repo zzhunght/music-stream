@@ -12,17 +12,16 @@ import (
 )
 
 const associateSongArtist = `-- name: AssociateSongArtist :exec
-INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, $3)
+INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, true)
 `
 
 type AssociateSongArtistParams struct {
 	SongID   int32 `json:"song_id"`
 	ArtistID int32 `json:"artist_id"`
-	Owner    bool  `json:"owner"`
 }
 
 func (q *Queries) AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error {
-	_, err := q.db.Exec(ctx, associateSongArtist, arg.SongID, arg.ArtistID, arg.Owner)
+	_, err := q.db.Exec(ctx, associateSongArtist, arg.SongID, arg.ArtistID)
 	return err
 }
 
@@ -123,8 +122,10 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]Song, error) {
 }
 
 const getSongBySongCategory = `-- name: GetSongBySongCategory :many
-SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at from  songs 
-WHERE id in (
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE s.id in (
     SELECT song_id from song_categories WHERE category_id = $1
 ) LIMIT COALESCE($3::int, 50)
 OFFSET COALESCE($2::int, 0)
@@ -136,15 +137,28 @@ type GetSongBySongCategoryParams struct {
 	Size       int32 `json:"size"`
 }
 
-func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]Song, error) {
+type GetSongBySongCategoryRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+}
+
+func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error) {
 	rows, err := q.db.Query(ctx, getSongBySongCategory, arg.CategoryID, arg.Start, arg.Size)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetSongBySongCategoryRow{}
 	for rows.Next() {
-		var i Song
+		var i GetSongBySongCategoryRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -155,6 +169,7 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
 		); err != nil {
 			return nil, err
 		}
@@ -243,7 +258,7 @@ const searchSong = `-- name: SearchSong :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
-where name ilike $1 || '%'
+where s.name ilike $1 || '%'
 OFFSET COALESCE($2::int, 0)
 LIMIT COALESCE($3::int, 50)
 `

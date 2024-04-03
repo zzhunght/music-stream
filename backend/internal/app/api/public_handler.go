@@ -54,3 +54,14 @@ func (s *Server) GetSongByCategories(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Tìm kiếm bài hát thành công"))
 }
+
+func (s *Server) GetLatestAlbum(ctx *gin.Context) {
+
+	data, err := s.store.GetLatestAlbum(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(data, "Danh sách album mới nhất"))
+}

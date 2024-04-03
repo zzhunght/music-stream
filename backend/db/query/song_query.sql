@@ -17,7 +17,7 @@ limit 12;
 SELECT s.*, a.name as artist_name FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
-where name ilike sqlc.narg(search) || '%'
+where s.name ilike sqlc.narg(search) || '%'
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50)
 ;
@@ -48,15 +48,17 @@ WHERE id = sqlc.arg(id)
 RETURNING * ;
 
 -- name: GetSongBySongCategory :many
-SELECT * from  songs 
-WHERE id in (
+SELECT s.*, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE s.id in (
     SELECT song_id from song_categories WHERE category_id = $1
 ) LIMIT COALESCE(sqlc.arg(size)::int, 50)
 OFFSET COALESCE(sqlc.arg(start)::int, 0);
 
 
 -- name: AssociateSongArtist :exec
-INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, $3);
+INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, true);
 
 -- name: RemoveAssociateSongArtist :exec
 

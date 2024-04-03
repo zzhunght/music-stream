@@ -13,6 +13,7 @@ INSERT INTO albums (
 ) RETURNING *;
 
 
+
 -- name: CountAlbumsByArtistID :one
 SELECT COUNT(*) AS total_rows FROM albums WHERE artist_id = $1;
 -- name: GetAlbumByArtistID :many
@@ -66,3 +67,11 @@ DELETE FROM albums_songs WHERE id = ANY($1::int[]);
 
 -- name: GetAlbumSong :many
 SELECT s.* from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.album_id = $1;
+
+
+-- name: GetLatestAlbum :many
+SELECT a.*, art.name as artist_name from albums a
+INNER JOIN artist art on a.artist_id = art.id
+ORDER BY a.created_at DESC
+OFFSET 0
+LIMIT 20;

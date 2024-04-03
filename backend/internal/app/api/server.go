@@ -38,9 +38,10 @@ func NewServer(
 }
 
 func (s *Server) setupRouter() {
-	s.UserRouter()
-	s.AdminRouter()
-	s.PublicRouter()
+	v1 := s.router.Group("/api/v1")
+	s.UserRouter(v1)
+	s.AdminRouter(v1)
+	s.PublicRouter(v1)
 }
 
 func (s *Server) Run(address string) {

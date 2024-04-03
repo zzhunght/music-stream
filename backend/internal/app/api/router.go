@@ -1,10 +1,14 @@
 package api
 
-import api "music-app-backend/internal/app/api/middleware"
+import (
+	api "music-app-backend/internal/app/api/middleware"
 
-func (s *Server) UserRouter() {
+	"github.com/gin-gonic/gin"
+)
 
-	user := s.router.Group("/user")
+func (s *Server) UserRouter(route *gin.RouterGroup) {
+
+	user := route.Group("/user")
 	{
 		user.POST("/register", s.Register)
 		user.POST("/verify-otp", s.VerifyOTP)
@@ -17,8 +21,8 @@ func (s *Server) UserRouter() {
 
 }
 
-func (s *Server) AdminRouter() {
-	admin := s.router.Group("/admin")
+func (s *Server) AdminRouter(route *gin.RouterGroup) {
+	admin := route.Group("/admin")
 	{
 		//  admin artists
 		admin.GET("/artists", s.GetArtists)
@@ -55,11 +59,13 @@ func (s *Server) AdminRouter() {
 	}
 }
 
-func (s *Server) PublicRouter() {
+func (s *Server) PublicRouter(route *gin.RouterGroup) {
 
-	public := s.router.Group("/public")
+	public := route.Group("/public")
 	{
 		public.GET("/artists", s.GetArtists)
+		public.GET("/album/latest", s.GetLatestAlbum)
+		public.GET("/album/:album_id/songs", s.GetAlbumSong)
 		public.GET("/categories", s.GetCategories)
 		public.GET("/songs", s.SearchSong)
 		public.GET("/songs_by_categories/:categories_id", s.GetSongByCategories)

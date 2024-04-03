@@ -234,6 +234,52 @@ func (q *Queries) GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, 
 	return items, nil
 }
 
+const getLatestAlbum = `-- name: GetLatestAlbum :many
+SELECT a.id, a.artist_id, a.thumbnail, a.name, a.release_date, a.created_at, art.name as artist_name from albums a
+INNER JOIN artist art on a.artist_id = art.id
+ORDER BY a.created_at DESC
+OFFSET 0
+LIMIT 20
+`
+
+type GetLatestAlbumRow struct {
+	ID          int32            `json:"id"`
+	ArtistID    int32            `json:"artist_id"`
+	Thumbnail   string           `json:"thumbnail"`
+	Name        string           `json:"name"`
+	ReleaseDate time.Time        `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ArtistName  string           `json:"artist_name"`
+}
+
+func (q *Queries) GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error) {
+	rows, err := q.db.Query(ctx, getLatestAlbum)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetLatestAlbumRow{}
+	for rows.Next() {
+		var i GetLatestAlbumRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ArtistID,
+			&i.Thumbnail,
+			&i.Name,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+			&i.ArtistName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const removeSongFromAlbum = `-- name: RemoveSongFromAlbum :exec
 DELETE FROM albums_songs WHERE id = ANY($1::int[])
 `

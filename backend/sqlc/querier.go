@@ -36,11 +36,12 @@ type Querier interface {
 	GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Album, error)
 	GetAlbumSong(ctx context.Context, albumID int32) ([]Song, error)
 	GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, error)
+	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error)
 	GetRandomSong(ctx context.Context) ([]Song, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
-	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]Song, error)
+	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
 	GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error)
 	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error
