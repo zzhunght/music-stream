@@ -33,7 +33,6 @@ func (s *Server) AssociateSongArtist(c *gin.Context) {
 	err = s.store.AssociateSongArtist(c, sqlc.AssociateSongArtistParams{
 		SongID:   body.SongID,
 		ArtistID: body.ArtistID,
-		Owner:    body.Owner,
 	})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

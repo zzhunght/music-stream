@@ -1,10 +1,14 @@
 package api
 
-import api "music-app-backend/internal/app/api/middleware"
+import (
+	api "music-app-backend/internal/app/api/middleware"
 
-func (s *Server) UserRouter() {
+	"github.com/gin-gonic/gin"
+)
 
-	user := s.router.Group("/user")
+func (s *Server) UserRouter(route *gin.RouterGroup) {
+
+	user := route.Group("/user")
 	{
 		user.POST("/register", s.Register)
 		user.POST("/verify-otp", s.VerifyOTP)
@@ -17,32 +21,51 @@ func (s *Server) UserRouter() {
 
 }
 
-func (s *Server) AdminRouter() {
-	admin := s.router.Group("/admin")
+func (s *Server) AdminRouter(route *gin.RouterGroup) {
+	admin := route.Group("/admin")
 	{
 		//  admin artists
 		admin.GET("/artists", s.GetArtists)
+		admin.GET("/artists/album/:artist_id", s.GetAlbumByArtistId)
 		admin.POST("/artists/", s.CreateArtist)
 		admin.PUT("/artists/:artist_id", s.UpdateArtist)
 		admin.DELETE("/artists/:artist_id", s.DeleteArtist)
 
-		// admin songs
-		admin.GET("/song", s.GetSong)
-		admin.POST("/song", s.CreateArtist)
-		admin.PUT("/song", s.CreateArtist)
-		admin.DELETE("/song", s.CreateArtist)
-		//
+		// admin categories
+		admin.GET("/categories", s.GetCategories)
+		admin.POST("/categories", s.CreateCategory)
+		admin.PUT("/categories", s.UpdateCategory)
+		admin.DELETE("/categories/:category_id", s.DeleteCategory)
 
+		// admin song
+		admin.GET("/song", s.GetSong)
+		admin.POST("/song", s.CreateSong)
+		admin.PUT("/song/:song_id", s.UpdateSong)
+		admin.DELETE("/song/:song_id", s.DeleteSong)
+
+		// album
+		admin.GET("/album", s.GetAlbums)
+		admin.GET("/album/:album_id", s.GetAlbumSong)
+		admin.POST("/album", s.CreateAlbum)
+		admin.POST("/album/add-song", s.AddSongToAlbum)
+		admin.POST("/album/remove-song", s.RemoveSongFromAlbum)
+		// admin.POST("/album", s.CreateAlbum)
+		admin.PUT("/album/:album_id", s.UpdateAlbum)
+		admin.DELETE("/album/:album_id", s.DeleteAlbum)
+
+		// song associated
 		admin.POST("/associate-song-artist", s.AssociateSongArtist)
 		admin.POST("/remove-associate-song-artist", s.RemoveAssociateSongArtist)
 	}
 }
 
-func (s *Server) PublicRouter() {
+func (s *Server) PublicRouter(route *gin.RouterGroup) {
 
-	public := s.router.Group("/public")
+	public := route.Group("/public")
 	{
 		public.GET("/artists", s.GetArtists)
+		public.GET("/album/latest", s.GetLatestAlbum)
+		public.GET("/album/:album_id/songs", s.GetAlbumSong)
 		public.GET("/categories", s.GetCategories)
 		public.GET("/songs", s.SearchSong)
 		public.GET("/songs_by_categories/:categories_id", s.GetSongByCategories)

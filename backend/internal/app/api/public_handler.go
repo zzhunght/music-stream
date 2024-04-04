@@ -10,24 +10,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func (s *Server) GetCategories(ctx *gin.Context) {
-
-	categories, err := s.store.GetSongCategories(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
-		return
-	}
-
-	ctx.JSON(http.StatusOK, SuccessResponse(categories, "Danh sách danh mục"))
-}
-
 func (s *Server) SearchSong(ctx *gin.Context) {
-
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
 	search := ctx.DefaultQuery("search", "")
 	fmt.Println("query : >>>>>>>>>> ", search)
-	songs, err := s.store.SearchSong(ctx, pgtype.Text{
-		String: search,
-		Valid:  true,
+	songs, err := s.store.SearchSong(ctx, sqlc.SearchSongParams{
+		Size:  int32(size),
+		Start: (int32(page) - 1) * int32(size),
+		Search: pgtype.Text{
+			String: search,
+			Valid:  true,
+		},
 	})
 
 	if err != nil {
@@ -59,4 +53,15 @@ func (s *Server) GetSongByCategories(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Tìm kiếm bài hát thành công"))
+}
+
+func (s *Server) GetLatestAlbum(ctx *gin.Context) {
+
+	data, err := s.store.GetLatestAlbum(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(data, "Danh sách album mới nhất"))
 }

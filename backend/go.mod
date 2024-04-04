@@ -21,6 +21,7 @@ require (
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	go.uber.org/goleak v1.2.1 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 

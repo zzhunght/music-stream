@@ -153,7 +153,7 @@ func (s *Server) VerifyOTP(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(401, ErrorResponse(errors.New("Xác thực thất bại")))
+	c.JSON(401, ErrorResponse(errors.New("xác thực thất bại")))
 }
 
 func (s *Server) ResendOTP(c *gin.Context) {
@@ -164,6 +164,7 @@ func (s *Server) ResendOTP(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"error": "Invalid request body",
 		})
+		return
 	}
 	s.task_client.DeliveryEmailTaskTask(requestBody.Email)
 	c.JSON(200, gin.H{
@@ -181,6 +182,7 @@ func (s *Server) Login(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"error": "Invalid login request",
 		})
+		return
 	}
 
 	if requestBody.Email == "" || requestBody.Password == "" {

@@ -11,6 +11,10 @@ SET name = $2, avatar_url = $3
 WHERE  id = $1 
 RETURNING *;
 
+-- name: CountListArtists :one
+SELECT count(*) as total_rows
+FROM artist 
+WHERE name ILIKE sqlc.arg(name_search) || '%';
 -- name: GetListArtists :many
 SELECT * 
 FROM artist 
