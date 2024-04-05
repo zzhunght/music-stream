@@ -5,7 +5,7 @@ const dev = {
     db: {
         host: process.env.DEV_DB_HOST || "0.0.0.0",
         port: process.env.DEV_DB_PORT || 27017,
-        name: process.env.DEV_DB_NAME || "noti-music-dev",
+        name: process.env.DEV_DB_NAME || "follow-music-dev",
     },
 };
 
@@ -16,7 +16,7 @@ const prod = {
     db: {
         host: process.env.PROD_DB_HOST || "0.0.0.0",
         port: process.env.PROD_DB_PORT || 27017,
-        name: process.env.PROD_DB_NAME || "noti-music-prod",
+        name: process.env.PROD_DB_NAME || "follow-music-prod",
     },
 };
 
