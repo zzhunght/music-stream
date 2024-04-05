@@ -19,6 +19,9 @@ func main() {
 	redisOpt := asynq.RedisClientOpt{
 		Addr: env.RedisUrl,
 	}
+	// messageQueue, err := message.NewRabbitMQ(env.RabbitMQUrl)
+
+	// defer messageQueue.CloseRabbitMQ()
 	taskClient := worker.NewDeliveryTaskClient(redisOpt)
 	mailsender := utils.NewMailSender(env)
 	store := config.InitDB(env.DatabaseDestination)
