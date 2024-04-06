@@ -4,6 +4,7 @@ import (
 	"music-app-backend/internal/app/api"
 	"music-app-backend/internal/app/config"
 	"music-app-backend/internal/app/utils"
+	"music-app-backend/message"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
 
@@ -19,9 +20,15 @@ func main() {
 	redisOpt := asynq.RedisClientOpt{
 		Addr: env.RedisUrl,
 	}
-	// messageQueue, err := message.NewRabbitMQ(env.RabbitMQUrl)
-
-	// defer messageQueue.CloseRabbitMQ()
+	messageQueue, err := message.NewRabbitMQ(env.RabbitMQUrl)
+	if err != nil {
+		log.Fatal().Err(err).Msg(("can connect to message queue"))
+	}
+	err = messageQueue.DeclareExchange()
+	if err != nil {
+		log.Fatal().Err(err).Msg(("can declare exchange"))
+	}
+	defer messageQueue.CloseRabbitMQ()
 	taskClient := worker.NewDeliveryTaskClient(redisOpt)
 	mailsender := utils.NewMailSender(env)
 	store := config.InitDB(env.DatabaseDestination)

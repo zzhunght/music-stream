@@ -1,6 +1,8 @@
 package message
 
 import (
+	"context"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -28,19 +30,32 @@ func (r *RabbitMQProvider) CloseRabbitMQ() error {
 	defer r.amqpConn.Close()
 	return r.ch.Close()
 }
-
-func (r *RabbitMQProvider) Send() error {
+func (r *RabbitMQProvider) DeclareExchange() error {
 	err := r.ch.ExchangeDeclare(
-		"logs_direct", // name
-		"direct",      // type
-		true,          // durable
-		false,         // auto-deleted
-		false,         // internal
-		false,         // no-wait
-		nil,           // arguments
+		"music_create", // name
+		"fanout",       // type
+		true,           // durable
+		false,          // auto-deleted
+		false,          // internal
+		false,          // no-wait
+		nil,            // arguments
 	)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (r *RabbitMQProvider) Send(ctx context.Context) error {
+	err := r.ch.PublishWithContext(ctx,
+		"music_create", // exchange
+		"",             // routing key
+		false,          // mandatory
+		false,          // immediate
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        []byte("Hello worlds"),
+		})
+
+	return err
 }

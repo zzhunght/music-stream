@@ -93,7 +93,7 @@ INSERT INTO albums (
     $2,
     $3,
     $4::date
-) RETURNING id, artist_id, thumbnail, name, release_date, created_at
+) RETURNING id, artist_id, name, thumbnail, release_date, created_at
 `
 
 type CreateAlbumParams struct {
@@ -114,8 +114,8 @@ func (q *Queries) CreateAlbum(ctx context.Context, arg CreateAlbumParams) (Album
 	err := row.Scan(
 		&i.ID,
 		&i.ArtistID,
-		&i.Thumbnail,
 		&i.Name,
+		&i.Thumbnail,
 		&i.ReleaseDate,
 		&i.CreatedAt,
 	)
@@ -132,7 +132,7 @@ func (q *Queries) DeleteAlbum(ctx context.Context, id int32) error {
 }
 
 const getAlbumByArtistID = `-- name: GetAlbumByArtistID :many
-SELECT id, artist_id, thumbnail, name, release_date, created_at FROM albums WHERE artist_id = $1
+SELECT id, artist_id, name, thumbnail, release_date, created_at FROM albums WHERE artist_id = $1
 `
 
 func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Album, error) {
@@ -147,8 +147,8 @@ func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Alb
 		if err := rows.Scan(
 			&i.ID,
 			&i.ArtistID,
-			&i.Thumbnail,
 			&i.Name,
+			&i.Thumbnail,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 		); err != nil {
@@ -197,7 +197,7 @@ func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]Song, erro
 }
 
 const getAlbums = `-- name: GetAlbums :many
-SELECT id, artist_id, thumbnail, name, release_date, created_at FROM albums
+SELECT id, artist_id, name, thumbnail, release_date, created_at FROM albums
 OFFSET COALESCE($1::int, 0)
 LIMIT COALESCE($2::int, 50)
 `
@@ -219,8 +219,8 @@ func (q *Queries) GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, 
 		if err := rows.Scan(
 			&i.ID,
 			&i.ArtistID,
-			&i.Thumbnail,
 			&i.Name,
+			&i.Thumbnail,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 		); err != nil {
@@ -235,7 +235,7 @@ func (q *Queries) GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, 
 }
 
 const getLatestAlbum = `-- name: GetLatestAlbum :many
-SELECT a.id, a.artist_id, a.thumbnail, a.name, a.release_date, a.created_at, art.name as artist_name from albums a
+SELECT a.id, a.artist_id, a.name, a.thumbnail, a.release_date, a.created_at, art.name as artist_name from albums a
 INNER JOIN artist art on a.artist_id = art.id
 ORDER BY a.created_at DESC
 OFFSET 0
@@ -245,8 +245,8 @@ LIMIT 20
 type GetLatestAlbumRow struct {
 	ID          int32            `json:"id"`
 	ArtistID    int32            `json:"artist_id"`
-	Thumbnail   string           `json:"thumbnail"`
 	Name        string           `json:"name"`
+	Thumbnail   string           `json:"thumbnail"`
 	ReleaseDate time.Time        `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	ArtistName  string           `json:"artist_name"`
@@ -264,8 +264,8 @@ func (q *Queries) GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, erro
 		if err := rows.Scan(
 			&i.ID,
 			&i.ArtistID,
-			&i.Thumbnail,
 			&i.Name,
+			&i.Thumbnail,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.ArtistName,
@@ -295,7 +295,7 @@ UPDATE albums SET
     artist_id = $3,
     thumbnail = $4,
     release_date = $5
-WHERE id = $1 RETURNING id, artist_id, thumbnail, name, release_date, created_at
+WHERE id = $1 RETURNING id, artist_id, name, thumbnail, release_date, created_at
 `
 
 type UpdateAlbumParams struct {
@@ -318,8 +318,8 @@ func (q *Queries) UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album
 	err := row.Scan(
 		&i.ID,
 		&i.ArtistID,
-		&i.Thumbnail,
 		&i.Name,
+		&i.Thumbnail,
 		&i.ReleaseDate,
 		&i.CreatedAt,
 	)

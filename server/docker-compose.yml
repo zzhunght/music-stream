@@ -11,7 +11,7 @@ services:
     volumes:
        - postgres-db:/data/postgres
     ports:
-      - "5432:5432"
+      - "5434:5432"
     networks:
       - music-networks
 
@@ -22,17 +22,33 @@ services:
       - "6379:6379"
     networks:
       - music-networks
-
-  golang_app:
-    container_name: go-be
-    build: .
+    
+  rabbitmq:
+    container_name: message_broker
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=music
+      - RABBITMQ_DEFAULT_PASS=music123
     ports:
-      - "8080:8080"
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/
+     - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     networks:
       - music-networks
-    depends_on:
-      - redis
-      - postgres
+    restart: always
+
+  # golang_app:
+  #   container_name: go-be
+  #   build: ./golang/.
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - music-networks
+  #   depends_on:
+  #     - redis
+  #     - postgres
 
 
 networks:
