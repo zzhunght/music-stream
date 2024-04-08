@@ -17,6 +17,8 @@ type Config struct {
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 	RedisUrl             string        `mapstructure:"REDIS_URL"`
 	RabbitMQUrl          string        `mapstructure:"RABBITMQ_URL"`
+	ExchangeName         string        `mapstructure:"EXCHANGE_NAME"`
+	NotiRoutingKey       string        `mapstructure:"NOTI_ROUTING_KEY"`
 }
 
 func LoadEnv(path string) (c *Config, err error) {

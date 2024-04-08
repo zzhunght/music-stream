@@ -67,7 +67,8 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 				Valid: true,
 			},
 		},
-		ArtistID: body.ArtistID,
+		ArtistID:      body.ArtistID,
+		AfterFunction: s.message_queue.Publishing,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))

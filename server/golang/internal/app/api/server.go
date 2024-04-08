@@ -3,6 +3,7 @@ package api
 import (
 	"music-app-backend/internal/app/helper"
 	"music-app-backend/internal/app/utils"
+	"music-app-backend/message"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
 
@@ -10,12 +11,13 @@ import (
 )
 
 type Server struct {
-	store       *sqlc.SQLStore
-	router      *gin.Engine
-	mailsender  *utils.MailSender
-	config      *utils.Config
-	token_maker *helper.Token
-	task_client *worker.DeliveryTaskClient
+	store         *sqlc.SQLStore
+	router        *gin.Engine
+	mailsender    *utils.MailSender
+	config        *utils.Config
+	token_maker   *helper.Token
+	task_client   *worker.DeliveryTaskClient
+	message_queue *message.RabbitMQProvider
 }
 
 func NewServer(
@@ -23,13 +25,15 @@ func NewServer(
 	config *utils.Config,
 	task_client *worker.DeliveryTaskClient,
 	mailsender *utils.MailSender,
+	message_queue *message.RabbitMQProvider,
 ) *Server {
 	r := gin.Default()
 	server := &Server{
-		store:       store,
-		config:      config,
-		token_maker: helper.NewTokenMaker(config.JwtSecretKey),
-		task_client: task_client,
+		store:         store,
+		config:        config,
+		token_maker:   helper.NewTokenMaker(config.JwtSecretKey),
+		task_client:   task_client,
+		message_queue: message_queue,
 	}
 	server.mailsender = mailsender
 	server.router = r
