@@ -13,9 +13,14 @@ type CreateSongWithTxParams struct {
 	AfterFunction  func([]byte) error
 }
 
+type MessageData struct {
+	ArtistID int32  `json:"artist_id"`
+	SongID   int32  `json:"song_id"`
+	Type     string `json:"type"`
+}
 type MessageBody struct {
-	ArtistID int32 `json:"artist_id"`
-	SongID   int32 `json:"song_id"`
+	Event string      `json:"event"`
+	Data  MessageData `json:"data"`
 }
 
 func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithTxParams) (Song, error) {
@@ -39,8 +44,12 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 		return song, err
 	}
 	body, err := json.Marshal(MessageBody{
-		ArtistID: arg.ArtistID,
-		SongID:   song.ID,
+		Event: "CREATE_NEW_SONG",
+		Data: MessageData{
+			ArtistID: arg.ArtistID,
+			SongID:   song.ID,
+			Type:     "CREATE",
+		},
 	})
 	if err != nil {
 		return song, err
