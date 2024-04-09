@@ -20,7 +20,7 @@ CREATE TABLE "accounts" (
   "name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
   "password" varchar NOT NULL,
-  "role_id" int NOT NULL,
+  "role_id" int NOT NULL DEFAULT 1,
   "is_verify" boolean NOT NULL DEFAULT false,
   "secret_key" varchar,
   "created_at" timestamp DEFAULT (now()),
@@ -153,3 +153,4 @@ ALTER TABLE "favorite_albums" ADD FOREIGN KEY ("album_id") REFERENCES "albums" (
 ALTER TABLE "artist_follow" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "artist_follow" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+INSERT INTO roles (name) VALUES ('user'), ('admin');

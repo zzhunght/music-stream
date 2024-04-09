@@ -5,20 +5,28 @@ import (
 	"music-app-backend/sqlc"
 
 	"github.com/hibiken/asynq"
+	"github.com/redis/go-redis/v9"
 )
 
 type ProcessorRedisTasks struct {
 	client *asynq.Server
 	mailer *utils.MailSender
 	store  *sqlc.SQLStore
+	rdb    *redis.Client
 }
 
-func NewProcessorTaskClient(opts asynq.RedisClientOpt, mailer *utils.MailSender, store *sqlc.SQLStore) *ProcessorRedisTasks {
+func NewProcessorTaskClient(
+	opts asynq.RedisClientOpt,
+	mailer *utils.MailSender,
+	store *sqlc.SQLStore,
+	rdb *redis.Client,
+) *ProcessorRedisTasks {
 	client := asynq.NewServer(opts, asynq.Config{})
 	return &ProcessorRedisTasks{
 		client: client,
 		mailer: mailer,
 		store:  store,
+		rdb:    rdb,
 	}
 }
 

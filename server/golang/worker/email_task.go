@@ -16,6 +16,12 @@ var TypeEmailDeliveryTask = "task:send_email_verify"
 type EmailDeliveryTaskPayload struct {
 	Email string `json:"email"`
 }
+type CreateAccountTemp struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	SecretKey string `json:"secret_key"`
+}
 
 func NewEmailDeliveryTaskPayload(payload EmailDeliveryTaskPayload) (*asynq.Task, error) {
 	data, err := json.Marshal(payload)
@@ -26,16 +32,22 @@ func NewEmailDeliveryTaskPayload(payload EmailDeliveryTaskPayload) (*asynq.Task,
 }
 
 func (process *ProcessorRedisTasks) HandleEmailDeliveryTask(ctx context.Context, t *asynq.Task) error {
-
 	var p EmailDeliveryTaskPayload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
 	}
-	key, err := process.store.GetSecretKey(ctx, p.Email)
+	var tempUser CreateAccountTemp
+	key := "register:" + p.Email
+	val, err := process.rdb.Get(ctx, key).Result()
 	if err != nil {
 		log.Err(err).Msg("Failed to get secret key")
 	}
-	otp, err := totp.GenerateCode(key.String, time.Now().Add(60))
+	err = json.Unmarshal([]byte(val), &tempUser)
+	if err != nil {
+		log.Err(err).Msg("Failed to decode json")
+	}
+
+	otp, err := totp.GenerateCode(tempUser.SecretKey, time.Now().Add(60))
 
 	if err != nil {
 		log.Err(err).Msg("Failed to create otp")

@@ -9,6 +9,7 @@ import (
 	"music-app-backend/worker"
 
 	"github.com/hibiken/asynq"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
 )
 
@@ -25,16 +26,25 @@ func main() {
 	defer mq.CloseRabbitMQ()
 	taskClient := worker.NewDeliveryTaskClient(redisOpt)
 	mailsender := utils.NewMailSender(env)
+	rdb := utils.NewRedisClient(env.RedisUrl)
+	defer rdb.Close()
+
 	store := config.InitDB(env.DatabaseDestination)
-	go StartRedisWorker(redisOpt, mailsender, store)
-	server := api.NewServer(store, env, taskClient, mailsender, mq)
+
+	go StartRedisWorker(redisOpt, mailsender, store, rdb)
+	server := api.NewServer(store, env, taskClient, mailsender, mq, rdb)
 	// defer config.CloseDB()
 	server.Run(":8080")
 }
 
-func StartRedisWorker(redisOpts asynq.RedisClientOpt, mailer *utils.MailSender, store *sqlc.SQLStore) {
+func StartRedisWorker(
+	redisOpts asynq.RedisClientOpt,
+	mailer *utils.MailSender,
+	store *sqlc.SQLStore,
+	rdb *redis.Client,
+) {
 	log.Info().Msg("Start Task processor")
-	client := worker.NewProcessorTaskClient(redisOpts, mailer, store)
+	client := worker.NewProcessorTaskClient(redisOpts, mailer, store, rdb)
 	err := client.Start()
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot start worker")
@@ -50,10 +60,6 @@ func StartRabbitMQ(config *utils.Config) *message.RabbitMQProvider {
 	if err != nil {
 		log.Fatal().Err(err).Msg(("can declare exchange"))
 	}
-	// err = messageQueue.Send()
-	// if err != nil {
-	// 	log.Fatal().Err(err).Msg(("can declare exchange"))
-	// }
 	log.Info().Msg("Start RabbitMQ Successfully!")
 	return messageQueue
 }

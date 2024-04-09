@@ -8,6 +8,7 @@ import (
 	"music-app-backend/worker"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 type Server struct {
@@ -18,6 +19,7 @@ type Server struct {
 	token_maker   *helper.Token
 	task_client   *worker.DeliveryTaskClient
 	message_queue *message.RabbitMQProvider
+	rdb           *redis.Client
 }
 
 func NewServer(
@@ -26,6 +28,7 @@ func NewServer(
 	task_client *worker.DeliveryTaskClient,
 	mailsender *utils.MailSender,
 	message_queue *message.RabbitMQProvider,
+	rdb *redis.Client,
 ) *Server {
 	r := gin.Default()
 	server := &Server{
@@ -34,6 +37,7 @@ func NewServer(
 		token_maker:   helper.NewTokenMaker(config.JwtSecretKey),
 		task_client:   task_client,
 		message_queue: message_queue,
+		rdb:           rdb,
 	}
 	server.mailsender = mailsender
 	server.router = r

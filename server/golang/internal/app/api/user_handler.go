@@ -1,11 +1,13 @@
 package api
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/sqlc"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
@@ -39,6 +41,13 @@ type LoginResponse struct {
 	User         sqlc.GetAccountRow `json:"user"`
 	AccessToken  string             `json:"access_token"`
 	RefreshToken string             `json:"refresh_token"`
+}
+
+type CreateAccountTemp struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	SecretKey string `json:"secret_key"`
 }
 
 // ListUsers là handler cho việc liệt kê các users
@@ -93,24 +102,56 @@ func (s *Server) Register(c *gin.Context) {
 		})
 		return
 	}
+	form := CreateAccountTemp{
+		Name:      requestBody.Name,
+		Email:     requestBody.Email,
+		Password:  string(hashedPassword),
+		SecretKey: secret.Secret(),
+	}
+	key := "register:" + form.Email
+	val, err := json.Marshal(form)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		c.JSON(400, gin.H{
+			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
+		})
+		return
+	}
+	err = s.rdb.Set(c, key, val, time.Minute*15).Err()
+
+	if err != nil {
+		// Xử lý lỗi nếu có
+		c.JSON(400, gin.H{
+			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
+		})
+		return
+	}
+	err = s.task_client.DeliveryEmailTaskTask(form.Email)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		c.JSON(400, gin.H{
+			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
+		})
+		return
+	}
 	// otp, _ := totp.GenerateCode(secret.Secret(), time.Now())
-	form := sqlc.CreateAccountParams{
-		Name:     requestBody.Name,
-		Email:    requestBody.Email,
-		Password: string(hashedPassword),
-		SecretKey: pgtype.Text{
-			String: secret.Secret(),
-			Valid:  true,
-		},
-	}
+	// form := sqlc.CreateAccountParams{
+	// 	Name:     requestBody.Name,
+	// 	Email:    requestBody.Email,
+	// 	Password: string(hashedPassword),
+	// 	SecretKey: pgtype.Text{
+	// 		String: secret.Secret(),
+	// 		Valid:  true,
+	// 	},
+	// }
 	// s.mailsender.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
-	arg := sqlc.CreateAccountWithTxParams{
-		Params: form,
-		AfterFunction: func(email string) error {
-			return s.task_client.DeliveryEmailTaskTask(email)
-		},
-	}
-	new_acc, err := s.store.CreateAccountWithTx(c, arg)
+	// arg := sqlc.CreateAccountWithTxParams{
+	// 	Params: form,
+	// 	AfterFunction: func(email string) error {
+	// 		return s.task_client.DeliveryEmailTaskTask(email)
+	// 	},
+	// }
+	// new_acc, err := s.store.CreateAccountWithTx(c, arg)
 	if err != nil {
 		// Xử lý lỗi nếu có
 		c.JSON(400, gin.H{
@@ -119,12 +160,39 @@ func (s *Server) Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, gin.H{
-		"message": "Tạo tài khoản thành công",
-		"data":    new_acc,
-	})
+	c.JSON(201, SuccessResponse(true, "Vui lòng kiểm tra email và xác thực OTP để hoàn tất quá trình tạo tài khoản"))
 
 }
+
+// func (s *Server) VerifyOTP(c *gin.Context) {
+// 	var requestBody VerifyOTPRequest
+
+// 	err := c.ShouldBindJSON(&requestBody)
+// 	if err != nil {
+// 		// Xử lý lỗi nếu có
+// 		c.JSON(400, ErrorResponse(errors.New("invalid request body")))
+// 		return
+// 	}
+// 	key, err := s.store.GetSecretKey(c, requestBody.Email)
+// 	log.Info().Str("otp ", requestBody.Otp).Msg("")
+// 	log.Info().Str("key ", key.String).Msg("")
+// 	if err != nil {
+// 		c.JSON(400, ErrorResponse(err))
+// 		return
+// 	}
+
+// 	valid := totp.Validate(requestBody.Otp, key.String)
+// 	log.Info().Any("valid", valid).Msg("")
+// 	if valid {
+// 		s.store.VerifyAccount(c, requestBody.Email)
+// 		c.JSON(200, gin.H{
+// 			"message": "Xác thực thành công",
+// 			"data":    true,
+// 		})
+// 		return
+// 	}
+// 	c.JSON(401, ErrorResponse(errors.New("xác thực thất bại")))
+// }
 
 func (s *Server) VerifyOTP(c *gin.Context) {
 	var requestBody VerifyOTPRequest
@@ -135,21 +203,44 @@ func (s *Server) VerifyOTP(c *gin.Context) {
 		c.JSON(400, ErrorResponse(errors.New("invalid request body")))
 		return
 	}
-	key, err := s.store.GetSecretKey(c, requestBody.Email)
-	log.Info().Str("otp ", requestBody.Otp).Msg("")
-	log.Info().Str("key ", key.String).Msg("")
+	var tempUser CreateAccountTemp
+	key := "register:" + requestBody.Email
+	val, err := s.rdb.Get(c, key).Result()
 	if err != nil {
-		c.JSON(400, ErrorResponse(err))
+		// Xử lý lỗi nếu có
+		c.JSON(400, ErrorResponse(errors.New("vui lòng đăng ký trước khi gửi otp")))
 		return
 	}
 
-	valid := totp.Validate(requestBody.Otp, key.String)
+	err = json.Unmarshal([]byte(val), &tempUser)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		c.JSON(400, ErrorResponse(errors.New("có lỗi xảy ra vui lòng thử lại")))
+		return
+	}
+	fmt.Println("key:", tempUser.SecretKey)
+	fmt.Println("OTP:", requestBody.Otp)
+
+	valid := totp.Validate(requestBody.Otp, tempUser.SecretKey)
 	log.Info().Any("valid", valid).Msg("")
 	if valid {
-		s.store.VerifyAccount(c, requestBody.Email)
+		newu, err := s.store.CreateAccount(c, sqlc.CreateAccountParams{
+			Name:     tempUser.Name,
+			Email:    tempUser.Email,
+			Password: tempUser.Password,
+			SecretKey: pgtype.Text{
+				String: tempUser.SecretKey,
+				Valid:  true,
+			},
+		})
+
+		if err != nil {
+			c.JSON(401, ErrorResponse(err))
+			return
+		}
 		c.JSON(200, gin.H{
 			"message": "Xác thực thành công",
-			"data":    true,
+			"data":    newu,
 		})
 		return
 	}
