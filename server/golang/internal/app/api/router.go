@@ -17,6 +17,13 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/refresh-token", s.RenewToken)
 		user.Use(api.Authentication(s.token_maker))
 		user.GET("/", s.GetUser)
+
+		user.GET("/playlist")
+		user.POST("/playlist")
+		user.POST("/playlist/add-song")
+		user.POST("/playlist/remove-song")
+		user.PUT("/playlist/:playlist_id")
+		user.DELETE("/playlist/:playlist_id")
 	}
 
 }
@@ -49,7 +56,6 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		admin.POST("/album", s.CreateAlbum)
 		admin.POST("/album/add-song", s.AddSongToAlbum)
 		admin.POST("/album/remove-song", s.RemoveSongFromAlbum)
-		// admin.POST("/album", s.CreateAlbum)
 		admin.PUT("/album/:album_id", s.UpdateAlbum)
 		admin.DELETE("/album/:album_id", s.DeleteAlbum)
 
