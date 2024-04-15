@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "music-app-backend/pb";
+import "rpc_user.proto";
+service MusicApp {
+    rpc Login (UserLoginRequest) returns (UserLoginResponse) {}
+}

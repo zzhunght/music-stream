@@ -19,10 +19,10 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.GET("/", s.GetUser)
 
 		user.GET("/playlist")
-		user.POST("/playlist")
-		user.POST("/playlist/add-song")
-		user.POST("/playlist/remove-song")
-		user.PUT("/playlist/:playlist_id")
+		user.POST("/playlist", s.CreatePlaylist)
+		user.POST("/playlist/add-song/:playlist_id", s.AddSongToPlaylist)
+		user.POST("/playlist/remove-song/:playlist_id", s.RemoveSongFromPlaylist)
+		user.PUT("/playlist/:playlist_id", s.UpdatePlaylistName)
 		user.DELETE("/playlist/:playlist_id")
 	}
 

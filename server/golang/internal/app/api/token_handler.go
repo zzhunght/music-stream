@@ -57,7 +57,7 @@ func (s *Server) RenewToken(ctx *gin.Context) {
 		return
 	}
 
-	new_access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.Role, s.config.AccessTokenDuration)
+	new_access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.ID, acc.Role, s.config.AccessTokenDuration)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, ErrorResponse(errors.New("Unauthorized")))
 		return

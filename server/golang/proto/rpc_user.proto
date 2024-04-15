@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "music-app-backend/pb";
+import "user.proto";
+message UserLoginRequest {
+    string email  = 1;
+    string password  = 2;
+}
+
+message UserLoginResponse {
+    string session_id = 1;
+    UserResponse user = 2;
+    string access_token = 3;
+    string refresh_token = 4;
+}

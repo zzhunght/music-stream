@@ -91,7 +91,7 @@ CREATE TABLE "albums_songs" (
 
 CREATE TABLE "playlist" (
   "id" SERIAL PRIMARY KEY,
-  "name" int NOT NULL,
+  "name" varchar NOT NULL,
   "account_id" int NOT NULL,
   "description" varchar,
   "created_at" timestamp DEFAULT (now())

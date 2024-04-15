@@ -17,6 +17,7 @@ type Querier interface {
 	AddSongToPlaylist(ctx context.Context, arg AddSongToPlaylistParams) error
 	AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
+	CheckOwnerPlaylist(ctx context.Context, arg CheckOwnerPlaylistParams) (CheckOwnerPlaylistRow, error)
 	CheckSongInPlaylist(ctx context.Context, arg CheckSongInPlaylistParams) (int64, error)
 	CountAlbums(ctx context.Context) (int64, error)
 	CountAlbumsByArtistID(ctx context.Context, artistID int32) (int64, error)

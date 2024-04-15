@@ -36,11 +36,18 @@ type LoginRequest struct {
 	Email    string `json:"email"`
 }
 
+type UserResponse struct {
+	ID        int32     `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
 type LoginResponse struct {
-	SessionID    any                `json:"session_id"`
-	User         sqlc.GetAccountRow `json:"user"`
-	AccessToken  string             `json:"access_token"`
-	RefreshToken string             `json:"refresh_token"`
+	SessionID    string       `json:"session_id"`
+	User         UserResponse `json:"user"`
+	AccessToken  string       `json:"access_token"`
+	RefreshToken string       `json:"refresh_token"`
 }
 
 type CreateAccountTemp struct {
@@ -291,12 +298,12 @@ func (s *Server) Login(c *gin.Context) {
 		})
 		return
 	}
-	access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.Role, s.config.AccessTokenDuration)
+	access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.ID, acc.Role, s.config.AccessTokenDuration)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	refresh_token, rf_payload, err := s.token_maker.CreateToken(acc.Email, acc.Role, s.config.RefreshTokenDuration)
+	refresh_token, rf_payload, err := s.token_maker.CreateToken(acc.Email, acc.ID, acc.Role, s.config.RefreshTokenDuration)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -319,8 +326,14 @@ func (s *Server) Login(c *gin.Context) {
 	}
 
 	resp := &LoginResponse{
-		SessionID:    session.ID,
-		User:         acc,
+		SessionID: session.ID.String(),
+		User: UserResponse{
+			Email:     acc.Email,
+			Name:      acc.Name,
+			ID:        acc.ID,
+			CreatedAt: acc.CreatedAt.Time,
+			UpdatedAt: acc.UpdatedAt.Time,
+		},
 		AccessToken:  access_token,
 		RefreshToken: refresh_token,
 	}

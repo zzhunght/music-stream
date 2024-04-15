@@ -75,7 +75,7 @@ type FavoriteSong struct {
 
 type Playlist struct {
 	ID          int32            `json:"id"`
-	Name        int32            `json:"name"`
+	Name        string           `json:"name"`
 	AccountID   int32            `json:"account_id"`
 	Description pgtype.Text      `json:"description"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`

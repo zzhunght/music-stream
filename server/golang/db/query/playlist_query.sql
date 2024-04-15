@@ -16,6 +16,10 @@ SET name = $1
 WHERE id = $2 and account_id = $3
 RETURNING *;
 
+-- name: CheckOwnerPlaylist :one
+SELECT account_id, id FROM playlist WHERE account_id = $1 and id = $2;
+
+
 -- name: DeletePlaylist :exec
 DELETE FROM playlist where account_id = $1 and id = $2;
 

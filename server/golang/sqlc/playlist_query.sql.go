@@ -24,6 +24,27 @@ func (q *Queries) AddSongToPlaylist(ctx context.Context, arg AddSongToPlaylistPa
 	return err
 }
 
+const checkOwnerPlaylist = `-- name: CheckOwnerPlaylist :one
+SELECT account_id, id FROM playlist WHERE account_id = $1 and id = $2
+`
+
+type CheckOwnerPlaylistParams struct {
+	AccountID int32 `json:"account_id"`
+	ID        int32 `json:"id"`
+}
+
+type CheckOwnerPlaylistRow struct {
+	AccountID int32 `json:"account_id"`
+	ID        int32 `json:"id"`
+}
+
+func (q *Queries) CheckOwnerPlaylist(ctx context.Context, arg CheckOwnerPlaylistParams) (CheckOwnerPlaylistRow, error) {
+	row := q.db.QueryRow(ctx, checkOwnerPlaylist, arg.AccountID, arg.ID)
+	var i CheckOwnerPlaylistRow
+	err := row.Scan(&i.AccountID, &i.ID)
+	return i, err
+}
+
 const checkSongInPlaylist = `-- name: CheckSongInPlaylist :one
 SELECT count(*) 
 FROM playlist_song
@@ -48,8 +69,8 @@ VALUES($1, $2) RETURNING id, name, account_id, description, created_at
 `
 
 type CreatePlaylistParams struct {
-	AccountID int32 `json:"account_id"`
-	Name      int32 `json:"name"`
+	AccountID int32  `json:"account_id"`
+	Name      string `json:"name"`
 }
 
 func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error) {
@@ -165,9 +186,9 @@ RETURNING id, name, account_id, description, created_at
 `
 
 type UpdatePlaylistParams struct {
-	Name      int32 `json:"name"`
-	ID        int32 `json:"id"`
-	AccountID int32 `json:"account_id"`
+	Name      string `json:"name"`
+	ID        int32  `json:"id"`
+	AccountID int32  `json:"account_id"`
 }
 
 func (q *Queries) UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error) {

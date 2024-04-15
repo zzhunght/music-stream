@@ -21,6 +21,7 @@ type Token struct {
 
 type TokenPayload struct {
 	ID        uuid.UUID `json:"id"`
+	UserID    int32     `json:"user_id"`
 	Email     string    `json:"email"`
 	Role      string    `json:"role"`
 	IssuedAt  time.Time `json:"issued_at"`
@@ -41,9 +42,10 @@ func NewTokenMaker(secretkey string) *Token {
 	}
 }
 
-func (t *Token) CreateToken(email string, role string, duration time.Duration) (string, *TokenPayload, error) {
+func (t *Token) CreateToken(email string, user_id int32, role string, duration time.Duration) (string, *TokenPayload, error) {
 	payload := &TokenPayload{
 		ID:        uuid.New(),
+		UserID:    user_id,
 		Role:      role,
 		Email:     email,
 		IssuedAt:  time.Now(),
