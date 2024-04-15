@@ -135,3 +135,29 @@ func (s *Server) RemoveSongFromPlaylist(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, SuccessResponse(true, "Xóa bài hát vào playlist thành công"))
 }
+
+func (s *Server) GetUserPlaylists(ctx *gin.Context) {
+	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+
+	data, err := s.store.GetPlaylistofUser(ctx, authPayload.UserID)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, ErrorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusCreated, SuccessResponse(data, "playlist"))
+}
+
+func (s *Server) GetPlaylistSong(ctx *gin.Context) {
+
+	playlist_id, err := strconv.Atoi(ctx.Param("playlist_id"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	data, err := s.store.GetSongInPlaylist(ctx, int32(playlist_id))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, ErrorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusCreated, SuccessResponse(data, "playlist song"))
+}
