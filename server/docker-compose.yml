@@ -39,17 +39,17 @@ services:
             - music-networks
         restart: always
 
-    golang_app:
-        container_name: go-be
-        build: ./golang/.
-        ports:
-            - "8080:8080"
-        networks:
-            - music-networks
-        depends_on:
-            - redis
-            - postgres
-            - rabbitmq
+    # golang_app:
+    #     container_name: go-be
+    #     build: ./golang/.
+    #     ports:
+    #         - "8080:8080"
+    #     networks:
+    #         - music-networks
+    #     depends_on:
+    #         - redis
+    #         - postgres
+    #         - rabbitmq
 
 networks:
     music-networks:
