@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/internal/app/helper"
 	db "music-app-backend/sqlc"
@@ -90,12 +91,26 @@ func (s *Server) AddSongToPlaylist(ctx *gin.Context) {
 		return
 	}
 
-	err = s.store.AddSongToPlaylist(ctx, db.AddSongToPlaylistParams{
+	exist, err := s.store.CheckSongInPlaylist(ctx, db.CheckSongInPlaylistParams{
 		PlaylistID: check.ID,
 		SongID:     body.SongID,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	if exist > 0 {
+		ctx.JSON(http.StatusCreated, SuccessResponse(true, "Bài hát đã tồn tại trong playlist"))
+		return
+	}
+
+	err = s.store.AddSongToPlaylist(ctx, db.AddSongToPlaylistParams{
+		PlaylistID: check.ID,
+		SongID:     body.SongID,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("Có lỗi trong quá trình thêm vào")))
 		return
 	}
 
@@ -160,4 +175,23 @@ func (s *Server) GetPlaylistSong(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusCreated, SuccessResponse(data, "playlist song"))
+}
+
+func (s *Server) DeletePlaylist(ctx *gin.Context) {
+	playlist_id, err := strconv.Atoi(ctx.Param("playlist_id"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+
+	err = s.store.DeletePlaylist(ctx, db.DeletePlaylistParams{
+		ID:        int32(playlist_id),
+		AccountID: authPayload.UserID,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, SuccessResponse(true, "Xóa playlist thành công"))
 }

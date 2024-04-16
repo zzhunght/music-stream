@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"hung18072002ht@gmail.com\",\r\n    \"password\": \"hung12345@\",\r\n    \"name\": \"hung\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"password\": \"hung12345@\",\r\n    \"name\": \"hung\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -43,7 +43,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"hung18072002ht@gmail.com\",\r\n    \"otp\": \"475006\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"otp\": \"943651\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -182,6 +182,663 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Ds playlist của user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MTJmOWE4LWE2NmEtNDViOC1iZDJiLTFkMDUwYjBmMDE2NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjAwOjA0LjU5NzE5OTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0xNlQyMjoxNTowNC41OTcxOTkyKzA3OjAwIn0.6ds1NLsWWjWSEOr6gvyMIXqvgl9QvmlMlXYibJtvZEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Tạo playlist Copy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:04:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "263"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"Playlist của hùng\",\n            \"account_id\": 1,\n            \"description\": null,\n            \"created_at\": \"2024-04-16T15:03:28.976534Z\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Playlist của hùng\",\n            \"account_id\": 1,\n            \"description\": null,\n            \"created_at\": \"2024-04-16T15:04:47.801668Z\"\n        }\n    ],\n    \"messgae\": \"playlist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Ds bài hát trong playlist",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MTJmOWE4LWE2NmEtNDViOC1iZDJiLTFkMDUwYjBmMDE2NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjAwOjA0LjU5NzE5OTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0xNlQyMjoxNTowNC41OTcxOTkyKzA3OjAwIn0.6ds1NLsWWjWSEOr6gvyMIXqvgl9QvmlMlXYibJtvZEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist/:playlist_id/song",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist",
+								":playlist_id",
+								"song"
+							],
+							"variable": [
+								{
+									"key": "playlist_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Tạo playlist Copy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:04:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "263"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"Playlist của hùng\",\n            \"account_id\": 1,\n            \"description\": null,\n            \"created_at\": \"2024-04-16T15:03:28.976534Z\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Playlist của hùng\",\n            \"account_id\": 1,\n            \"description\": null,\n            \"created_at\": \"2024-04-16T15:04:47.801668Z\"\n        }\n    ],\n    \"messgae\": \"playlist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Tạo playlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MTJmOWE4LWE2NmEtNDViOC1iZDJiLTFkMDUwYjBmMDE2NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjAwOjA0LjU5NzE5OTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0xNlQyMjoxNTowNC41OTcxOTkyKzA3OjAwIn0.6ds1NLsWWjWSEOr6gvyMIXqvgl9QvmlMlXYibJtvZEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Tạo playlist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:04:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "164"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": 3,\n        \"name\": \"Playlist của hùng\",\n        \"account_id\": 1,\n        \"description\": null,\n        \"created_at\": \"2024-04-16T15:04:47.801668Z\"\n    },\n    \"messgae\": \"Tạo playlist thành công\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Thêm bài hát vào playlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVhODk1MzgzLTgwNGQtNDIzZC05OTJkLTYyNGMxMTgyM2I3OCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjE1OjE1Ljc0ODAzMyswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjMwOjE1Ljc0ODAzMyswNzowMCJ9.gLO8GUEOViw8Mz5wa0ukLc_5Ana2wYmshacxdCaQ78c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"song_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist/remove-song/:playlist_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist",
+								"remove-song",
+								":playlist_id"
+							],
+							"variable": [
+								{
+									"key": "playlist_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Thêm bài hát vào playlist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"song_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist/add-song/:playlist_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist",
+										"add-song",
+										":playlist_id"
+									],
+									"variable": [
+										{
+											"key": "playlist_id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:14:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"messgae\": \"Bài hát đã tồn tại trong playlist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Xóa bài hát khỏi playlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVhODk1MzgzLTgwNGQtNDIzZC05OTJkLTYyNGMxMTgyM2I3OCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjE1OjE1Ljc0ODAzMyswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjMwOjE1Ljc0ODAzMyswNzowMCJ9.gLO8GUEOViw8Mz5wa0ukLc_5Ana2wYmshacxdCaQ78c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"song_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist/add-song/:playlist_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist",
+								"add-song",
+								":playlist_id"
+							],
+							"variable": [
+								{
+									"key": "playlist_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Thêm bài hát vào playlist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"song_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist/add-song/:playlist_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist",
+										"add-song",
+										":playlist_id"
+									],
+									"variable": [
+										{
+											"key": "playlist_id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:14:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"messgae\": \"Bài hát đã tồn tại trong playlist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Thêm bài hát vào playlist Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVhODk1MzgzLTgwNGQtNDIzZC05OTJkLTYyNGMxMTgyM2I3OCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjE1OjE1Ljc0ODAzMyswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjMwOjE1Ljc0ODAzMyswNzowMCJ9.gLO8GUEOViw8Mz5wa0ukLc_5Ana2wYmshacxdCaQ78c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"song_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist/add-song/:playlist_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist",
+								"add-song",
+								":playlist_id"
+							],
+							"variable": [
+								{
+									"key": "playlist_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Thêm bài hát vào playlist Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"song_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist/add-song/:playlist_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist",
+										"add-song",
+										":playlist_id"
+									],
+									"variable": [
+										{
+											"key": "playlist_id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:15:43 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"messgae\": \"Thêm bài hát vào playlist thành công\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Xóa playlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MTJmOWE4LWE2NmEtNDViOC1iZDJiLTFkMDUwYjBmMDE2NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjAwOjA0LjU5NzE5OTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0xNlQyMjoxNTowNC41OTcxOTkyKzA3OjAwIn0.6ds1NLsWWjWSEOr6gvyMIXqvgl9QvmlMlXYibJtvZEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/playlist/:playlist_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"playlist",
+								":playlist_id"
+							],
+							"variable": [
+								{
+									"key": "playlist_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Xóa playlist",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Playlist của hùng\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/playlist/:playlist_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"playlist",
+										":playlist_id"
+									],
+									"variable": [
+										{
+											"key": "playlist_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 16 Apr 2024 15:04:12 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"messgae\": \"Xóa playlist thành công\"\n}"
+						}
+					]
 				}
 			]
 		},
@@ -581,7 +1238,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Nơi này có anh 2\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"artist_id\": 8\r\n}",
+							"raw": "{\r\n    \"name\": \"Nơi này có anh\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"artist_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MusicAppClient interface {
 	Login(ctx context.Context, in *UserLoginRequest, opts ...grpc.CallOption) (*UserLoginResponse, error)
+	Authentication(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AuthenticationResponse, error)
 }
 
 type musicAppClient struct {
@@ -42,11 +44,21 @@ func (c *musicAppClient) Login(ctx context.Context, in *UserLoginRequest, opts .
 	return out, nil
 }
 
+func (c *musicAppClient) Authentication(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*AuthenticationResponse, error) {
+	out := new(AuthenticationResponse)
+	err := c.cc.Invoke(ctx, "/pb.MusicApp/Authentication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MusicAppServer is the server API for MusicApp service.
 // All implementations must embed UnimplementedMusicAppServer
 // for forward compatibility
 type MusicAppServer interface {
 	Login(context.Context, *UserLoginRequest) (*UserLoginResponse, error)
+	Authentication(context.Context, *emptypb.Empty) (*AuthenticationResponse, error)
 	mustEmbedUnimplementedMusicAppServer()
 }
 
@@ -56,6 +68,9 @@ type UnimplementedMusicAppServer struct {
 
 func (UnimplementedMusicAppServer) Login(context.Context, *UserLoginRequest) (*UserLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedMusicAppServer) Authentication(context.Context, *emptypb.Empty) (*AuthenticationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Authentication not implemented")
 }
 func (UnimplementedMusicAppServer) mustEmbedUnimplementedMusicAppServer() {}
 
@@ -88,6 +103,24 @@ func _MusicApp_Login_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MusicApp_Authentication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicAppServer).Authentication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MusicApp/Authentication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicAppServer).Authentication(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MusicApp_ServiceDesc is the grpc.ServiceDesc for MusicApp service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +131,10 @@ var MusicApp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _MusicApp_Login_Handler,
+		},
+		{
+			MethodName: "Authentication",
+			Handler:    _MusicApp_Authentication_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

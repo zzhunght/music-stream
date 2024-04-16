@@ -4,6 +4,8 @@ package pb;
 
 option go_package = "music-app-backend/pb";
 import "rpc_user.proto";
+import "google/protobuf/Empty.proto";
 service MusicApp {
     rpc Login (UserLoginRequest) returns (UserLoginResponse) {}
+    rpc Authentication(google.protobuf.Empty) returns (AuthenticationResponse) {}
 }

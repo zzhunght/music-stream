@@ -38,8 +38,8 @@ func main() {
 	store := config.InitDB(env.DatabaseDestination)
 
 	go StartRedisWorker(redisOpt, mailsender, store, rdb)
-	// StartHttpServer(store, env, taskClient, mailsender, mq, rdb)
-	StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
+	go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
+	StartHttpServer(store, env, taskClient, mailsender, mq, rdb)
 }
 
 func StartHttpServer(
