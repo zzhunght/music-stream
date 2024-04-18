@@ -6,7 +6,6 @@ import (
 	"music-app-backend/message"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,14 +32,7 @@ func NewServer(
 	rdb *redis.Client,
 ) *Server {
 	r := gin.Default()
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+	r.Use(cors.Default())
 	server := &Server{
 		store:         store,
 		config:        config,
