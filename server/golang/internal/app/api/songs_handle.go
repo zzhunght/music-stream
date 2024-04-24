@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/sqlc"
+	db "music-app-backend/sqlc"
 	"net/http"
 	"strconv"
 	"time"
@@ -21,6 +22,14 @@ type CreateSongRequest struct {
 	ReleaseDate time.Time `json:"release_date" binding:"required"`
 	ArtistID    int32     `json:"artist_id" binding:"required"`
 }
+type UpdateSongRequest struct {
+	Name        string    `json:"name" binding:"required"`
+	Thumbnail   string    `json:"thumbnail" binding:"required"`
+	Path        string    `json:"path" binding:"required"`
+	Lyrics      string    `json:"lyrics" binding:"required"`
+	Duration    int32     `json:"duration" binding:"required"`
+	ReleaseDate time.Time `json:"release_date" binding:"required"`
+}
 
 func (s *Server) GetSong(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
@@ -28,7 +37,7 @@ func (s *Server) GetSong(ctx *gin.Context) {
 
 	fmt.Print(page, size)
 
-	songs, err := s.store.GetSongs(ctx, sqlc.GetSongsParams{
+	songs, err := s.store.GetSongs(ctx, db.GetSongsParams{
 		Size:  int32(size),
 		Start: int32(size) * int32(page-1),
 	})
@@ -85,7 +94,7 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
 		return
 	}
-	var body CreateSongRequest
+	var body UpdateSongRequest
 
 	err = ctx.ShouldBindJSON(&body)
 
@@ -94,7 +103,7 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 		return
 	}
 
-	new_song, err := s.store.UpdateSong(ctx, sqlc.UpdateSongParams{
+	new_song, err := s.store.UpdateSong(ctx, db.UpdateSongParams{
 		ID:        int32(song_id),
 		Name:      body.Name,
 		Path:      utils.ConvertStringToText(body.Path),
