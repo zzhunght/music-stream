@@ -39,17 +39,30 @@ services:
             - music-networks
         restart: always
 
-    # golang_app:
-    #     container_name: go-be
-    #     build: ./golang/.
-    #     ports:
-    #         - "8080:8080"
-    #     networks:
-    #         - music-networks
-    #     depends_on:
-    #         - redis
-    #         - postgres
-    #         - rabbitmq
+    nginx:
+        container_name: api-gateway
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx_gateway/api_gateway.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - music-networks
+        restart: always
+
+    golang_app:
+        container_name: go-be
+        build: ./golang/.
+        ports:
+            - "8080:8080"
+        networks:
+            - music-networks
+        depends_on:
+            - redis
+            - postgres
+            - rabbitmq
+        restart: on-failure
+
 
 networks:
     music-networks:

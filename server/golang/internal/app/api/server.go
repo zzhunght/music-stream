@@ -6,6 +6,7 @@ import (
 	"music-app-backend/message"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -48,10 +49,18 @@ func NewServer(
 }
 
 func (s *Server) setupRouter() {
+
 	v1 := s.router.Group("/api/v1")
+	{
+		v1.GET("health-check", healthCheck)
+	}
 	s.UserRouter(v1)
 	s.AdminRouter(v1)
 	s.PublicRouter(v1)
+}
+
+func healthCheck(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
 
 func (s *Server) Run(address string) {
