@@ -35,7 +35,7 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		//  admin artists
 		admin.GET("/artists", s.GetArtists)
 		admin.GET("/artists/album/:artist_id", s.GetAlbumByArtistId)
-		admin.POST("/artists/", s.CreateArtist)
+		admin.POST("/artists", s.CreateArtist)
 		admin.PUT("/artists/:artist_id", s.UpdateArtist)
 		admin.DELETE("/artists/:artist_id", s.DeleteArtist)
 

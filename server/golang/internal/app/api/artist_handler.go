@@ -131,12 +131,6 @@ func (s *Server) DeleteArtist(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-	var body UpdateArtistRequest
-	err = c.ShouldBindJSON(&body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Not valid body"})
-		return
-	}
 
 	err = s.store.DeleteArtist(c, int32(id))
 	if err != nil {
