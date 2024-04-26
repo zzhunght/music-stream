@@ -24,7 +24,7 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/playlist/remove-song/:playlist_id", s.RemoveSongFromPlaylist)
 		user.PUT("/playlist/:playlist_id", s.UpdatePlaylistName)
 		user.DELETE("/playlist/:playlist_id", s.DeletePlaylist)
-		user.GET("/", s.GetUser)
+		user.GET("/info", s.GetUser)
 	}
 
 }
