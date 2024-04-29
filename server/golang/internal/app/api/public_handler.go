@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	"music-app-backend/sqlc"
+	db "music-app-backend/sqlc"
 	"net/http"
 	"strconv"
 
@@ -10,12 +10,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type SearchResult struct {
+	Song   []db.SearchSongRow `json:"songs"`
+	Artist []db.Artist        `json:"artists"`
+	Album  []db.Album         `json:"albums"`
+}
+
 func (s *Server) SearchSong(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
 	search := ctx.DefaultQuery("search", "")
 	fmt.Println("query : >>>>>>>>>> ", search)
-	songs, err := s.store.SearchSong(ctx, sqlc.SearchSongParams{
+	songs, err := s.store.SearchSong(ctx, db.SearchSongParams{
 		Size:  int32(size),
 		Start: (int32(page) - 1) * int32(size),
 		Search: pgtype.Text{
@@ -43,7 +49,7 @@ func (s *Server) GetSongByCategories(ctx *gin.Context) {
 		return
 	}
 
-	songs, err := s.store.GetSongBySongCategory(ctx, sqlc.GetSongBySongCategoryParams{
+	songs, err := s.store.GetSongBySongCategory(ctx, db.GetSongBySongCategoryParams{
 		CategoryID: int32(id),
 		Size:       int32(size),
 		Start:      (int32(page) - 1) * int32(size),
@@ -64,4 +70,57 @@ func (s *Server) GetLatestAlbum(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, SuccessResponse(data, "Danh sách album mới nhất"))
+}
+
+func (s *Server) Search(ctx *gin.Context) {
+
+	search := ctx.DefaultQuery("search", "")
+	fmt.Println("query : >>>>>>>>>> ", search)
+	songs, err := s.store.SearchSong(ctx, db.SearchSongParams{
+		Size:  int32(10),
+		Start: 0,
+		Search: pgtype.Text{
+			String: search,
+			Valid:  true,
+		},
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	album, err := s.store.SearchAlbums(ctx, db.SearchAlbumsParams{
+		Size:  int32(3),
+		Start: 0,
+		Search: pgtype.Text{
+			String: search,
+			Valid:  true,
+		},
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	artist, err := s.store.GetListArtists(ctx, db.GetListArtistsParams{
+		Size:  int32(3),
+		Start: 0,
+		NameSearch: pgtype.Text{
+			String: search,
+			Valid:  true,
+		},
+		OrderBy: "name ASC",
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	response := SearchResult{
+		Song:   songs,
+		Artist: artist,
+		Album:  album,
+	}
+	ctx.JSON(http.StatusOK, SuccessResponse(response, "Tìm kiếm bài hát thành công"))
 }

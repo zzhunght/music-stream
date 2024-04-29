@@ -30,7 +30,7 @@ LIMIT COALESCE(sqlc.arg(size)::int, 50);
 -- name: CountSearchAlbums :one
 SELECT COUNT(*) AS total_rows FROM albums WHERE name ILIKE sqlc.arg(search) || '%';
 
--- search: SearchAlbums :many
+-- name: SearchAlbums :many
 SELECT * FROM albums where name ilike sqlc.narg(search) || '%'
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);

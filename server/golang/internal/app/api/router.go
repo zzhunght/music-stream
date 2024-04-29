@@ -24,6 +24,7 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/playlist/remove-song/:playlist_id", s.RemoveSongFromPlaylist)
 		user.PUT("/playlist/:playlist_id", s.UpdatePlaylistName)
 		user.DELETE("/playlist/:playlist_id", s.DeletePlaylist)
+		user.POST("/change-password", s.ChangePassword)
 		user.GET("/info", s.GetUser)
 	}
 
@@ -76,5 +77,6 @@ func (s *Server) PublicRouter(route *gin.RouterGroup) {
 		public.GET("/categories", s.GetCategories)
 		public.GET("/songs", s.SearchSong)
 		public.GET("/songs_by_categories/:categories_id", s.GetSongByCategories)
+		public.GET("/search", s.Search)
 	}
 }

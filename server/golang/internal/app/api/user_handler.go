@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	api "music-app-backend/internal/app/api/middleware"
+	"music-app-backend/internal/app/helper"
 	"music-app-backend/sqlc"
 	"net/http"
 	"time"
@@ -57,13 +58,9 @@ type CreateAccountTemp struct {
 	SecretKey string `json:"secret_key"`
 }
 
-// ListUsers là handler cho việc liệt kê các users
-func ListUsers(c *gin.Context) {
-
-	c.JSON(200, gin.H{
-		"message": "List of users",
-		"data":    "",
-	})
+type ChangePasswordRequest struct {
+	OldPassword string `json:"old_password"`
+	Password    string `json:"password"`
 }
 
 func (s *Server) Register(c *gin.Context) {
@@ -142,64 +139,52 @@ func (s *Server) Register(c *gin.Context) {
 		return
 	}
 	// otp, _ := totp.GenerateCode(secret.Secret(), time.Now())
-	// form := sqlc.CreateAccountParams{
-	// 	Name:     requestBody.Name,
-	// 	Email:    requestBody.Email,
-	// 	Password: string(hashedPassword),
-	// 	SecretKey: pgtype.Text{
-	// 		String: secret.Secret(),
-	// 		Valid:  true,
-	// 	},
-	// }
-	// s.mailsender.SendMailOTP(form.Email, "Mã OTP xác thực của bạn là : "+otp)
-	// arg := sqlc.CreateAccountWithTxParams{
-	// 	Params: form,
-	// 	AfterFunction: func(email string) error {
-	// 		return s.task_client.DeliveryEmailTaskTask(email)
-	// 	},
-	// }
-	// new_acc, err := s.store.CreateAccountWithTx(c, arg)
-	if err != nil {
-		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
-		})
-		return
-	}
 
 	c.JSON(201, SuccessResponse(true, "Vui lòng kiểm tra email và xác thực OTP để hoàn tất quá trình tạo tài khoản"))
 
 }
 
-// func (s *Server) VerifyOTP(c *gin.Context) {
-// 	var requestBody VerifyOTPRequest
+func (s *Server) ChangePassword(ctx *gin.Context) {
+	var requestBody ChangePasswordRequest
+	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
 
-// 	err := c.ShouldBindJSON(&requestBody)
-// 	if err != nil {
-// 		// Xử lý lỗi nếu có
-// 		c.JSON(400, ErrorResponse(errors.New("invalid request body")))
-// 		return
-// 	}
-// 	key, err := s.store.GetSecretKey(c, requestBody.Email)
-// 	log.Info().Str("otp ", requestBody.Otp).Msg("")
-// 	log.Info().Str("key ", key.String).Msg("")
-// 	if err != nil {
-// 		c.JSON(400, ErrorResponse(err))
-// 		return
-// 	}
+	// Đọc dữ liệu từ body của request và gán vào biến requestBody
+	err := ctx.ShouldBindJSON(&requestBody)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		ctx.JSON(400, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
 
-// 	valid := totp.Validate(requestBody.Otp, key.String)
-// 	log.Info().Any("valid", valid).Msg("")
-// 	if valid {
-// 		s.store.VerifyAccount(c, requestBody.Email)
-// 		c.JSON(200, gin.H{
-// 			"message": "Xác thực thành công",
-// 			"data":    true,
-// 		})
-// 		return
-// 	}
-// 	c.JSON(401, ErrorResponse(errors.New("xác thực thất bại")))
-// }
+	acc, err := s.store.GetAccount(ctx, authPayload.Email)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(errors.New("not authenticated")))
+		return
+	}
+	validate := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(requestBody.OldPassword))
+	if validate != nil {
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(errors.New("incorrect username or password")))
+		return
+	}
+	new_password, err := bcrypt.GenerateFromPassword([]byte(requestBody.Password), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("internal error: "+err.Error())))
+		return
+	}
+
+	err = s.store.ChangePassword(ctx, sqlc.ChangePasswordParams{
+		Email:    authPayload.Email,
+		Password: string(new_password),
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("internal error: "+err.Error())))
+		return
+	}
+	ctx.JSON(200, SuccessResponse(true, "Change password successfully"))
+}
 
 func (s *Server) VerifyOTP(c *gin.Context) {
 	var requestBody VerifyOTPRequest

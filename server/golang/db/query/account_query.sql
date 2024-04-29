@@ -11,6 +11,9 @@ INSERT INTO accounts (
     $4
 ) RETURNING id, name, email, created_at, updated_at;
 
+-- name: ChangePassword :exec
+UPDATE accounts SET password = $1 WHERE email = $2;
+
 
 -- name: CheckEmailExists :one
 SELECT id FROM accounts
