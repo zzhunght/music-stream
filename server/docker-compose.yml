@@ -77,6 +77,19 @@ services:
     #         - rabbitmq
     #     restart: on-failure
 
+    authentication_services:
+        container_name: authentication_services
+        build: ./auth_services/.
+        ports:
+            - "3001:3001"
+        networks:
+            - music-networks
+        depends_on:
+            - redis
+            - postgres
+            - rabbitmq
+        restart: on-failure
+
 
 networks:
     music-networks:
