@@ -39,3 +39,15 @@ func (mail *MailSender) SendMailOTP(to string, msg string) {
 		fmt.Println("error sending mail: ", err)
 	}
 }
+
+func (mail *MailSender) SendMail(to string, msg string, subject string) {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "hung18072002ht@gmail.com")
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", msg)
+	err := mail.mail.DialAndSend(m)
+	if err != nil {
+		fmt.Println("error sending mail: ", err)
+	}
+}

@@ -8,6 +8,7 @@ import (
 	"music-app-backend/internal/app/helper"
 	"music-app-backend/sqlc"
 	"net/http"
+	"net/mail"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -84,7 +85,7 @@ func (s *Server) Register(c *gin.Context) {
 	_, err = s.store.CheckEmailExists(c, requestBody.Email)
 
 	if err != pgx.ErrNoRows {
-		c.JSON(409, ErrorResponse(errors.New("email already exists")))
+		c.JSON(http.StatusConflict, ErrorResponse(errors.New("email already exists")))
 		return
 	}
 
@@ -101,9 +102,7 @@ func (s *Server) Register(c *gin.Context) {
 	})
 	if errotp != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Some thing went wrong",
-		})
+		c.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("có lỗi xảy ra trong lúc tạo tài khoản")))
 		return
 	}
 	form := CreateAccountTemp{
@@ -116,26 +115,20 @@ func (s *Server) Register(c *gin.Context) {
 	val, err := json.Marshal(form)
 	if err != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
-		})
+		c.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("có lỗi xảy ra trong lúc tạo tài khoản")))
 		return
 	}
 	err = s.rdb.Set(c, key, val, time.Minute*15).Err()
 
 	if err != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
-		})
+		c.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("có lỗi xảy ra trong lúc tạo tài khoản")))
 		return
 	}
 	err = s.task_client.DeliveryEmailTaskTask(form.Email)
 	if err != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Có lỗi xảy ra trong lúc tạo tài khoản",
-		})
+		c.JSON(http.StatusInternalServerError, ErrorResponse(errors.New("có lỗi xảy ra trong lúc tạo tài khoản")))
 		return
 	}
 	// otp, _ := totp.GenerateCode(secret.Secret(), time.Now())
@@ -244,9 +237,7 @@ func (s *Server) ResendOTP(c *gin.Context) {
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		// Xử lý lỗi nếu có
-		c.JSON(400, gin.H{
-			"error": "Invalid request body",
-		})
+		c.JSON(http.StatusBadRequest, ErrorResponse(errors.New("invalid request body")))
 		return
 	}
 	s.task_client.DeliveryEmailTaskTask(requestBody.Email)
@@ -257,30 +248,67 @@ func (s *Server) ResendOTP(c *gin.Context) {
 
 }
 
-func (s *Server) Login(c *gin.Context) {
-	var requestBody LoginRequest
+func (s *Server) ForgetPasswordRequest(ctx *gin.Context) {
+	email := ctx.Query("email")
+	_, err := mail.ParseAddress(email)
 
-	err := c.BindJSON(&requestBody)
 	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "Invalid login request",
-		})
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(errors.New("email is required")))
+		return
+	}
+	acc, err := s.store.GetAccount(ctx, email)
+	if err != nil {
+		// Xử lý lỗi nếu có
+		if err != pgx.ErrNoRows {
+			ctx.JSON(http.StatusBadRequest, ErrorResponse(errors.New("tài khoản không tồn tại")))
+			return
+		}
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(errors.New("invalid request body")))
 		return
 	}
 
-	if requestBody.Email == "" || requestBody.Password == "" {
-		c.JSON(400, gin.H{
-			"error": "Invalid login request",
-		})
-	}
+	token, _, err := s.token_maker.CreateToken(acc.Email, acc.ID, acc.Role, time.Second*60)
 
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(errors.New(err.Error())))
+		return
+	}
+	s.task_client.DeliveryForgetPasswordTask(acc.Email, token)
+	ctx.JSON(http.StatusOK, SuccessResponse(true, "Vui lòng kiểm tra Email và làm theo hướng dẫn"))
+
+}
+func (s *Server) ForgetPasswordConfirm(ctx *gin.Context) {
+	token := ctx.Query("token")
+
+	auth_payload, err := s.token_maker.VerifyToken(token)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, ErrorResponse(errors.New(err.Error())))
+		return
+	}
+	acc, err := s.store.GetAccount(ctx, auth_payload.Email)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(errors.New(err.Error())))
+		return
+	}
+	s.task_client.DeliveryNewPasswordTask(acc.Email, token)
+	ctx.JSON(http.StatusOK, SuccessResponse(true, "Mật khẩu mới đã được gửi đến email của bạn"))
+
+}
+
+func (s *Server) Login(c *gin.Context) {
+	var requestBody LoginRequest
+
+	err := c.ShouldBindJSON(&requestBody)
+	if err != nil {
+		c.JSON(400, ErrorResponse(errors.New("invalid request body")))
+		return
+	}
 	acc, _ := s.store.GetAccount(c, requestBody.Email)
 
 	validate := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(requestBody.Password))
 	if validate != nil {
-		c.JSON(400, gin.H{
-			"error": "Incorrect username or password",
-		})
+		c.JSON(400, ErrorResponse(errors.New("incorrect username or password")))
 		return
 	}
 	access_token, _, err := s.token_maker.CreateToken(acc.Email, acc.ID, acc.Role, s.config.AccessTokenDuration)

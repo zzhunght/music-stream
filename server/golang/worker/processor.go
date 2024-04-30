@@ -35,6 +35,8 @@ func (process *ProcessorRedisTasks) Start() error {
 	mux := asynq.NewServeMux()
 
 	mux.HandleFunc(TypeEmailDeliveryTask, process.HandleEmailDeliveryTask)
+	mux.HandleFunc(TypeEmailDeliveryForgetPasswordRequest, process.HandleEmailDeliveryForgetPasswordRequestTask)
+	mux.HandleFunc(TypeEmailDeliveryNewPassword, process.HandleEmailDeliveryNewtPasswordTask)
 
 	return process.client.Start(mux)
 }

@@ -10,11 +10,13 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 
 	user := route.Group("/user")
 	{
+		user.GET("/confirm-forget-password", s.ForgetPasswordConfirm)
 		user.POST("/register", s.Register)
 		user.POST("/verify-otp", s.VerifyOTP)
 		user.POST("/send-otp", s.ResendOTP)
 		user.POST("/login", s.Login)
 		user.POST("/refresh-token", s.RenewToken)
+		user.POST("/forget-password", s.ForgetPasswordRequest)
 		user.Use(api.Authentication(s.token_maker))
 
 		user.GET("/playlist", s.GetUserPlaylists)

@@ -67,10 +67,10 @@ func (s *Server) Run(address string) {
 	s.router.Run(address)
 }
 
-func SuccessResponse(data any, messgae string) gin.H {
+func SuccessResponse(data any, message string) gin.H {
 	return gin.H{
 		"data":    data,
-		"messgae": messgae,
+		"message": message,
 	}
 }
 
