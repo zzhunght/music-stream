@@ -8,6 +8,15 @@ OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 
+-- name: GetSongOfArtist :many
+
+SELECT s.*, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE a.id = $1
+OFFSET COALESCE(sqlc.arg(start)::int, 0)
+LIMIT COALESCE(sqlc.arg(size)::int, 50);
+
 -- name: GetRandomSong :many
 SELECT * FROM songs
 Order by RAND()

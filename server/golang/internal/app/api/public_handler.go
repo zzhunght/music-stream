@@ -61,6 +61,31 @@ func (s *Server) GetSongByCategories(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Tìm kiếm bài hát thành công"))
 }
 
+func (s *Server) GetSongOfArtist(ctx *gin.Context) {
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
+	artist_id, _ := ctx.Params.Get("artist_id")
+	id, err := strconv.Atoi(artist_id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	data, err := s.store.GetSongOfArtist(ctx, db.GetSongOfArtistParams{
+		ID:    int32(id),
+		Size:  int32(size),
+		Start: (int32(page) - 1) * int32(size),
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(data, "Danh sách bài hát theo nghệ sĩ"))
+
+}
+
 func (s *Server) GetLatestAlbum(ctx *gin.Context) {
 
 	data, err := s.store.GetLatestAlbum(ctx)
