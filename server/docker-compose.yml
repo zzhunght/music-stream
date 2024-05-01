@@ -51,18 +51,18 @@ services:
     #         - music-networks
     #     restart: always
 
-    # golang_app:
-    #     container_name: go-be
-    #     build: ./golang/.
-    #     ports:
-    #         - "8080:8080"
-    #     networks:
-    #         - music-networks
-    #     depends_on:
-    #         - redis
-    #         - postgres
-    #         - rabbitmq
-    #     restart: on-failure
+    golang_app:
+        container_name: go-be
+        build: ./golang/.
+        ports:
+            - "8080:8080"
+        networks:
+            - music-networks
+        depends_on:
+            - redis
+            - postgres
+            - rabbitmq
+        restart: on-failure
 
     # authentication_services:
     #     container_name: authentication_services
@@ -77,18 +77,6 @@ services:
     #         - rabbitmq
     #     restart: on-failure
 
-    authentication_services:
-        container_name: authentication_services
-        build: ./auth_services/.
-        ports:
-            - "3001:3001"
-        networks:
-            - music-networks
-        depends_on:
-            - redis
-            - postgres
-            - rabbitmq
-        restart: on-failure
 
 
 networks:

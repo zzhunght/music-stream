@@ -43,7 +43,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"otp\": \"943651\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"otp\": \"767520\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -97,7 +97,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"password\": \"hung12345@\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"password\": \"d#P&103Y\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -118,13 +118,46 @@
 					"response": []
 				},
 				{
+					"name": "Forget Pasword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/forget-password?email=tinhyeucuatui2002@gmail.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"forget-password"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "tinhyeucuatui2002@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Su dung refresh token",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMzBlMWNkLWNiOTAtNDg0YS1iMmEwLTgwMjY1M2U0OWJjMyIsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTI1VDEyOjA4OjA2LjE0OTAyKzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMDItMjZUMTI6MDg6MDYuMTQ5MDIrMDc6MDAifQ.Dp5Qw1eVnINcZgpxbcDWvL7o2-ziavXGb1n0-JtP8EE\"\r\n}",
+							"raw": "{\r\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyYjA4NmQzLTMxMDktNDZlNS1iNzNhLWEwOGU5Yjc4ZjRkZiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDA3OjQwOjE0LjMwMDY4NDYwM1oiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yN1QwNzo0MDoxNC4zMDA2ODQ2NDNaIn0.rnkDoCWYMwuBm9j2q0Qqla_Ve2t4PqD79yo9K29JEyw\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,12 +205,50 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/user",
+							"raw": "{{base_url}}/user/info",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"user"
+								"user",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Đổi mật khẩu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAyMmEwNmRhLTg2NTMtNDE0Zi1hZjZkLTFjYzNlMTdhNTBiNSIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI5VDIzOjI0OjM3LjE2NTkzOTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yOVQyMzozOTozNy4xNjU5MzkyKzA3OjAwIn0.3OcTIac4shXyFqctd-X0tivpnfFyczqJ_ir1iwjVTCI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"old_password\":\"hung12345@\",\r\n    \"password\": \"test1345@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"change-password"
 							]
 						}
 					},
@@ -194,7 +265,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MTJmOWE4LWE2NmEtNDViOC1iZDJiLTFkMDUwYjBmMDE2NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTE2VDIyOjAwOjA0LjU5NzE5OTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0xNlQyMjoxNTowNC41OTcxOTkyKzA3OjAwIn0.6ds1NLsWWjWSEOr6gvyMIXqvgl9QvmlMlXYibJtvZEM",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlhZjk5ZTZiLWM2YjYtNDMxMy1hZjAyLTRlZTBlOTMwOGNmNiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDA3OjMyOjE1LjExMDE0NTE0WiIsImV4cGlyZWRfYXQiOiIyMDI0LTA0LTI2VDA3OjQ3OjE1LjExMDE0NTMzMVoifQ.5lbU-PfPGWh7mqGa-R4J3LfZRMhs5XzXpasQRR7lY2E",
 									"type": "string"
 								}
 							]
@@ -310,7 +381,7 @@
 							"variable": [
 								{
 									"key": "playlist_id",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						}
@@ -851,6 +922,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNDJmMDE4LTY3ODUtNDM0Zi04ODg1LWUwYWU5YTgxZTJkZCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDAwOjU0OjE5LjQxOTgyMzQ3OFoiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNlQwMTowOToxOS40MTk4MjM2NDhaIn0.PvYPp_KxI6u4_47nAqCqStQxigjS14V7gTdUlHwj20I",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -936,6 +1017,16 @@
 				{
 					"name": "Ds danh muc",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxODk5M2FkLTI0ZTgtNDhlOC04OGY1LWNlNWFhOGQwOTg1NiIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI1VDExOjEwOjQ5LjcyNDU2Nzk0NloiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNVQxMToyNTo0OS43MjQ1NjgwNjdaIn0.j3b3wavWR5JiSySVpFNd7MK1aAyad0TSo6sJBY9Ko-c",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1234,6 +1325,16 @@
 				{
 					"name": "Tạo bài hát",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNDJmMDE4LTY3ODUtNDM0Zi04ODg1LWUwYWU5YTgxZTJkZCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDAwOjU0OjE5LjQxOTgyMzQ3OFoiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNlQwMTowOToxOS40MTk4MjM2NDhaIn0.PvYPp_KxI6u4_47nAqCqStQxigjS14V7gTdUlHwj20I",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1529,11 +1630,21 @@
 				{
 					"name": "Tạo nghệ sĩ",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NmNlY2M2LTJlNWQtNDI0NC1hNzA5LTMwNjBlNGUzNTA0ZCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI1VDE0OjEwOjE2LjIyNDE3OTMyN1oiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNVQxNDoyNToxNi4yMjQxNzk0OTdaIn0.2orrXunNvyqeVKwCfbWgmLmp9lYkF5OX5khN3g87qFg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Sơn Tùng MTP\",\r\n    \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzU1rTgHAVkOADoto3IlyZcwlgeG9NjDY5Pmi3DOuda7qVVgumRqc_O1C6FlAYim8Y1Yg&usqp=CAU\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Sơn Tùng MTP 2\",\r\n    \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzU1rTgHAVkOADoto3IlyZcwlgeG9NjDY5Pmi3DOuda7qVVgumRqc_O1C6FlAYim8Y1Yg&usqp=CAU\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1961,7 +2072,7 @@
 							"variable": [
 								{
 									"key": "song_id",
-									"value": "7"
+									"value": "1"
 								}
 							]
 						}
@@ -2080,7 +2191,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Taylor Swift\",\r\n    \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9fO22hyFur32YV76cd94kbvoCZNEJPrHrHw&usqp=CAU\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2100,7 +2211,7 @@
 							"variable": [
 								{
 									"key": "artist_id",
-									"value": "9"
+									"value": "3"
 								}
 							]
 						}
@@ -2589,6 +2700,94 @@
 					]
 				},
 				{
+					"name": "Tìm kiếm trên app",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/public/search?search=c",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "c"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Tìm kiếm trên áp",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/public/search?search=c",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"public",
+										"search"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "c"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Apr 2024 10:33:13 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"songs\": [\n            {\n                \"id\": 6,\n                \"name\": \"Chúng Ta Của Tương Lai\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/wox7fceHTKj6eps4V4dO11iER1XzEDPKd2cP6AEhWa8Opy3ha5rUegpZhBlQ-kfWM6RaoPUXmGgNLls=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/rAbJBorb8Qo.mp3\",\n                \"lyrics\": null,\n                \"duration\": 250,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Sơn Tùng MTP\"\n            },\n            {\n                \"id\": 7,\n                \"name\": \"Chúng Ta Của Hiện Tại\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/R96C4cCNuVOuaKpo8AfoM2ienXSOY3rhljcOi2_7Cg1KnjyZ3hr1X_A5Z8G5vOg645yG6P8txcu1r5kI=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/bNp9pn0ni3I.mp3\",\n                \"lyrics\": null,\n                \"duration\": 302,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Sơn Tùng MTP\"\n            },\n            {\n                \"id\": 16,\n                \"name\": \"Castle on the Hill\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/xpDEOr2TeqEn1QpXosXhqtj149FzNnTgAG3oqPnpTxTbQk-oceO90Sz4Axq0s4Jp_QLGQha_um6_EG3WGQ=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/wqlTrBCNRiY.mp3\",\n                \"lyrics\": null,\n                \"duration\": 262,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Ed Sheeran\"\n            },\n            {\n                \"id\": 46,\n                \"name\": \"Co Bao Nhieu Choi Bay Nhieu\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/Mjg2HISdKUO0wxJ91Bt-LjUy1IsWO1dqxi43JawCA5IyVvUU7jZbZNJ7bVP79QvSOlHoODWp9Qpygmxa=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/WJ0Xxruy4D8.mp3\",\n                \"lyrics\": null,\n                \"duration\": 269,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Han Sara\"\n            },\n            {\n                \"id\": 47,\n                \"name\": \"Công Chúa Xuân (feat. Seachains)\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/WOzO1TbUQ63qutStevcaDZrHpoUuZtNff4TWwrJRh17vf9K-FQsSSjVNP3S0a6aPX8kog58t71BnsGmF=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/eG4VQasTK2k.mp3\",\n                \"lyrics\": null,\n                \"duration\": 200,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Han Sara\"\n            },\n            {\n                \"id\": 61,\n                \"name\": \"Channa Ve\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/5bVRrRHi0EZ_MBeMh3Omxev5rvSttGNlzP8wuZGhdAdaIQLs4K9lP0LzkY3_bgR00WtgJj3Rssy6HNdr=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/epm7tAtEvYA.mp3\",\n                \"lyrics\": null,\n                \"duration\": 212,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": null\n            },\n            {\n                \"id\": 68,\n                \"name\": \"Chann Sitare\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/bKqbz3kthr9PGUf4zLb8QR8YJS9vOQvuAMuh68auETiSkviGgpirO3vl9qwqX2NsFzsI9yD8KFR4vqJssA=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/xjoat5I-1FI.mp3\",\n                \"lyrics\": null,\n                \"duration\": 188,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": null\n            },\n            {\n                \"id\": 71,\n                \"name\": \"Có Bao Nhiêu Chơi Bấy Nhiêu\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/_DE11w4AobFa1gcAOy-Ja9rxhprv9CYHfCgDuEdkZwGk0RcvFy-ov3wD-JgnnBZyludui4SoSXFPbFNK=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/6QcBBaMhliY.mp3\",\n                \"lyrics\": null,\n                \"duration\": 257,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Han Sara\"\n            },\n            {\n                \"id\": 80,\n                \"name\": \"Có Bao Nhiêu Chơi Bấy Nhiêu\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/S_cGdbdz9m0vukxJbMkeUqZA0lZK5dc-6U_oghNHwnKSCeD49_w4rcZfTGXDGu1c8N_Qa-l8eIFQIGa5=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/cvqEyH2CPqs.mp3\",\n                \"lyrics\": null,\n                \"duration\": 257,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Han Sara\"\n            },\n            {\n                \"id\": 86,\n                \"name\": \"Chúng Ta Không Thuộc Về Nhau\",\n                \"thumbnail\": \"https://lh3.googleusercontent.com/WyzaRYap78pVb2_5rJDGiYv9t3bfKVFCl6fXCPpTRvigGgHdZLKuOnhX6MvFDgv82AsCFCITLdyinS8=w120-h120-l90-rj\",\n                \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/78dCF99PheM.mp3\",\n                \"lyrics\": null,\n                \"duration\": 234,\n                \"release_date\": null,\n                \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n                \"updated_at\": null,\n                \"artist_name\": \"Sơn Tùng MTP\"\n            }\n        ],\n        \"artists\": [\n            {\n                \"id\": 3,\n                \"name\": \"Châu Khải Phong\",\n                \"avatar_url\": \"https://static-images.vnncdn.net/files/publish/2023/5/27/batch-dd346143096-707163824751824-6416013366828335422-n-300.jpg\",\n                \"created_at\": \"2024-04-29T08:13:56.794617Z\"\n            },\n            {\n                \"id\": 9,\n                \"name\": \"Chi Dân\",\n                \"avatar_url\": \"https://images2.thanhnien.vn/528068263637045248/2023/4/4/chi-dan-16805906568881778204975.jpeg\",\n                \"created_at\": \"2024-04-29T08:13:56.794617Z\"\n            }\n        ],\n        \"albums\": []\n    },\n    \"messgae\": \"Tìm kiếm bài hát thành công\"\n}"
+						}
+					]
+				},
+				{
 					"name": "Tìm kiếm bài hát theo danh mục",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -2693,6 +2892,23 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health-check",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health-check"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -2716,6 +2932,12 @@
 		}
 	],
 	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost/api/v1",
+			"type": "string",
+			"disabled": true
+		},
 		{
 			"key": "base_url",
 			"value": "localhost:8080/api/v1",
