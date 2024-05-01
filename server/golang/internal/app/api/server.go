@@ -67,7 +67,7 @@ func (s *Server) Run(address string) {
 	s.router.Run(address)
 }
 
-func SuccessResponse(data any, message string) gin.H {
+func SuccessResponse(data interface{}, message string) gin.H {
 	return gin.H{
 		"data":    data,
 		"message": message,

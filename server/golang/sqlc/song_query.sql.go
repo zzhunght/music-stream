@@ -86,20 +86,35 @@ func (q *Queries) DeleteSong(ctx context.Context, id int32) error {
 }
 
 const getRandomSong = `-- name: GetRandomSong :many
-SELECT id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at FROM songs
-Order by RAND()
-limit 12
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+Order by RANDOM()
+limit 15
 `
 
-func (q *Queries) GetRandomSong(ctx context.Context) ([]Song, error) {
+type GetRandomSongRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+}
+
+func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error) {
 	rows, err := q.db.Query(ctx, getRandomSong)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetRandomSongRow{}
 	for rows.Next() {
-		var i Song
+		var i GetRandomSongRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -110,6 +125,7 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]Song, error) {
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
 		); err != nil {
 			return nil, err
 		}

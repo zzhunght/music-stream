@@ -45,7 +45,7 @@ type Querier interface {
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error)
 	GetPlaylistofUser(ctx context.Context, accountID int32) ([]Playlist, error)
-	GetRandomSong(ctx context.Context) ([]Song, error)
+	GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error)

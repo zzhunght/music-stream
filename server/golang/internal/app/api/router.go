@@ -78,6 +78,7 @@ func (s *Server) PublicRouter(route *gin.RouterGroup) {
 		public.GET("/album/:album_id/songs", s.GetAlbumSong)
 		public.GET("/categories", s.GetCategories)
 		public.GET("/songs", s.SearchSong)
+		public.GET("/songs/suggested", s.RandomSong)
 		public.GET("/songs_by_categories/:categories_id", s.GetSongByCategories)
 		public.GET("/search", s.Search)
 		public.GET("/album", s.GetAlbums)

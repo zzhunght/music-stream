@@ -37,7 +37,14 @@ func (s *Server) SearchSong(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Tìm kiếm bài hát thành công"))
 }
-
+func (s *Server) RandomSong(ctx *gin.Context) {
+	songs, err := s.store.GetRandomSong(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Danh sách bài hát ngẫu nhiên"))
+}
 func (s *Server) GetSongByCategories(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
