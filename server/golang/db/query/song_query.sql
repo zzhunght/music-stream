@@ -3,7 +3,7 @@
 
 SELECT s.*,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -18,7 +18,7 @@ LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 SELECT s.*,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -32,7 +32,7 @@ LIMIT COALESCE(sqlc.arg(size)::int, 50);
 -- name: GetRandomSong :many
 SELECT s.*,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -45,7 +45,7 @@ limit 15;
 -- name: SearchSong :many
 SELECT s.*,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -85,7 +85,7 @@ RETURNING * ;
 -- name: GetSongBySongCategory :many
 SELECT s.*,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s

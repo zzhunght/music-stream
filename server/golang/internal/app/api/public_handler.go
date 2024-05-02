@@ -134,17 +134,13 @@ func (s *Server) Search(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-	artist, err := s.store.GetListArtists(ctx, db.GetListArtistsParams{
-		Size:  int32(3),
-		Start: 0,
-		NameSearch: pgtype.Text{
-			String: search,
-			Valid:  true,
-		},
-		OrderBy: "name ASC",
+	artist, err := s.store.GetListArtists(ctx, pgtype.Text{
+		String: search,
+		Valid:  true,
 	})
 
 	if err != nil {
+		fmt.Println("error getting artists: ", err)
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}

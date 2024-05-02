@@ -26,9 +26,9 @@ type ArtistResponse struct {
 }
 
 func (s *Server) GetArtists(c *gin.Context) {
-	fmt.Println("x user id :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-id"))
-	fmt.Println("x email id :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-email"))
-	fmt.Println("x user role :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-role"))
+	// fmt.Println("x user id :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-id"))
+	// fmt.Println("x email id :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-email"))
+	// fmt.Println("x user role :>>>>>>>>>>>>>>>>>>>>>>", c.GetHeader("x-user-role"))
 	for k, vals := range c.Request.Header {
 		fmt.Printf("%s", k)
 		for _, v := range vals {
@@ -36,18 +36,14 @@ func (s *Server) GetArtists(c *gin.Context) {
 		}
 	}
 	seach := c.DefaultQuery("search", "")
-	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	size, _ := strconv.Atoi(c.DefaultQuery("size", "50"))
+	// page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	// size, _ := strconv.Atoi(c.DefaultQuery("size", "50"))
 
-	artist, err := s.store.GetListArtists(c, sqlc.GetListArtistsParams{
-		Start: (int32(page) - 1) * int32(size),
-		Size:  int32(size),
-		NameSearch: pgtype.Text{
+	artist, err := s.store.GetListArtists(c,
+		pgtype.Text{
 			String: seach,
 			Valid:  true,
-		},
-		OrderBy: "name ASC",
-	})
+		})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return

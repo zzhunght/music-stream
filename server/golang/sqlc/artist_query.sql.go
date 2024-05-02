@@ -72,25 +72,18 @@ const getListArtists = `-- name: GetListArtists :many
 SELECT id, name, avatar_url, created_at 
 FROM artist 
 WHERE name ILIKE $1 || '%'
-ORDER BY $2::text 
-LIMIT COALESCE($4::int, 50)
-OFFSET COALESCE($3::int, 0)
+
+UNION
+
+SELECT a.id, a.name, a.avatar_url, a.created_at
+FROM songs s
+INNER JOIN songs_artist sa on s.id = sa.song_id
+INNER JOIN artist a on a.id = sa.artist_id
+where s.name ilike $1 || '%'
 `
 
-type GetListArtistsParams struct {
-	NameSearch pgtype.Text `json:"name_search"`
-	OrderBy    string      `json:"order_by"`
-	Start      int32       `json:"start"`
-	Size       int32       `json:"size"`
-}
-
-func (q *Queries) GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error) {
-	rows, err := q.db.Query(ctx, getListArtists,
-		arg.NameSearch,
-		arg.OrderBy,
-		arg.Start,
-		arg.Size,
-	)
+func (q *Queries) GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error) {
+	rows, err := q.db.Query(ctx, getListArtists, nameSearch)
 	if err != nil {
 		return nil, err
 	}

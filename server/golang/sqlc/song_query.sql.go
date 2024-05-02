@@ -89,7 +89,7 @@ func (q *Queries) DeleteSong(ctx context.Context, id int32) error {
 const getRandomSong = `-- name: GetRandomSong :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -147,7 +147,7 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 const getSongBySongCategory = `-- name: GetSongBySongCategory :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -215,7 +215,7 @@ const getSongOfArtist = `-- name: GetSongOfArtist :many
 
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -281,7 +281,7 @@ const getSongs = `-- name: GetSongs :many
 
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s
@@ -359,7 +359,7 @@ func (q *Queries) RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssoc
 const searchSong = `-- name: SearchSong :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
 END AS artists 
 FROM songs s

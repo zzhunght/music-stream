@@ -43,7 +43,7 @@ type Querier interface {
 	GetAlbumSong(ctx context.Context, albumID int32) ([]Song, error)
 	GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
-	GetListArtists(ctx context.Context, arg GetListArtistsParams) ([]Artist, error)
+	GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error)
 	GetPlaylistofUser(ctx context.Context, accountID int32) ([]Playlist, error)
 	GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
