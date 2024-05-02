@@ -1,34 +1,58 @@
 
 -- name: GetSongs :many
 
-SELECT s.*, a.name as artist_name FROM songs s
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
+GROUP BY s.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 
 -- name: GetSongOfArtist :many
 
-SELECT s.*, a.name as artist_name FROM songs s
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
 WHERE a.id = $1
+GROUP BY s.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 -- name: GetRandomSong :many
-SELECT s.*, a.name as artist_name FROM songs s
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
+GROUP BY s.id
 Order by RANDOM()
 limit 15;
 
 -- name: SearchSong :many
-SELECT s.*, a.name as artist_name FROM songs s
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
 where s.name ilike sqlc.narg(search) || '%'
+GROUP BY s.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50)
 ;
@@ -59,12 +83,19 @@ WHERE id = sqlc.arg(id)
 RETURNING * ;
 
 -- name: GetSongBySongCategory :many
-SELECT s.*, a.name as artist_name FROM songs s
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
 WHERE s.id in (
     SELECT song_id from song_categories WHERE category_id = $1
-) LIMIT COALESCE(sqlc.arg(size)::int, 50)
+) 
+GROUP BY s.id
+LIMIT COALESCE(sqlc.arg(size)::int, 50)
 OFFSET COALESCE(sqlc.arg(start)::int, 0);
 
 
