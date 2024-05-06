@@ -7,6 +7,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type UpateSongWithTx struct {
+	UpdateSongBody UpdateSongParams
+	ArtistID       int32
+}
+
 type CreateSongWithTxParams struct {
 	CreateSongBody CreateSongParams
 	ArtistID       int32
@@ -55,6 +60,32 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 		return song, err
 	}
 	err = arg.AfterFunction(body)
+	if err != nil {
+		return song, err
+	}
+	tx.Commit(ctx)
+	return song, nil
+}
+
+func (store *SQLStore) UpateSongWithTx(ctx context.Context, arg UpateSongWithTx) (GetSongByIDRow, error) {
+	tx, err := store.connPool.Begin(ctx)
+	if err != nil {
+		log.Info().Msg("Can not begin transaction")
+	}
+	defer tx.Rollback(ctx)
+	qtx := store.WithTx(tx)
+	err = qtx.UpdateSong(ctx, arg.UpdateSongBody)
+	if err != nil {
+		return GetSongByIDRow{}, err
+	}
+	err = qtx.UpdateAssociateSongArtist(ctx, UpdateAssociateSongArtistParams{
+		SongID:   arg.UpdateSongBody.ID,
+		ArtistID: arg.ArtistID,
+	})
+	if err != nil {
+		return GetSongByIDRow{}, err
+	}
+	song, err := qtx.GetSongByID(ctx, arg.UpdateSongBody.ID)
 	if err != nil {
 		return song, err
 	}

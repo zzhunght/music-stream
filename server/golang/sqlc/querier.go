@@ -48,6 +48,7 @@ type Querier interface {
 	GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, error)
 	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
 	GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error)
@@ -60,9 +61,10 @@ type Querier interface {
 	SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error)
 	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
+	UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error
 	UpdateCategories(ctx context.Context, arg UpdateCategoriesParams) (Category, error)
 	UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error)
-	UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, error)
+	UpdateSong(ctx context.Context, arg UpdateSongParams) error
 	VerifyAccount(ctx context.Context, email string) (Account, error)
 }
 

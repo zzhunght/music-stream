@@ -144,6 +144,51 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	return items, nil
 }
 
+const getSongByID = `-- name: GetSongByID :one
+
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE s.id = $1
+GROUP BY s.id
+`
+
+type GetSongByIDRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	Artists     type_custom.JSON `json:"artists"`
+}
+
+func (q *Queries) GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, error) {
+	row := q.db.QueryRow(ctx, getSongByID, id)
+	var i GetSongByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Thumbnail,
+		&i.Path,
+		&i.Lyrics,
+		&i.Duration,
+		&i.ReleaseDate,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Artists,
+	)
+	return i, err
+}
+
 const getSongBySongCategory = `-- name: GetSongBySongCategory :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE
@@ -421,13 +466,27 @@ func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]Searc
 	return items, nil
 }
 
-const updateSong = `-- name: UpdateSong :one
+const updateAssociateSongArtist = `-- name: UpdateAssociateSongArtist :exec
+UPDATE  songs_artist  SET artist_id =$1
+WHERE song_id = $2
+`
+
+type UpdateAssociateSongArtistParams struct {
+	ArtistID int32 `json:"artist_id"`
+	SongID   int32 `json:"song_id"`
+}
+
+func (q *Queries) UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error {
+	_, err := q.db.Exec(ctx, updateAssociateSongArtist, arg.ArtistID, arg.SongID)
+	return err
+}
+
+const updateSong = `-- name: UpdateSong :exec
 
 UPDATE songs 
 SET name = $1, thumbnail = $2, 
 path = $3, lyrics = $4, duration = $5, release_date = $6
 WHERE id = $7
-RETURNING id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at
 `
 
 type UpdateSongParams struct {
@@ -440,8 +499,8 @@ type UpdateSongParams struct {
 	ID          int32       `json:"id"`
 }
 
-func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, error) {
-	row := q.db.QueryRow(ctx, updateSong,
+func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) error {
+	_, err := q.db.Exec(ctx, updateSong,
 		arg.Name,
 		arg.Thumbnail,
 		arg.Path,
@@ -450,17 +509,5 @@ func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) (Song, e
 		arg.ReleaseDate,
 		arg.ID,
 	)
-	var i Song
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Thumbnail,
-		&i.Path,
-		&i.Lyrics,
-		&i.Duration,
-		&i.ReleaseDate,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
+	return err
 }

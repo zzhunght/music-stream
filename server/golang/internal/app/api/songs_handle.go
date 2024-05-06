@@ -26,9 +26,10 @@ type UpdateSongRequest struct {
 	Name        string    `json:"name" binding:"required"`
 	Thumbnail   string    `json:"thumbnail" binding:"required"`
 	Path        string    `json:"path" binding:"required"`
-	Lyrics      string    `json:"lyrics" binding:"required"`
+	Lyrics      string    `json:"lyrics"`
 	Duration    int32     `json:"duration" binding:"required"`
-	ReleaseDate time.Time `json:"release_date" binding:"required"`
+	ReleaseDate time.Time `json:"release_date"`
+	ArtistID    int32     `json:"artist_id" binding:"required"`
 }
 
 func (s *Server) GetSong(ctx *gin.Context) {
@@ -103,20 +104,23 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 		return
 	}
 
-	new_song, err := s.store.UpdateSong(ctx, db.UpdateSongParams{
-		ID:        int32(song_id),
-		Name:      body.Name,
-		Path:      utils.ConvertStringToText(body.Path),
-		Thumbnail: utils.ConvertStringToText(body.Thumbnail),
-		Lyrics:    utils.ConvertStringToText(body.Lyrics),
-		Duration: pgtype.Int4{
-			Int32: body.Duration,
-			Valid: true,
+	new_song, err := s.store.UpateSongWithTx(ctx, db.UpateSongWithTx{
+		UpdateSongBody: db.UpdateSongParams{
+			ID:        int32(song_id),
+			Name:      body.Name,
+			Path:      utils.ConvertStringToText(body.Path),
+			Thumbnail: utils.ConvertStringToText(body.Thumbnail),
+			Lyrics:    utils.ConvertStringToText(body.Lyrics),
+			Duration: pgtype.Int4{
+				Int32: body.Duration,
+				Valid: true,
+			},
+			ReleaseDate: pgtype.Date{
+				Time:  body.ReleaseDate,
+				Valid: true,
+			},
 		},
-		ReleaseDate: pgtype.Date{
-			Time:  body.ReleaseDate,
-			Valid: true,
-		},
+		ArtistID: body.ArtistID,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))
