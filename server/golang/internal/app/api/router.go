@@ -59,7 +59,7 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		admin.GET("/album/:album_id", s.GetAlbumSong)
 		admin.POST("/album", s.CreateAlbum)
 		admin.POST("/album/add-song", s.AddSongToAlbum)
-		admin.POST("/album/remove-song", s.RemoveSongFromAlbum)
+		admin.POST("/album/remove-song/:album_id", s.RemoveSongFromAlbum)
 		admin.PUT("/album/:album_id", s.UpdateAlbum)
 		admin.DELETE("/album/:album_id", s.DeleteAlbum)
 

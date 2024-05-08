@@ -281,11 +281,17 @@ func (q *Queries) GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, erro
 }
 
 const removeSongFromAlbum = `-- name: RemoveSongFromAlbum :exec
-DELETE FROM albums_songs WHERE id = ANY($1::int[])
+DELETE FROM albums_songs 
+WHERE album_id = $1 AND song_id = ANY($2::int[])
 `
 
-func (q *Queries) RemoveSongFromAlbum(ctx context.Context, dollar_1 []int32) error {
-	_, err := q.db.Exec(ctx, removeSongFromAlbum, dollar_1)
+type RemoveSongFromAlbumParams struct {
+	AlbumID int32   `json:"album_id"`
+	SongIds []int32 `json:"song_ids"`
+}
+
+func (q *Queries) RemoveSongFromAlbum(ctx context.Context, arg RemoveSongFromAlbumParams) error {
+	_, err := q.db.Exec(ctx, removeSongFromAlbum, arg.AlbumID, arg.SongIds)
 	return err
 }
 

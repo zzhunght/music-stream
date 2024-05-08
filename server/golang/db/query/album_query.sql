@@ -62,7 +62,8 @@ INSERT INTO albums_songs (
 );
 
 -- name: RemoveSongFromAlbum :exec
-DELETE FROM albums_songs WHERE id = ANY($1::int[]);
+DELETE FROM albums_songs 
+WHERE album_id = $1 AND song_id = ANY(sqlc.arg(song_ids)::int[]);
 
 
 -- name: GetAlbumSong :many

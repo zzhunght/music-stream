@@ -143,15 +143,28 @@ func (s *Server) AddSongToAlbum(ctx *gin.Context) {
 }
 
 func (s *Server) RemoveSongFromAlbum(ctx *gin.Context) {
+	album_id, b := ctx.Params.Get("album_id")
+	id, err := strconv.Atoi(album_id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
 
+	if !b {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
 	var body RemoveSongFromAlbum
-	err := ctx.ShouldBindJSON(&body)
+	err = ctx.ShouldBindJSON(&body)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
 	fmt.Print("IDS", body.Ids)
-	err = s.store.RemoveSongFromAlbum(ctx, body.Ids)
+	err = s.store.RemoveSongFromAlbum(ctx, sqlc.RemoveSongFromAlbumParams{
+		AlbumID: int32(id),
+		SongIds: body.Ids,
+	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
