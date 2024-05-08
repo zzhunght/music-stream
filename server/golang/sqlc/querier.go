@@ -52,6 +52,7 @@ type Querier interface {
 	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
 	GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error)
+	GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error)
 	GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams) ([]GetSongOfArtistRow, error)
 	GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error)
 	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error

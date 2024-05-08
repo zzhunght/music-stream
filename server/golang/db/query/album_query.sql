@@ -70,6 +70,11 @@ WHERE album_id = $1 AND song_id = ANY(sqlc.arg(song_ids)::int[]);
 SELECT s.* from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.album_id = $1;
 
 
+-- name: GetSongNotInAlbum :many
+SELECT s.id ,s.name , s.thumbnail, s.duration, s.created_at, s.release_date from songs s
+where id not in (SELECT als.song_id FROM albums_songs als WHERE als.album_id = $1) and name ilike sqlc.arg(search) || '%'
+order by s.created_at desc;
+
 -- name: GetLatestAlbum :many
 SELECT a.*, art.name as artist_name from albums a
 INNER JOIN artist art on a.artist_id = art.id

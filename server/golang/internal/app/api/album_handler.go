@@ -2,7 +2,8 @@ package api
 
 import (
 	"fmt"
-	"music-app-backend/sqlc"
+	"music-app-backend/internal/app/utils"
+	db "music-app-backend/sqlc"
 	"net/http"
 	"strconv"
 	"time"
@@ -11,8 +12,8 @@ import (
 )
 
 type AlbumResponse struct {
-	Data  []sqlc.Album `json:"data"`
-	Count int64        `json:"count"`
+	Data  []db.Album `json:"data"`
+	Count int64      `json:"count"`
 }
 
 type RemoveSongFromAlbum struct {
@@ -36,7 +37,7 @@ func (s *Server) GetAlbums(ctx *gin.Context) {
 		return
 	}
 
-	album, err := s.store.GetAlbums(ctx, sqlc.GetAlbumsParams{
+	album, err := s.store.GetAlbums(ctx, db.GetAlbumsParams{
 		Start: (int32(page) - 1) * int32(size),
 		Size:  int32(size),
 	})
@@ -77,6 +78,29 @@ func (s *Server) GetAlbumSong(ctx *gin.Context) {
 
 }
 
+func (s *Server) GetSongNotInAlbum(ctx *gin.Context) {
+	album_id, _ := ctx.Params.Get("album_id")
+	id, err := strconv.Atoi(album_id)
+	search := ctx.DefaultQuery("search", "")
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	data, err := s.store.GetSongNotInAlbum(ctx, db.GetSongNotInAlbumParams{
+		AlbumID: int32(id),
+		Search:  utils.ConvertStringToText(search),
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(data, "Danh sách bài hát không ở trong album"))
+
+}
+
 func (s *Server) GetAlbumByArtistId(ctx *gin.Context) {
 	artist_id, _ := ctx.Params.Get("artist_id")
 	id, err := strconv.Atoi(artist_id)
@@ -106,7 +130,7 @@ func (s *Server) GetAlbumByArtistId(ctx *gin.Context) {
 }
 
 func (s *Server) CreateAlbum(ctx *gin.Context) {
-	var body sqlc.CreateAlbumParams
+	var body db.CreateAlbumParams
 
 	err := ctx.ShouldBindJSON(&body)
 
@@ -125,7 +149,7 @@ func (s *Server) CreateAlbum(ctx *gin.Context) {
 
 func (s *Server) AddSongToAlbum(ctx *gin.Context) {
 
-	var body sqlc.AddManySongToAlbumParams
+	var body db.AddManySongToAlbumParams
 
 	err := ctx.ShouldBindJSON(&body)
 	if err != nil {
@@ -161,7 +185,7 @@ func (s *Server) RemoveSongFromAlbum(ctx *gin.Context) {
 		return
 	}
 	fmt.Print("IDS", body.Ids)
-	err = s.store.RemoveSongFromAlbum(ctx, sqlc.RemoveSongFromAlbumParams{
+	err = s.store.RemoveSongFromAlbum(ctx, db.RemoveSongFromAlbumParams{
 		AlbumID: int32(id),
 		SongIds: body.Ids,
 	})
@@ -195,7 +219,7 @@ func (s *Server) UpdateAlbum(ctx *gin.Context) {
 		return
 	}
 
-	data, err := s.store.UpdateAlbum(ctx, sqlc.UpdateAlbumParams{
+	data, err := s.store.UpdateAlbum(ctx, db.UpdateAlbumParams{
 		ID:          int32(id),
 		Name:        body.Name,
 		ReleaseDate: body.ReleaseDate,

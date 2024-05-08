@@ -57,6 +57,7 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		// album
 		admin.GET("/album", s.GetAlbums)
 		admin.GET("/album/:album_id", s.GetAlbumSong)
+		admin.GET("/album/:album_id/song_not_in", s.GetSongNotInAlbum)
 		admin.POST("/album", s.CreateAlbum)
 		admin.POST("/album/add-song", s.AddSongToAlbum)
 		admin.POST("/album/remove-song/:album_id", s.RemoveSongFromAlbum)

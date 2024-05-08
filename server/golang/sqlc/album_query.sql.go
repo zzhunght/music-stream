@@ -280,6 +280,53 @@ func (q *Queries) GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, erro
 	return items, nil
 }
 
+const getSongNotInAlbum = `-- name: GetSongNotInAlbum :many
+SELECT s.id ,s.name , s.thumbnail, s.duration, s.created_at, s.release_date from songs s
+where id not in (SELECT als.song_id FROM albums_songs als WHERE als.album_id = $1) and name ilike $2 || '%'
+order by s.created_at desc
+`
+
+type GetSongNotInAlbumParams struct {
+	AlbumID int32       `json:"album_id"`
+	Search  pgtype.Text `json:"search"`
+}
+
+type GetSongNotInAlbumRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Duration    pgtype.Int4      `json:"duration"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+}
+
+func (q *Queries) GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error) {
+	rows, err := q.db.Query(ctx, getSongNotInAlbum, arg.AlbumID, arg.Search)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSongNotInAlbumRow{}
+	for rows.Next() {
+		var i GetSongNotInAlbumRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Thumbnail,
+			&i.Duration,
+			&i.CreatedAt,
+			&i.ReleaseDate,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const removeSongFromAlbum = `-- name: RemoveSongFromAlbum :exec
 DELETE FROM albums_songs 
 WHERE album_id = $1 AND song_id = ANY($2::int[])
