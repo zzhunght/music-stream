@@ -11,9 +11,9 @@ import (
 )
 
 type SearchResult struct {
-	Song   []db.SearchSongRow `json:"songs"`
-	Artist []db.Artist        `json:"artists"`
-	Album  []db.Album         `json:"albums"`
+	Song   []db.SearchSongRow   `json:"songs"`
+	Artist []db.Artist          `json:"artists"`
+	Album  []db.SearchAlbumsRow `json:"albums"`
 }
 
 func (s *Server) SearchSong(ctx *gin.Context) {
@@ -109,7 +109,7 @@ func (s *Server) Search(ctx *gin.Context) {
 	search := ctx.DefaultQuery("search", "")
 	fmt.Println("query : >>>>>>>>>> ", search)
 	songs, err := s.store.SearchSong(ctx, db.SearchSongParams{
-		Size:  int32(10),
+		Size:  int32(100),
 		Start: 0,
 		Search: pgtype.Text{
 			String: search,
@@ -122,7 +122,7 @@ func (s *Server) Search(ctx *gin.Context) {
 		return
 	}
 	album, err := s.store.SearchAlbums(ctx, db.SearchAlbumsParams{
-		Size:  int32(3),
+		Size:  int32(100),
 		Start: 0,
 		Search: pgtype.Text{
 			String: search,

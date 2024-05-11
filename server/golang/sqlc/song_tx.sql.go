@@ -28,25 +28,26 @@ type MessageBody struct {
 	Data  MessageData `json:"data"`
 }
 
-func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithTxParams) (Song, error) {
+func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithTxParams) (GetSongByIdRow, error) {
 	tx, err := store.connPool.Begin(ctx)
 
 	if err != nil {
 		log.Info().Msg("Can not begin transaction")
 	}
 	defer tx.Rollback(ctx)
+	// tạo 1 interface với transaction
 	qtx := store.WithTx(tx)
 	song, err := qtx.CreateSong(ctx, arg.CreateSongBody)
 
 	if err != nil {
-		return song, err
+		return GetSongByIdRow{}, err
 	}
 	err = qtx.AssociateSongArtist(ctx, AssociateSongArtistParams{
 		SongID:   song.ID,
 		ArtistID: arg.ArtistID,
 	})
 	if err != nil {
-		return song, err
+		return GetSongByIdRow{}, err
 	}
 	body, err := json.Marshal(MessageBody{
 		Event: "CREATE_NEW_SONG",
@@ -57,14 +58,18 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 		},
 	})
 	if err != nil {
-		return song, err
+		return GetSongByIdRow{}, err
 	}
 	err = arg.AfterFunction(body)
 	if err != nil {
-		return song, err
+		return GetSongByIdRow{}, err
+	}
+	song_return, err := qtx.GetSongById(ctx, song.ID)
+	if err != nil {
+		return song_return, err
 	}
 	tx.Commit(ctx)
-	return song, nil
+	return song_return, nil
 }
 
 func (store *SQLStore) UpateSongWithTx(ctx context.Context, arg UpateSongWithTx) (GetSongByIDRow, error) {

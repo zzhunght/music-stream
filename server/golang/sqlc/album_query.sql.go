@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
+	type_custom "music-app-backend/db/type"
 )
 
 const addManySongToAlbum = `-- name: AddManySongToAlbum :exec
@@ -163,18 +164,41 @@ func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Alb
 }
 
 const getAlbumSong = `-- name: GetAlbumSong :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from albums_songs a INNER JOIN songs s ON a.song_id = s.id WHERE a.album_id = $1
+SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
+    ELSE '[]'::jsonb
+END AS artists 
+from albums_songs
+INNER JOIN songs s ON albums_songs.song_id = s.id 
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE albums_songs.album_id = $1
+GROUP BY s.id
 `
 
-func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]Song, error) {
+type GetAlbumSongRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Date      `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	Artists     type_custom.JSON `json:"artists"`
+}
+
+func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSongRow, error) {
 	rows, err := q.db.Query(ctx, getAlbumSong, albumID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetAlbumSongRow{}
 	for rows.Next() {
-		var i Song
+		var i GetAlbumSongRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -185,6 +209,7 @@ func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]Song, erro
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Artists,
 		); err != nil {
 			return nil, err
 		}
@@ -343,7 +368,7 @@ func (q *Queries) RemoveSongFromAlbum(ctx context.Context, arg RemoveSongFromAlb
 }
 
 const searchAlbums = `-- name: SearchAlbums :many
-SELECT id, artist_id, name, thumbnail, release_date, created_at FROM albums where name ilike $1 || '%'
+SELECT albums.id, albums.name, albums.thumbnail, albums.release_date FROM albums where name ilike $1 || '%'
 OFFSET COALESCE($2::int, 0)
 LIMIT COALESCE($3::int, 50)
 `
@@ -354,22 +379,27 @@ type SearchAlbumsParams struct {
 	Size   int32       `json:"size"`
 }
 
-func (q *Queries) SearchAlbums(ctx context.Context, arg SearchAlbumsParams) ([]Album, error) {
+type SearchAlbumsRow struct {
+	ID          int32     `json:"id"`
+	Name        string    `json:"name"`
+	Thumbnail   string    `json:"thumbnail"`
+	ReleaseDate time.Time `json:"release_date"`
+}
+
+func (q *Queries) SearchAlbums(ctx context.Context, arg SearchAlbumsParams) ([]SearchAlbumsRow, error) {
 	rows, err := q.db.Query(ctx, searchAlbums, arg.Search, arg.Start, arg.Size)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Album{}
+	items := []SearchAlbumsRow{}
 	for rows.Next() {
-		var i Album
+		var i SearchAlbumsRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.ArtistID,
 			&i.Name,
 			&i.Thumbnail,
 			&i.ReleaseDate,
-			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}

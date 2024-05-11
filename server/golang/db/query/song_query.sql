@@ -26,6 +26,20 @@ OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 
+-- name: GetSongById :one
+
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
+    ELSE '[]'::jsonb
+END AS artists 
+FROM songs s 
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+WHERE s.id = $1
+GROUP BY s.id;
+
+
 -- name: GetSongOfArtist :many
 
 SELECT s.*,
