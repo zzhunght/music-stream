@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -14,6 +15,11 @@ type SearchResult struct {
 	Song   []db.SearchSongRow   `json:"songs"`
 	Artist []db.Artist          `json:"artists"`
 	Album  []db.SearchAlbumsRow `json:"albums"`
+}
+
+type AlbumFromSongResponse struct {
+	Album db.GetAlbumInfoFromSongIDRow `json:"albums"`
+	Song  []db.GetAlbumSongRow         `json:"songs"`
 }
 
 func (s *Server) SearchSong(ctx *gin.Context) {
@@ -151,4 +157,46 @@ func (s *Server) Search(ctx *gin.Context) {
 		Album:  album,
 	}
 	ctx.JSON(http.StatusOK, SuccessResponse(response, "Tìm kiếm bài hát thành công"))
+}
+
+func (s *Server) GetAlbumsDetailFromSongID(ctx *gin.Context) {
+	song_id, ok := ctx.Params.Get("song_id")
+
+	if !ok {
+		ctx.JSON(http.StatusBadRequest, ErrorResponse(fmt.Errorf("song_id is required")))
+		return
+	}
+	id, err := strconv.Atoi(song_id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	data, err := s.store.GetAlbumInfoFromSongID(ctx, int32(id))
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			ctx.JSON(http.StatusOK, SuccessResponse(AlbumFromSongResponse{
+				Album: db.GetAlbumInfoFromSongIDRow{},
+				Song:  []db.GetAlbumSongRow{},
+			}, "Album từ bài hát"))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	songs, err := s.store.GetAlbumSong(ctx, data.ID)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(AlbumFromSongResponse{
+		Album: data,
+		Song:  songs,
+	}, "Album từ bài hát"))
+	return
 }

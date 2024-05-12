@@ -90,3 +90,8 @@ INNER JOIN artist art on a.artist_id = art.id
 ORDER BY a.created_at DESC
 OFFSET 0
 LIMIT 20;
+
+-- name: GetAlbumInfoFromSongID :one
+SELECT al.id, al.name , al.thumbnail, al.release_date from albums al
+INNER JOIN albums_songs abs on al.id = abs.album_id
+WHERE abs.song_id = $1 LIMIT 1;

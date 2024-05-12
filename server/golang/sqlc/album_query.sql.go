@@ -163,6 +163,31 @@ func (q *Queries) GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Alb
 	return items, nil
 }
 
+const getAlbumInfoFromSongID = `-- name: GetAlbumInfoFromSongID :one
+SELECT al.id, al.name , al.thumbnail, al.release_date from albums al
+INNER JOIN albums_songs abs on al.id = abs.album_id
+WHERE abs.song_id = $1 LIMIT 1
+`
+
+type GetAlbumInfoFromSongIDRow struct {
+	ID          int32     `json:"id"`
+	Name        string    `json:"name"`
+	Thumbnail   string    `json:"thumbnail"`
+	ReleaseDate time.Time `json:"release_date"`
+}
+
+func (q *Queries) GetAlbumInfoFromSongID(ctx context.Context, songID int32) (GetAlbumInfoFromSongIDRow, error) {
+	row := q.db.QueryRow(ctx, getAlbumInfoFromSongID, songID)
+	var i GetAlbumInfoFromSongIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Thumbnail,
+		&i.ReleaseDate,
+	)
+	return i, err
+}
+
 const getAlbumSong = `-- name: GetAlbumSong :many
 SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
 CASE

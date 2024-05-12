@@ -40,6 +40,7 @@ type Querier interface {
 	DeleteSong(ctx context.Context, id int32) error
 	GetAccount(ctx context.Context, email string) (GetAccountRow, error)
 	GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Album, error)
+	GetAlbumInfoFromSongID(ctx context.Context, songID int32) (GetAlbumInfoFromSongIDRow, error)
 	GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSongRow, error)
 	GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
