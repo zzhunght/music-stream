@@ -45,12 +45,12 @@ INSERT INTO songs (
 `
 
 type CreateSongParams struct {
-	Name        string      `json:"name"`
-	Thumbnail   pgtype.Text `json:"thumbnail"`
-	Path        pgtype.Text `json:"path"`
-	Lyrics      pgtype.Text `json:"lyrics"`
-	Duration    pgtype.Int4 `json:"duration"`
-	ReleaseDate pgtype.Date `json:"release_date"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 }
 
 func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, error) {
@@ -107,7 +107,7 @@ type GetRandomSongRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -165,7 +165,7 @@ type GetSongByIDRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -210,7 +210,7 @@ type GetSongByIdRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -264,7 +264,7 @@ type GetSongBySongCategoryRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -330,7 +330,7 @@ type GetSongOfArtistRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -394,7 +394,7 @@ type GetSongsRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -474,7 +474,7 @@ type SearchSongRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -535,13 +535,13 @@ WHERE id = $7
 `
 
 type UpdateSongParams struct {
-	Name        string      `json:"name"`
-	Thumbnail   pgtype.Text `json:"thumbnail"`
-	Path        pgtype.Text `json:"path"`
-	Lyrics      pgtype.Text `json:"lyrics"`
-	Duration    pgtype.Int4 `json:"duration"`
-	ReleaseDate pgtype.Date `json:"release_date"`
-	ID          int32       `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
+	ID          int32            `json:"id"`
 }
 
 func (q *Queries) UpdateSong(ctx context.Context, arg UpdateSongParams) error {

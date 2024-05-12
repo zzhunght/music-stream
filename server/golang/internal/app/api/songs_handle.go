@@ -17,9 +17,9 @@ type CreateSongRequest struct {
 	Name        string    `json:"name" binding:"required"`
 	Thumbnail   string    `json:"thumbnail" binding:"required"`
 	Path        string    `json:"path" binding:"required"`
-	Lyrics      string    `json:"lyrics" binding:"required"`
+	Lyrics      string    `json:"lyrics"`
 	Duration    int32     `json:"duration" binding:"required"`
-	ReleaseDate time.Time `json:"release_date" binding:"required"`
+	ReleaseDate time.Time `json:"release_date"`
 	ArtistID    int32     `json:"artist_id" binding:"required"`
 }
 type UpdateSongRequest struct {
@@ -72,7 +72,7 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 				Int32: body.Duration,
 				Valid: true,
 			},
-			ReleaseDate: pgtype.Date{
+			ReleaseDate: pgtype.Timestamp{
 				Time:  body.ReleaseDate,
 				Valid: true,
 			},
@@ -115,7 +115,7 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 				Int32: body.Duration,
 				Valid: true,
 			},
-			ReleaseDate: pgtype.Date{
+			ReleaseDate: pgtype.Timestamp{
 				Time:  body.ReleaseDate,
 				Valid: true,
 			},

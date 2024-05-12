@@ -34,7 +34,7 @@ CREATE TABLE "songs" (
   "path" varchar,
   "lyrics" text,
   "duration" int,
-  "release_date" date,
+  "release_date" timestamp,
   "created_at" timestamp DEFAULT (now()),
   "updated_at" timestamp
 );

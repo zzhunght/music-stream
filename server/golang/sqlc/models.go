@@ -112,7 +112,7 @@ type Song struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 }

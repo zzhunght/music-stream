@@ -198,5 +198,4 @@ func (s *Server) GetAlbumsDetailFromSongID(ctx *gin.Context) {
 		Album: data,
 		Song:  songs,
 	}, "Album từ bài hát"))
-	return
 }

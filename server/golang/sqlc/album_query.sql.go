@@ -209,7 +209,7 @@ type GetAlbumSongRow struct {
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 	Artists     type_custom.JSON `json:"artists"`
@@ -347,7 +347,7 @@ type GetSongNotInAlbumRow struct {
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
 	Duration    pgtype.Int4      `json:"duration"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
-	ReleaseDate pgtype.Date      `json:"release_date"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
 }
 
 func (q *Queries) GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error) {
