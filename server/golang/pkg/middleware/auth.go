@@ -1,4 +1,4 @@
-package api
+package middleware
 
 import (
 	"music-app-backend/internal/app/helper"

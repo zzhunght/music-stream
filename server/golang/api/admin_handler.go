@@ -63,3 +63,15 @@ func (s *Server) RemoveAssociateSongArtist(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, SuccessResponse(true, "Cập nhật nghệ sĩ cho bài hát thành công"))
 }
+
+func (s *Server) GetStatics(ctx *gin.Context) {
+
+	data, err := s.store.Statistics(ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(data, "Get statics"))
+}

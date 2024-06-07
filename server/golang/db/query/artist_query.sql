@@ -27,7 +27,9 @@ SELECT a.*
 FROM songs s
 INNER JOIN songs_artist sa on s.id = sa.song_id
 INNER JOIN artist a on a.id = sa.artist_id
-where s.name ilike sqlc.arg(name_search) || '%';
+where s.name ilike sqlc.arg(name_search) || '%'
+
+ORDER BY created_at DESC;
 
 -- name: DeleteArtist :exec
 

@@ -2,8 +2,8 @@ package api
 
 import (
 	"errors"
-	api "music-app-backend/internal/app/api/middleware"
 	"music-app-backend/internal/app/helper"
+	"music-app-backend/pkg/middleware"
 	db "music-app-backend/sqlc"
 	"net/http"
 	"strconv"
@@ -25,7 +25,7 @@ type HanleSongPlayListRequest struct {
 
 func (s *Server) CreatePlaylist(ctx *gin.Context) {
 	var body CreatePlayListRequest
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 	err := ctx.ShouldBindJSON(&body)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
@@ -50,7 +50,7 @@ func (s *Server) UpdatePlaylistName(ctx *gin.Context) {
 		return
 	}
 
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 	var body UpdatePlayListRequest
 	err = ctx.ShouldBindJSON(&body)
 	if err != nil {
@@ -75,7 +75,7 @@ func (s *Server) AddSongToPlaylist(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 	var body HanleSongPlayListRequest
 	err = ctx.ShouldBindJSON(&body)
 	if err != nil {
@@ -123,7 +123,7 @@ func (s *Server) RemoveSongFromPlaylist(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 	var body HanleSongPlayListRequest
 	err = ctx.ShouldBindJSON(&body)
 	if err != nil {
@@ -152,7 +152,7 @@ func (s *Server) RemoveSongFromPlaylist(ctx *gin.Context) {
 }
 
 func (s *Server) GetUserPlaylists(ctx *gin.Context) {
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 
 	data, err := s.store.GetPlaylistofUser(ctx, authPayload.UserID)
 	if err != nil {
@@ -183,7 +183,7 @@ func (s *Server) DeletePlaylist(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
 		return
 	}
-	authPayload := ctx.MustGet(api.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 
 	err = s.store.DeletePlaylist(ctx, db.DeletePlaylistParams{
 		ID:        int32(playlist_id),

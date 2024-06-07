@@ -1,7 +1,7 @@
 package api
 
 import (
-	api "music-app-backend/internal/app/api/middleware"
+	"music-app-backend/pkg/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +17,7 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/login", s.Login)
 		user.POST("/refresh-token", s.RenewToken)
 		user.POST("/forget-password", s.ForgetPasswordRequest)
-		user.Use(api.Authentication(s.token_maker))
+		user.Use(middleware.Authentication(s.token_maker))
 
 		user.GET("/playlist", s.GetUserPlaylists)
 		user.GET("/playlist/:playlist_id/song", s.GetPlaylistSong)
@@ -36,6 +36,7 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 	admin := route.Group("/admin")
 	{
 		//  admin artists
+		admin.GET("/statics", s.GetStatics)
 		admin.GET("/artists", s.GetArtists)
 		admin.GET("/artists/album/:artist_id", s.GetAlbumByArtistId)
 		admin.POST("/artists", s.CreateArtist)
@@ -49,7 +50,7 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		admin.DELETE("/categories/:category_id", s.DeleteCategory)
 
 		// admin song
-		admin.GET("/song", s.GetSong)
+		admin.GET("/song", s.AdminGetSong)
 		admin.POST("/song", s.CreateSong)
 		admin.PUT("/song/:song_id", s.UpdateSong)
 		admin.DELETE("/song/:song_id", s.DeleteSong)

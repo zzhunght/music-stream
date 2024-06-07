@@ -98,7 +98,7 @@ func (process *ProcessorRedisTasks) HandleEmailDeliveryTask(ctx context.Context,
 		log.Err(err).Msg("Failed to decode json")
 	}
 
-	otp, err := totp.GenerateCode(tempUser.SecretKey, time.Now().Add(60))
+	otp, err := totp.GenerateCode(tempUser.SecretKey, time.Now().Add(180))
 
 	if err != nil {
 		log.Err(err).Msg("Failed to create otp")

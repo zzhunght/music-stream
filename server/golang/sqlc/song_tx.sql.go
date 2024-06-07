@@ -10,11 +10,13 @@ import (
 type UpateSongWithTx struct {
 	UpdateSongBody UpdateSongParams
 	ArtistID       int32
+	CategoryID     int32
 }
 
 type CreateSongWithTxParams struct {
 	CreateSongBody CreateSongParams
 	ArtistID       int32
+	CategoryID     int32
 	AfterFunction  func([]byte) error
 }
 
@@ -28,7 +30,7 @@ type MessageBody struct {
 	Data  MessageData `json:"data"`
 }
 
-func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithTxParams) (GetSongByIdRow, error) {
+func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithTxParams) (GetSongByIDRow, error) {
 	tx, err := store.connPool.Begin(ctx)
 
 	if err != nil {
@@ -40,14 +42,21 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 	song, err := qtx.CreateSong(ctx, arg.CreateSongBody)
 
 	if err != nil {
-		return GetSongByIdRow{}, err
+		return GetSongByIDRow{}, err
 	}
 	err = qtx.AssociateSongArtist(ctx, AssociateSongArtistParams{
 		SongID:   song.ID,
 		ArtistID: arg.ArtistID,
 	})
 	if err != nil {
-		return GetSongByIdRow{}, err
+		return GetSongByIDRow{}, err
+	}
+	err = qtx.AddSongToCategory(ctx, AddSongToCategoryParams{
+		SongID:     song.ID,
+		CategoryID: arg.CategoryID,
+	})
+	if err != nil {
+		return GetSongByIDRow{}, err
 	}
 	body, err := json.Marshal(MessageBody{
 		Event: "CREATE_NEW_SONG",
@@ -58,13 +67,13 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 		},
 	})
 	if err != nil {
-		return GetSongByIdRow{}, err
+		return GetSongByIDRow{}, err
 	}
 	err = arg.AfterFunction(body)
 	if err != nil {
-		return GetSongByIdRow{}, err
+		return GetSongByIDRow{}, err
 	}
-	song_return, err := qtx.GetSongById(ctx, song.ID)
+	song_return, err := qtx.GetSongByID(ctx, song.ID)
 	if err != nil {
 		return song_return, err
 	}
@@ -86,6 +95,13 @@ func (store *SQLStore) UpateSongWithTx(ctx context.Context, arg UpateSongWithTx)
 	err = qtx.UpdateAssociateSongArtist(ctx, UpdateAssociateSongArtistParams{
 		SongID:   arg.UpdateSongBody.ID,
 		ArtistID: arg.ArtistID,
+	})
+	if err != nil {
+		return GetSongByIDRow{}, err
+	}
+	err = qtx.UpdateSongCategory(ctx, UpdateSongCategoryParams{
+		SongID:     arg.UpdateSongBody.ID,
+		CategoryID: arg.CategoryID,
 	})
 	if err != nil {
 		return GetSongByIDRow{}, err

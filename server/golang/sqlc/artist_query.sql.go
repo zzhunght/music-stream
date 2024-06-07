@@ -80,6 +80,8 @@ FROM songs s
 INNER JOIN songs_artist sa on s.id = sa.song_id
 INNER JOIN artist a on a.id = sa.artist_id
 where s.name ilike $1 || '%'
+
+ORDER BY created_at DESC
 `
 
 func (q *Queries) GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error) {

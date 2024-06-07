@@ -9,6 +9,20 @@ import (
 	"context"
 )
 
+const addSongToCategory = `-- name: AddSongToCategory :exec
+INSERT INTO song_categories (song_id, category_id) VALUES ($1, $2)
+`
+
+type AddSongToCategoryParams struct {
+	SongID     int32 `json:"song_id"`
+	CategoryID int32 `json:"category_id"`
+}
+
+func (q *Queries) AddSongToCategory(ctx context.Context, arg AddSongToCategoryParams) error {
+	_, err := q.db.Exec(ctx, addSongToCategory, arg.SongID, arg.CategoryID)
+	return err
+}
+
 const createCategories = `-- name: CreateCategories :one
 INSERT INTO categories (name) VALUES ($1) RETURNING id, name, created_at
 `
@@ -72,4 +86,18 @@ func (q *Queries) UpdateCategories(ctx context.Context, arg UpdateCategoriesPara
 	var i Category
 	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
 	return i, err
+}
+
+const updateSongCategory = `-- name: UpdateSongCategory :exec
+UPDATE  song_categories set category_id = $1 WHERE song_id = $2
+`
+
+type UpdateSongCategoryParams struct {
+	CategoryID int32 `json:"category_id"`
+	SongID     int32 `json:"song_id"`
+}
+
+func (q *Queries) UpdateSongCategory(ctx context.Context, arg UpdateSongCategoryParams) error {
+	_, err := q.db.Exec(ctx, updateSongCategory, arg.CategoryID, arg.SongID)
+	return err
 }

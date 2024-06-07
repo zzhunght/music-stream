@@ -14,7 +14,9 @@ import (
 type Querier interface {
 	AddManySongToAlbum(ctx context.Context, arg AddManySongToAlbumParams) error
 	AddSongToAlbum(ctx context.Context, arg AddSongToAlbumParams) error
+	AddSongToCategory(ctx context.Context, arg AddSongToCategoryParams) error
 	AddSongToPlaylist(ctx context.Context, arg AddSongToPlaylistParams) error
+	AdminGetSongs(ctx context.Context) ([]AdminGetSongsRow, error)
 	AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error
 	ChangePassword(ctx context.Context, arg ChangePasswordParams) error
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
@@ -62,12 +64,14 @@ type Querier interface {
 	RemoveSongFromPlaylist(ctx context.Context, arg RemoveSongFromPlaylistParams) error
 	SearchAlbums(ctx context.Context, arg SearchAlbumsParams) ([]SearchAlbumsRow, error)
 	SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error)
+	Statistics(ctx context.Context) (StatisticsRow, error)
 	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
 	UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error
 	UpdateCategories(ctx context.Context, arg UpdateCategoriesParams) (Category, error)
 	UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error)
 	UpdateSong(ctx context.Context, arg UpdateSongParams) error
+	UpdateSongCategory(ctx context.Context, arg UpdateSongCategoryParams) error
 	VerifyAccount(ctx context.Context, email string) (Account, error)
 }
 

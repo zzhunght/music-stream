@@ -1,4 +1,4 @@
-package config
+package initial
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 )
 
 var Conn *pgxpool.Pool
+var DB *sqlc.SQLStore
 
 func InitDB(dns string) (DB *sqlc.SQLStore) {
 

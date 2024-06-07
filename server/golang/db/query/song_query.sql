@@ -5,12 +5,14 @@ SELECT s.*,
 CASE
     WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
     ELSE '[]'::jsonb
-END AS artists 
+END AS artists,
+c.category_id
 FROM songs s
 LEFT JOIN songs_artist sa on s.id = sa.song_id
 LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN song_categories c on s.id = c.song_id
 WHERE s.id = $1
-GROUP BY s.id;
+GROUP BY s.id, category_id;
 -- name: GetSongs :many
 
 SELECT s.*,
@@ -24,6 +26,22 @@ LEFT JOIN artist a on a.id = sa.artist_id
 GROUP BY s.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
+
+
+-- name: AdminGetSongs :many
+
+SELECT s.*,
+CASE
+    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
+    ELSE '[]'::jsonb
+END AS artists, 
+c.category_id
+FROM songs s
+LEFT JOIN songs_artist sa on s.id = sa.song_id
+LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN song_categories c on s.id = c.song_id
+GROUP BY s.id, category_id
+ORDER BY s.created_at DESC;
 
 
 -- name: GetSongById :one

@@ -21,6 +21,7 @@ type CreateSongRequest struct {
 	Duration    int32     `json:"duration" binding:"required"`
 	ReleaseDate time.Time `json:"release_date"`
 	ArtistID    int32     `json:"artist_id" binding:"required"`
+	CategoryID  int32     `json:"category_id" binding:"required"`
 }
 type UpdateSongRequest struct {
 	Name        string    `json:"name" binding:"required"`
@@ -30,11 +31,12 @@ type UpdateSongRequest struct {
 	Duration    int32     `json:"duration" binding:"required"`
 	ReleaseDate time.Time `json:"release_date"`
 	ArtistID    int32     `json:"artist_id" binding:"required"`
+	CategoryID  int32     `json:"category_id" binding:"required"`
 }
 
 func (s *Server) GetSong(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
-	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "50"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "999"))
 
 	fmt.Print(page, size)
 
@@ -42,6 +44,18 @@ func (s *Server) GetSong(ctx *gin.Context) {
 		Size:  int32(size),
 		Start: int32(size) * int32(page-1),
 	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, SuccessResponse(songs, "Get songs successfully"))
+}
+
+func (s *Server) AdminGetSong(ctx *gin.Context) {
+
+	songs, err := s.store.AdminGetSongs(ctx)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
@@ -78,6 +92,7 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 			},
 		},
 		ArtistID:      body.ArtistID,
+		CategoryID:    body.CategoryID,
 		AfterFunction: s.message_queue.Publishing,
 	})
 	if err != nil {
@@ -120,7 +135,8 @@ func (s *Server) UpdateSong(ctx *gin.Context) {
 				Valid: true,
 			},
 		},
-		ArtistID: body.ArtistID,
+		ArtistID:   body.ArtistID,
+		CategoryID: body.CategoryID,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, ErrorResponse(err))

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"music-app-backend/api"
 	"music-app-backend/gapi"
-	"music-app-backend/internal/app/api"
-	"music-app-backend/internal/app/config"
+	"music-app-backend/internal/app/initial"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/message"
 	"music-app-backend/pb"
@@ -35,7 +35,7 @@ func main() {
 	rdb := utils.NewRedisClient(env.RedisUrl)
 	defer rdb.Close()
 
-	store := config.InitDB(env.DatabaseDestination)
+	store := initial.InitDB(env.DatabaseDestination)
 
 	go StartRedisWorker(redisOpt, mailsender, store, rdb)
 	go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
