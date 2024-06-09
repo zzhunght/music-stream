@@ -1,3 +1,6 @@
+-- name: GetArtistById :one
+SELECT * FROM artist WHERE id = $1;
+
 
 -- name: CreateArtist :one
 INSERT INTO artist (

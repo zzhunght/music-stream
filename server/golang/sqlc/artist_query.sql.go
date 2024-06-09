@@ -68,6 +68,22 @@ func (q *Queries) DeleteManyArtist(ctx context.Context, ids []int32) error {
 	return err
 }
 
+const getArtistById = `-- name: GetArtistById :one
+SELECT id, name, avatar_url, created_at FROM artist WHERE id = $1
+`
+
+func (q *Queries) GetArtistById(ctx context.Context, id int32) (Artist, error) {
+	row := q.db.QueryRow(ctx, getArtistById, id)
+	var i Artist
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.AvatarUrl,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getListArtists = `-- name: GetListArtists :many
 SELECT id, name, avatar_url, created_at 
 FROM artist 

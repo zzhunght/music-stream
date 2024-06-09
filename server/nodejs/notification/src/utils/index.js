@@ -46,8 +46,9 @@ const subscribeMessage = async (channel, service) => {
       process.env.NOTI_ROUTING_KEY
     );
     channel.consume(q.queue, (msg) => {
+      
       service.SubscribeEvents(msg.content.toString());
-      // console.log("received message: " + msg.content.toString());
+      console.log("received message: " + msg.content.toString());
       channel.ack(msg);
     });
   } catch (error) {

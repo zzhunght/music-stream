@@ -21,9 +21,11 @@ type CreateSongWithTxParams struct {
 }
 
 type MessageData struct {
-	ArtistID int32  `json:"artist_id"`
-	SongID   int32  `json:"song_id"`
-	Type     string `json:"type"`
+	Artist    Artist `json:"artist"`
+	SongID    int32  `json:"song_id"`
+	SongName  string `json:"song_name"`
+	Type      string `json:"type"`
+	Thumbnail string `json:"thumbnail"`
 }
 type MessageBody struct {
 	Event string      `json:"event"`
@@ -51,6 +53,7 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}
+
 	err = qtx.AddSongToCategory(ctx, AddSongToCategoryParams{
 		SongID:     song.ID,
 		CategoryID: arg.CategoryID,
@@ -58,12 +61,21 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}
+
+	// -----------------------------
+	artist, err := qtx.GetArtistById(ctx, arg.ArtistID)
+	if err != nil {
+		return GetSongByIDRow{}, err
+	}
+
 	body, err := json.Marshal(MessageBody{
 		Event: "CREATE_NEW_SONG",
 		Data: MessageData{
-			ArtistID: arg.ArtistID,
-			SongID:   song.ID,
-			Type:     "CREATE",
+			SongID:    song.ID,
+			Type:      "CREATE",
+			SongName:  song.Name,
+			Artist:    artist,
+			Thumbnail: song.Thumbnail.String,
 		},
 	})
 	if err != nil {

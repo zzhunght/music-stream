@@ -6,7 +6,12 @@ module.exports = (app, channel) => {
   const service = new NotificationService();
 
   subscribeMessage(channel, service);
-
+  // app.get("/test", async(req, res) => {
+  //   await service.sendNotification()
+  //   res.json({
+  //     message: "ok",
+  //   })
+  // })
   app.get("/create", async (req, res, next) => {
     new SuccessResponse({
       message: "Get notification success",

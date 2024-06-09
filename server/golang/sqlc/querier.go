@@ -45,6 +45,7 @@ type Querier interface {
 	GetAlbumInfoFromSongID(ctx context.Context, songID int32) (GetAlbumInfoFromSongIDRow, error)
 	GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSongRow, error)
 	GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, error)
+	GetArtistById(ctx context.Context, id int32) (Artist, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error)
 	GetPlaylistofUser(ctx context.Context, accountID int32) ([]Playlist, error)

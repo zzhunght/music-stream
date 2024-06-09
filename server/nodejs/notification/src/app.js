@@ -8,13 +8,13 @@ app.use(express.json());
 
 const appServer = async () => {
   //init database
-  require("./dbs/init.mongodb");
+  // require("./dbs/init.mongodb");
+  require('./configs/config.firebase').initFirebaseApp()
   // const { checkOverLoad } = require("./helpers/check.connect");
   // checkOverLoad();
 
   //create channel rabbitmq
   const channel = await getChannel();
-
   notification(app, channel);
 };
 
