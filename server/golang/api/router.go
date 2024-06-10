@@ -7,7 +7,6 @@ import (
 )
 
 func (s *Server) UserRouter(route *gin.RouterGroup) {
-
 	user := route.Group("/user")
 	{
 		user.GET("/confirm-forget-password", s.ForgetPasswordConfirm)
@@ -17,8 +16,10 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/login", s.Login)
 		user.POST("/refresh-token", s.RenewToken)
 		user.POST("/forget-password", s.ForgetPasswordRequest)
-		user.Use(middleware.Authentication(s.token_maker))
+		// user.Use(middleware.Authentication(s.token_maker))
+		user.Use(middleware.Authentication())
 
+		//  play list
 		user.GET("/playlist", s.GetUserPlaylists)
 		user.GET("/playlist/:playlist_id/song", s.GetPlaylistSong)
 		user.POST("/playlist", s.CreatePlaylist)
@@ -26,14 +27,20 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/playlist/remove-song/:playlist_id", s.RemoveSongFromPlaylist)
 		user.PUT("/playlist/:playlist_id", s.UpdatePlaylistName)
 		user.DELETE("/playlist/:playlist_id", s.DeletePlaylist)
+
+		//  follow
+
+		user.POST("/follow/follow-artist", s.FollowArtist)
+		user.POST("/follow/unfollow-artist", s.UnfollowArtist)
+
 		user.POST("/change-password", s.ChangePassword)
 		user.GET("/info", s.GetUser)
 	}
-
 }
 
 func (s *Server) AdminRouter(route *gin.RouterGroup) {
 	admin := route.Group("/admin")
+	admin.Use(middleware.Authentication(), middleware.Authorization([]string{"admin"}))
 	{
 		//  admin artists
 		admin.GET("/statics", s.GetStatics)

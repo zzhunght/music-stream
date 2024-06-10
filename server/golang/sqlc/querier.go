@@ -20,6 +20,7 @@ type Querier interface {
 	AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error
 	ChangePassword(ctx context.Context, arg ChangePasswordParams) error
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
+	CheckFollow(ctx context.Context, arg CheckFollowParams) (ArtistFollow, error)
 	CheckOwnerPlaylist(ctx context.Context, arg CheckOwnerPlaylistParams) (CheckOwnerPlaylistRow, error)
 	CheckSongInPlaylist(ctx context.Context, arg CheckSongInPlaylistParams) (int64, error)
 	CountAlbums(ctx context.Context) (int64, error)
@@ -40,6 +41,7 @@ type Querier interface {
 	DeletePlaylist(ctx context.Context, arg DeletePlaylistParams) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
 	DeleteSong(ctx context.Context, id int32) error
+	Follow(ctx context.Context, arg FollowParams) error
 	GetAccount(ctx context.Context, email string) (GetAccountRow, error)
 	GetAlbumByArtistID(ctx context.Context, artistID int32) ([]Album, error)
 	GetAlbumInfoFromSongID(ctx context.Context, songID int32) (GetAlbumInfoFromSongIDRow, error)
@@ -66,6 +68,7 @@ type Querier interface {
 	SearchAlbums(ctx context.Context, arg SearchAlbumsParams) ([]SearchAlbumsRow, error)
 	SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error)
 	Statistics(ctx context.Context) (StatisticsRow, error)
+	UnFollow(ctx context.Context, arg UnFollowParams) error
 	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
 	UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error

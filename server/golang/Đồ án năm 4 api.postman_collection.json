@@ -43,7 +43,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"otp\": \"767520\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"otp\": \"669810\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -97,7 +97,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"password\": \"d#P&103Y\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tinhyeucuatui2002@gmail.com\",\r\n    \"password\": \"hung12345@\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -188,7 +188,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1M2IzMzExLTA3NWEtNGNjYi1iNTM0LWZhY2VhZjFhYWM1ZSIsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTI4VDE1OjQwOjQwLjY3OTA4MzgrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wMi0yOFQxNTo1NTo0MC42NzkwODM4KzA3OjAwIn0.t8Ab2OsleC8GEbAakrmhqRhvZNyaQrOOtN3UWbN9zD0",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYxMDU5NzZiLTIwZWItNDMyMS1iZThjLWYwMTY2YTA4MTg0MCIsInVzZXJfaWQiOjUsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA2LTEwVDEwOjE3OjU5LjUwMzU2MTAyWiIsImV4cGlyZWRfYXQiOiIyMDI0LTA2LTEzVDEwOjE3OjU5LjUwMzU2MTExWiJ9.nqXvxlwRGc1qeUg94yynPq3L9cqoJXyEOnSv8GFQYME",
 									"type": "string"
 								}
 							]
@@ -221,17 +221,16 @@
 					"name": "Đổi mật khẩu",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAyMmEwNmRhLTg2NTMtNDE0Zi1hZjZkLTFjYzNlMTdhNTBiNSIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI5VDIzOjI0OjM3LjE2NTkzOTIrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yOVQyMzozOTozNy4xNjU5MzkyKzA3OjAwIn0.3OcTIac4shXyFqctd-X0tivpnfFyczqJ_ir1iwjVTCI",
-									"type": "string"
-								}
-							]
+							"type": "apikey"
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQyMzE3YTgwLWE3ZDAtNDcxMy1hNWYxLTJlNDMwZGIwMzJjOSIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA1LTA1VDE0OjU4OjIzLjY0MzQ5MzQ4NVoiLCJleHBpcmVkX2F0IjoiMjAyNC0wNS0wOFQxNDo1ODoyMy42NDM0OTM2NTVaIn0.2Tl7InkSDgh35-Bpfxbften4SYQ7e4kt7O9rYx5gc2Y",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"old_password\":\"hung12345@\",\r\n    \"password\": \"test1345@\"\r\n}",
@@ -514,6 +513,137 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"data\": {\n        \"id\": 3,\n        \"name\": \"Playlist của hùng\",\n        \"account_id\": 1,\n        \"description\": null,\n        \"created_at\": \"2024-04-16T15:04:47.801668Z\"\n    },\n    \"messgae\": \"Tạo playlist thành công\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Unfollow nghe sĩ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzRlYWYwLTNjYzQtNDIzZi1iZGQ1LTQwOWRkN2U4YTc2NCIsInVzZXJfaWQiOjUsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaXNzdWVkX2F0IjoiMjAyNC0wNi0xMFQxNTowMDo0OC4zMzE4MDE3NDlaIiwiZXhwaXJlZF9hdCI6IjIwMjQtMDYtMTNUMTU6MDA6NDguMzMxODAxOTE5WiJ9.xohm2COBueod-tAP2hieWoApjcuxKeUe4tiUbnUArgc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"artist_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/follow/unfollow-artist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"follow",
+								"unfollow-artist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Follow Nghệ sĩ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzRlYWYwLTNjYzQtNDIzZi1iZGQ1LTQwOWRkN2U4YTc2NCIsInVzZXJfaWQiOjUsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaXNzdWVkX2F0IjoiMjAyNC0wNi0xMFQxNTowMDo0OC4zMzE4MDE3NDlaIiwiZXhwaXJlZF9hdCI6IjIwMjQtMDYtMTNUMTU6MDA6NDguMzMxODAxOTE5WiJ9.xohm2COBueod-tAP2hieWoApjcuxKeUe4tiUbnUArgc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"artist_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/follow/follow-artist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"follow",
+								"follow-artist"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Follow Nghệ sĩ",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"artist_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/follow/follow-artist",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"follow",
+										"follow-artist"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.27.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 10 Jun 2024 15:14:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"message\": \"Follow success\"\n}"
 						}
 					]
 				},
@@ -927,7 +1057,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNDJmMDE4LTY3ODUtNDM0Zi04ODg1LWUwYWU5YTgxZTJkZCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDAwOjU0OjE5LjQxOTgyMzQ3OFoiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNlQwMTowOToxOS40MTk4MjM2NDhaIn0.PvYPp_KxI6u4_47nAqCqStQxigjS14V7gTdUlHwj20I",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwZDcwNGRhLWRhYTQtNDIyMi05NGRjLWI4MDZhNDI4OTNiYiIsInVzZXJfaWQiOjUsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaXNzdWVkX2F0IjoiMjAyNC0wNi0xMFQxMDoyNDo0Mi4zNDg3MDg3MDNaIiwiZXhwaXJlZF9hdCI6IjIwMjQtMDYtMTNUMTA6MjQ6NDIuMzQ4NzA4ODIzWiJ9._KFrx0aD1s1RN2uLPe_7Dy7iL_NYMkqnAhXU9W-eIiU",
 									"type": "string"
 								}
 							]
@@ -944,7 +1074,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/admin/artists?search=",
+							"raw": "{{base_url}}/admin/artists?search=&page=1&size=9999",
 							"host": [
 								"{{base_url}}"
 							],
@@ -956,6 +1086,14 @@
 								{
 									"key": "search",
 									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "9999"
 								}
 							]
 						}
@@ -1013,6 +1151,46 @@
 							"body": "{\n    \"data\": {\n        \"data\": [\n            {\n                \"id\": 8,\n                \"name\": \"Taylor Swift Update\",\n                \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9fO22hyFur32YV76cd94kbvoCZNEJPrHrHw&usqp=CAU\",\n                \"created_at\": \"2024-02-24T07:41:30.264441Z\"\n            },\n            {\n                \"id\": 10,\n                \"name\": \"Sơn Tùng MTP\",\n                \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzU1rTgHAVkOADoto3IlyZcwlgeG9NjDY5Pmi3DOuda7qVVgumRqc_O1C6FlAYim8Y1Yg&usqp=CAU\",\n                \"created_at\": \"2024-03-27T14:25:08.160651Z\"\n            }\n        ],\n        \"count\": 2\n    },\n    \"messgae\": \"Get artists\"\n}"
 						}
 					]
+				},
+				{
+					"name": "Thống kê",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNDJmMDE4LTY3ODUtNDM0Zi04ODg1LWUwYWU5YTgxZTJkZCIsInVzZXJfaWQiOjEsImVtYWlsIjoidGluaHlldWN1YXR1aTIwMDJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJpc3N1ZWRfYXQiOiIyMDI0LTA0LTI2VDAwOjU0OjE5LjQxOTgyMzQ3OFoiLCJleHBpcmVkX2F0IjoiMjAyNC0wNC0yNlQwMTowOToxOS40MTk4MjM2NDhaIn0.PvYPp_KxI6u4_47nAqCqStQxigjS14V7gTdUlHwj20I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Taylor Swift\",\r\n    \"avatar_url\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9fO22hyFur32YV76cd94kbvoCZNEJPrHrHw&usqp=CAU\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/statics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"statics"
+							]
+						}
+					},
+					"response": []
 				},
 				{
 					"name": "Ds danh muc",
@@ -1252,6 +1430,89 @@
 					]
 				},
 				{
+					"name": "Lấy ds bài hát không ở trong album",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/album/:album_id/song_not_in?search=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"album",
+								":album_id",
+								"song_not_in"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "album_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Lấy ds bài hát trong album Copy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/admin/album/:album_id/song_not_in?search=",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"album",
+										":album_id",
+										"song_not_in"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": ""
+										}
+									],
+									"variable": [
+										{
+											"key": "album_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 May 2024 06:53:59 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 4,\n            \"name\": \"Sao Anh Chưa Về Nhà (feat. Ricky Star)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/aZbQ7gsAizgC-A6F0tKKXMEloOTFtI3XrjEZmr6JEfUHQM2qUciUm_wmnuYFjEPBZHPN__S2H9r7BXSm9A=w120-h120-l90-rj\",\n            \"duration\": 248,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 5,\n            \"name\": \"anh nhà ở đâu thế\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 216,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 7,\n            \"name\": \"Chúng Ta Của Hiện Tại\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/R96C4cCNuVOuaKpo8AfoM2ienXSOY3rhljcOi2_7Cg1KnjyZ3hr1X_A5Z8G5vOg645yG6P8txcu1r5kI=w120-h120-l90-rj\",\n            \"duration\": 302,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 8,\n            \"name\": \"MAKING MY WAY\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/4W7UzpwfJwYvB--1T8UQ6FdLBCfPH2zTElbCwnNp_wKYA_WvEJOvSNO9dg27YKbs1Wa8Y05iXhXL4hsL=w120-h120-l90-rj\",\n            \"duration\": 259,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 9,\n            \"name\": \"Hãy Trao Cho Anh (feat. Snoop Dogg)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/XUL3o2EPMtfAppLw5fDHBPqB8CmWLfsWQTalYQmhQAkAdlsWsVIdUgnT6lYfpYE_dBFdOYiWLlo70tgR=w120-h120-l90-rj\",\n            \"duration\": 246,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 10,\n            \"name\": \"Muộn Rồi Mà Sao Còn\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/P91TazxnU8veJCp9Uq8pb0lWCSd23QDO3_5xmVykXuFG98U_JgYLk4THqfqmSNp5SjHjB7M7KcQ_9bYQdQ=w120-h120-l90-rj\",\n            \"duration\": 276,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 11,\n            \"name\": \"My Everything\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/iLtU0PIwmVtWX-85Q3evs6vbX34UK9X5InYXtjZQat44KFlw2OWxy9ZOZTxk06bDy-uoV0mt4ZT2IxHyeA=w120-h120-l90-rj\",\n            \"duration\": 198,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 12,\n            \"name\": \"Vì Tôi Còn Sống (Dsmall Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/rY-1n2mIKhgZuoLs0mzUvklJvdzJ53R1tCuTNLIhqV2-kfQqmREkApZEo_A-eTmEuALjq1ceg03_BKY=w120-h120-l90-rj\",\n            \"duration\": 260,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 13,\n            \"name\": \"Say You Do\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/NFoDSLQfxEKd56CmVrRaFJ8-82oPqMfyH4HSObzZi1UecyftAHWW7qdXlx58Dox1FOThGgogO_7OPs3x=w120-h120-l90-rj\",\n            \"duration\": 221,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 14,\n            \"name\": \"Anh Vui Không?\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Ho4W-2TIEIAFus1oRQQUdMYzstqggTrI608OU_JDosAm2JavKqcetOjMOAP3SgHNz5lq8UJT8PoUdVaL=w120-h120-l90-rj\",\n            \"duration\": 297,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 15,\n            \"name\": \"Đi Về Đâu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/_8aCjOxXw-Rte8IaCXsz2CW_GOY3QyrODrODJfdX_-7xiDv7QIPC913zLOpcr33fA4t_qGEwUCCjXEAFOQ=w120-h120-l90-rj\",\n            \"duration\": 223,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 16,\n            \"name\": \"Castle on the Hill\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xpDEOr2TeqEn1QpXosXhqtj149FzNnTgAG3oqPnpTxTbQk-oceO90Sz4Axq0s4Jp_QLGQha_um6_EG3WGQ=w120-h120-l90-rj\",\n            \"duration\": 262,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 17,\n            \"name\": \"Bad Habits\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/3xN5Rqah_iSMqbl3ZMCr9MjnEBVyBLmLng0f-MCvFFdfPNhK619ikGwAD0iOBkzCOXIlucWE0lLLXJA=w120-h120-l90-rj\",\n            \"duration\": 231,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 18,\n            \"name\": \"Shivers\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/LDjFD-70y9c3aYL3-2zTUXkmlWfNlryJllQpHZLxZgi0i73pGx9JaJkNzDTo2LO9cGBDJx7E4eWdytMA=w120-h120-l90-rj\",\n            \"duration\": 208,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 19,\n            \"name\": \"Let It Out\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xESC6YGPy6Jj3LES1NuhyAWBxVJrDgWL_pViNBZ0wPYgTNzmDSlNt9zeSLLgoc82mD7SKTUswO6oAZf3=w120-h120-l90-rj\",\n            \"duration\": 232,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 20,\n            \"name\": \"How Would You Feel (Paean)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Q55rIAk_fG3Q4HmtuD9ZQOniqMdd5wPK9ZnecT-pqaINoBPGkZpQdty93QCUF1pMLS1hk-QTwGM5HtcP=w120-h120-l90-rj\",\n            \"duration\": 281,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 21,\n            \"name\": \"Tình Đã Đầy Một Tim\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/kclUQTBPBl1OmrggyUtntQXxTx5hTUTGV9vaqsaO333H7CWLEqP1g8fu6KgzTjTGlswpjjGJ-2bPQapSgQ=w120-h120-l90-rj\",\n            \"duration\": 268,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 22,\n            \"name\": \"Phố Đã Lên Đèn\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/8Qjm2KNvV3whnBjBdofe_ujAbebJBgXBfG8VVz9pLB7T8SPcTlpMvNzgqtmzM6etmKBCG8lhv5zJsqM=w120-h120-l90-rj\",\n            \"duration\": 287,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 23,\n            \"name\": \"LẦN HẸN HÒ ĐẦU TIÊN\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/JLZLuvqvClctHBvlP6Hn_CSS1hUw5yEO8QIq7xQ8j7qoURgh5AkW52tPx4xJermCzhhmpqF71gebWYg=w120-h120-l90-rj\",\n            \"duration\": 268,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 24,\n            \"name\": \"LIỆU CHÂN THÀNH CÓ ĐỔI ĐƯỢC CHÂN TÌNH\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vINWu03uUlxlYYOwMfqYWEonW3Igt9uhoTPuVtDMncdvvmMlDytW794WSq1HJB2PLUQLXFEo3oi3GeCg=w120-h120-l90-rj\",\n            \"duration\": 388,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 25,\n            \"name\": \"Phố Đã Lên Đèn (Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/WrFrHdpTlxfXQRhn0ER7vTeZ9fBzKauqjS7Y7bis_vlDZkSlN-51v1qJhJOw66DQmDLrO2rt6oIE8w-j=w120-h120-l90-rj\",\n            \"duration\": 208,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 26,\n            \"name\": \"Lỡ Yêu Mất Rồi (feat. Tùng Maru)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/BuwpVLsESJnxAjqFo1uACr0XFMkKltj2qmNvHvre-XVUDauufKsQtx68izzSu4emfD7RGWCkRs5t6rOz=w120-h120-l90-rj\",\n            \"duration\": 239,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 27,\n            \"name\": \"Đếm Cừu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/E-quFz7DfkrWC7KCryeFclG_Qg8azKgmhD_aQGV-GiVTDoYv09Y9yl7mhcMz-PXO3kX9bRUF_ZuoAejIxw=w120-h120-l90-rj\",\n            \"duration\": 212,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 28,\n            \"name\": \"lyhoptinh (feat. Han Sara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/qh0oDVWZcu0kmWnLwqI6EIvUxkJ4JsoMy8zrl-NR234tb1fgdMU7jOqSqKTa7yft6YSn7aXMa2kc9p1R=w120-h120-l90-rj\",\n            \"duration\": 208,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 29,\n            \"name\": \"Tớ Thích Cậu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/NlNxAoUFB9uRFWqVMiUYTxDX_v-PIhqp7-i5QfI8c4Qd79D8q5sJ4SJURpqmqITpLhJB7HzsFrfy6A-H=w120-h120-l90-rj\",\n            \"duration\": 199,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 30,\n            \"name\": \"Tớ Thích Cậu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Q84S_uK2vaSltc_UmhZzW_r17WqY6Xx8tLe0hyklcIEN7fjvIADnqIaCZLj8U3ZYK2phPCNEPDMK4gk=w120-h120-l90-rj\",\n            \"duration\": 203,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 31,\n            \"name\": \"Rồi Mình Sẽ Gặp Nhau (Mười: Lời Nguyền Trở Lại Original Soundtrack)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ehvTUXz1QT6-89ULMI5C8qi6rb48RS9fVThjbIAZPmRE3QkYWlzMce9ndfkjlrxSMP8pjCkfxp1ZPFc=w120-h120-l90-rj\",\n            \"duration\": 245,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 32,\n            \"name\": \"Mình Hẹn Hò Nhau Đi (feat. Huỳnh Hiền Năng)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/VxKoztemAYtFiLKdVIRRLfW80DguFuu63HRt5VCvv27qRJZX-cNzxdlLQ7qJgrkx49oZZ71kB6alhyM=w120-h120-l90-rj\",\n            \"duration\": 223,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 33,\n            \"name\": \"Tự Nhiên Cái Tết\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Qj0gYWmxWz7PRJssO8KjhtAEDxj9hLBBkeIPw5fbBzuusbXtiG4vL_0DmpwIvngP1grDtY-TWcTtbX0=w120-h120-l90-rj\",\n            \"duration\": 227,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 34,\n            \"name\": \"Úm Ba La\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/V153VgWhzVDzOSy9WJj0qjsn4s2jIjztPmDC3Tn2E4kE3MldFnR3_aX0TX4maZ-V1tcNhCcb69wz2EY=w120-h120-l90-rj\",\n            \"duration\": 213,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 35,\n            \"name\": \"Hiếm Có Khó Tìm (feat. Han Sara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/BOfSpCTtloGFEU9pOAbyON3KQSkEAC-bw2_imoE5H1yc0sxbbkCG6U4_duzCafeJn2S_RLw6kyyQ9kUX=w120-h120-l90-rj\",\n            \"duration\": 197,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 36,\n            \"name\": \"Yêu Đến Đâu Hay Đến Đó (feat. Tùng Maru)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/70nOug8Jmw31GWLX2vZP-vRJ9TaGN55EX8ATcTD-g-3ksjTYem66S93GQby6jK0OQbLakswRYLPpekfp=w120-h120-l90-rj\",\n            \"duration\": 239,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 37,\n            \"name\": \"Tết Đón Xuân Về\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/co6xG3Lz9yA5KI588vrdEIH0fVmBKQFbRFJs4-Tm9vTlHlL_PWXxisePVYuXa_omzDhBU4SJyyusv4Ccew=w120-h120-l90-rj\",\n            \"duration\": 295,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 38,\n            \"name\": \"Thế Là Không Xanh Chín Rồi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xXv2NTgAq8KVzzs8MZrsmlT-40FQm8VNeL40hk8ayhlnf7tJEKOFOaJEkbGHnsUN10Qc3l6HLbYWN-HU=w120-h120-l90-rj\",\n            \"duration\": 193,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 39,\n            \"name\": \"Đã Xem Đấy Là Yêu (feat. Tùng Maru)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vp_vpcRkjV_SI9Mjbq3j180_P-CnYX9J5TWYz8Vh0mGnUvbgRzd4Y_Q8PmVnr1GBqzxyQacpotmdJY3R=w120-h120-l90-rj\",\n            \"duration\": 248,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 40,\n            \"name\": \"Let Me Go (feat. Rtee)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/i0ief1MGDIa7Xl1Q8WNxP_cweOmpOV_YV5v__i-xn4y1KfUW5ur5X6ZxoL4ZPWAyuW-wu8BhEPhwV1F-Nw=w120-h120-l90-rj\",\n            \"duration\": 234,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 41,\n            \"name\": \"Que A Du\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/K3V56z7a0eYQJ0saa5f2MnyKG4ZEQsQJO9bLXrD-pY1QA1B5St677n-vfRrOWjtgv4yvxbdwTb_KOsaq=w120-h120-l90-rj\",\n            \"duration\": 219,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 42,\n            \"name\": \"Ba Chúng Ta (Three Of Us)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/BOnbIoyqrNUEgVvXdQ8XoMga97WxwRMrXt5OkzpDRAYrPJT9MfomrpdXwDMmuACVg1WutGvADK8Q2T8=w120-h120-l90-rj\",\n            \"duration\": 256,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 43,\n            \"name\": \"Xin Đừng Nhấc Máy\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/dHA1gJRKqQoryLBsEHZ-o7d22LZkE7w_fQJPBnAen97nmHgi9Eqyk4vnjgc8kcUsdE2uqfCzTmEG0Hpr=w120-h120-l90-rj\",\n            \"duration\": 188,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 44,\n            \"name\": \"Xin Đừng Nhấc Máy (Acoustic)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Ef3vVbw7yN02dXbdoD5u5rUxAgAMKX2_LhN-_q9KErB2r_O5nYS6RhLJ49mTGgS7j1zLkw0cVVr5DHck=w120-h120-l90-rj\",\n            \"duration\": 198,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 45,\n            \"name\": \"Xuan Ve Khap Noi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vDNNo6-T48RHLN8rcGvSgFSFfe3eHzqfmYSS-PYiX17pt7eBYbM65jfI_0QnY7akSOqtHQvswMHne7A-Aw=w120-h120-l90-rj\",\n            \"duration\": 201,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 46,\n            \"name\": \"Co Bao Nhieu Choi Bay Nhieu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Mjg2HISdKUO0wxJ91Bt-LjUy1IsWO1dqxi43JawCA5IyVvUU7jZbZNJ7bVP79QvSOlHoODWp9Qpygmxa=w120-h120-l90-rj\",\n            \"duration\": 269,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 47,\n            \"name\": \"Công Chúa Xuân (feat. Seachains)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/WOzO1TbUQ63qutStevcaDZrHpoUuZtNff4TWwrJRh17vf9K-FQsSSjVNP3S0a6aPX8kog58t71BnsGmF=w120-h120-l90-rj\",\n            \"duration\": 200,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Vui Nhu Tet\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vDNNo6-T48RHLN8rcGvSgFSFfe3eHzqfmYSS-PYiX17pt7eBYbM65jfI_0QnY7akSOqtHQvswMHne7A-Aw=w120-h120-l90-rj\",\n            \"duration\": 297,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Đã Xem Đấy Là Yêu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vp_vpcRkjV_SI9Mjbq3j180_P-CnYX9J5TWYz8Vh0mGnUvbgRzd4Y_Q8PmVnr1GBqzxyQacpotmdJY3R=w120-h120-l90-rj\",\n            \"duration\": 249,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 50,\n            \"name\": \"Sakhiyaan\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xPIMRy2kSfrBlj-eVFBY3Kv8PLQWpitn4US-0FTSHowQImMZBgLH8ROqgLvwS0ESBZQpCrOrrzTy3tLQdA=w120-h120-l90-rj\",\n            \"duration\": 180,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 51,\n            \"name\": \"Feelings\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7pdku5TGM-COWEeCbWHXJJrkkwNZ6xjf4r1zPzyqQxFaAv_WC8P92wkbbeVKFzKgb0iJHbjhKtNqUGxH=w120-h120-l90-rj\",\n            \"duration\": 225,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 52,\n            \"name\": \"Kaisi Teri Khudgharzi (Original Score)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/zteFVz-2HffgRsuU8C6zIdP7tAL8FvYft0NlNIOgjjnD6ElAXIRt2Ki0WPUvuepdh1HltxUkU4BXbeJo=w120-h120-l90-rj\",\n            \"duration\": 370,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 53,\n            \"name\": \"Shree Hanuman Chalisa\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/kW9c3NhFNBmldZXrOtpq72fNffqFe_576p4r_oUqhgpQFW6jPbHmFdShEeWzlcTVgBvcE9jPSz9_E8yB=w120-h120-l90-rj\",\n            \"duration\": 645,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 54,\n            \"name\": \"Mera Dil Ye Pukare Aaja\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/U6YeviuT-THmcFMGB9aQFdD4rWZH7h9ltrFuunNPaWuAU2VfI9ianDar4XFCNz8-n4spI9E1wsJEJmUe=w120-h120-l90-rj\",\n            \"duration\": 273,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 55,\n            \"name\": \"Manike\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/mCkg-VoJ_K0CSZ6P-Sp2y8-9lJl_5nxejAJK5gSZCbSdw1tfCofTzYS6Vdjmt6rzFVDBzb47xeRq3Lgw=w120-h120-l90-rj\",\n            \"duration\": 198,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 56,\n            \"name\": \"Sankatmochan\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/NRLqYo5JTbGbI6o-R3E2EsNVGS1q2mpVDBNnbXFPKWcxKNj7I4uKTN3QwTB0LBu9sm7fd8mFJTRTVdg8=w120-h120-l90-rj\",\n            \"duration\": 454,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 57,\n            \"name\": \"Dilli Sara\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Mh8P8NIqQPU0GcypNXsAV5MWTMtTZcI7pHORl2FnHwefmN3rN_v9lJ6T2kCsUA9dBGJtwbi0wWbdIRc=w120-h120-l90-rj\",\n            \"duration\": 212,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 58,\n            \"name\": \"Aaj Sajeya\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/FPWIbk4nqqBo3ir_vXECEeyA6dU6W7I-d3mw2aOPI-t1kik1Z1v40B7vsL4Ghd-Yi9ctOcmtvtXL8GrK=w120-h120-l90-rj\",\n            \"duration\": 230,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 59,\n            \"name\": \"Tum Hi Aana (From \\\"Marjaavaan\\\")\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/I1joWeHM_7TM_uJ-cQrn3OmZ9plqWxhB74zeYcgPDwCZwoXPb0JkEQ7L8KevoAt8CIDpX6ztKOllrZI=w120-h120-l90-rj\",\n            \"duration\": 249,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 60,\n            \"name\": \"Duniyaa (From \\\"Luka Chuppi\\\")\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/kpmaPayRqAm6Ol1j_uYIQvxvDHVBEdW7RM5YSGNud0n36onW-W0lITnTv9YE9tN6Jx3s8JvcvfrA7Pax_w=w120-h120-l90-rj\",\n            \"duration\": 222,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 61,\n            \"name\": \"Channa Ve\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/5bVRrRHi0EZ_MBeMh3Omxev5rvSttGNlzP8wuZGhdAdaIQLs4K9lP0LzkY3_bgR00WtgJj3Rssy6HNdr=w120-h120-l90-rj\",\n            \"duration\": 212,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 62,\n            \"name\": \"Meri Mai\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ToizTHx5IlNd2uN_i1i3rN5Y9x6vWq7DKk_quJEktrMya8PWJuZ3Po6HYVHXCyfuVHqlrHjckTcwF-w=w120-h120-l90-rj\",\n            \"duration\": 288,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 63,\n            \"name\": \"Saara India\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/c82KTKOwlmXoRrwjaNUkowRJGOgR0xySbIhsiYOrXq-QBjJ1eFUMav22BVM2ea5pXm-jR1aE9bm5VQwg=w120-h120-l90-rj\",\n            \"duration\": 163,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 64,\n            \"name\": \"Mann Bharrya\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vZZRnEidaX1DmutUr0ulJ5Oo3kTSMziP7HtZYcWsKKWKv9hf9a1t-G6imbGyK6GYrcoevWLa054DS-MEqw=w120-h120-l90-rj\",\n            \"duration\": 276,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 65,\n            \"name\": \"HAI DIL YE MERA\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/2NTe7yq3nn6Y-h4vKydP5lefnwSwuGFp2SMqj1r4J-eOrQI9sB1CTKsYgYXzEjSAspezm280UhuJsd9U=w120-h120-l90-rj\",\n            \"duration\": 297,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 66,\n            \"name\": \"Tujhko Hi Dulhan Banaoonga\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/w1qKQirm2-VS3NEM4073L1Uw40xF_hOGkIstISyCghOberEDxXb9_jisKm77M0IPNIfmm4loJonOiA=w120-h120-l90-rj\",\n            \"duration\": 450,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 67,\n            \"name\": \"Mere Yaaraa\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/wn2G_S0tOFv85QyWkYjrHjdXtkpumVpr2HAWjDzG2SwG49ehAAq_QUuuoWDfXRiJckfpGeYmgUQTAnVmMw=w120-h120-l90-rj\",\n            \"duration\": 286,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 68,\n            \"name\": \"Chann Sitare\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/bKqbz3kthr9PGUf4zLb8QR8YJS9vOQvuAMuh68auETiSkviGgpirO3vl9qwqX2NsFzsI9yD8KFR4vqJssA=w120-h120-l90-rj\",\n            \"duration\": 188,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 69,\n            \"name\": \"Ek Toh Kum Zindagani (From \\\"Marjaavaan\\\")\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/dZUiYuNmNBim_l6jTTfb2qvYAfzfq4zyklZcEsrFVukRCopVPlyAk67mmMGWAn5km_2WC0Heih4lSTg-=w120-h120-l90-rj\",\n            \"duration\": 190,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 70,\n            \"name\": \"Phá đảo thế giới ảo\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/_9CwIT0em8qpshEbAgxwlxvdOXB5BA7QEaybEVnR7yuTVmced7KyZt5uffNdsc6ihsbObD_SPZrsqb7GHQ=w120-h120-l90-rj\",\n            \"duration\": 176,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 71,\n            \"name\": \"Có Bao Nhiêu Chơi Bấy Nhiêu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/_DE11w4AobFa1gcAOy-Ja9rxhprv9CYHfCgDuEdkZwGk0RcvFy-ov3wD-JgnnBZyludui4SoSXFPbFNK=w120-h120-l90-rj\",\n            \"duration\": 257,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 72,\n            \"name\": \"Tận Cùng Nỗi Nhớ (Lofi)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/6iUe_RKzOFDV3fNFoCzL-kcua8PVENpnBpKgq_0bM_pulRkyhdlqO0ZLDk1odQb2TNcZZ0BNfTOsSxXbrA=w120-h120-l90-rj\",\n            \"duration\": 293,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 73,\n            \"name\": \"Em Muốn Yên Lặng Một Mình Em Thôi (Siêu Quậy Có Bầu Original Soundtrack)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/AusXI0cULC2b4Job7l0RKEjxgFrrZebyfj52nO5QX7HSRJtKDlhx0zFodrNh_XDhBI1tIqUOVLW8CYrR=w120-h120-l90-rj\",\n            \"duration\": 284,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 74,\n            \"name\": \"Ngày Đá Đơm Bông\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/NlNxAoUFB9uRFWqVMiUYTxDX_v-PIhqp7-i5QfI8c4Qd79D8q5sJ4SJURpqmqITpLhJB7HzsFrfy6A-H=w120-h120-l90-rj\",\n            \"duration\": 134,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 75,\n            \"name\": \"Yêu Đến Đâu Hay Đến Đó [Beat] (feat. Tùng Maru)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/uZ_d1HWbP-PrTBe-0hR2X7623vfccbIONuJTsu9CZ2_RY3A1o659tkJZAYU71Eo2L8br6DINLjP9NKBC=w120-h120-l90-rj\",\n            \"duration\": 238,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 76,\n            \"name\": \"Xuân Về Khắp Nơi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/SfhDOpsCMQrcledy_k4TWfOeQ3aURuShXNQzRpJ8G3IP_LiKzyH1irffTtoiTfbgn4XwBgik9jlG9FjH=w120-h120-l90-rj\",\n            \"duration\": 192,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 77,\n            \"name\": \"Tuổi Học Trò (Siêu Quậy Có Bầu Original Soundtrack)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/yUiXAz8_cacWGWHc1lcR2XAwguOlX6wW4aGR_ofr5HepAkFqg0yzOk8GNFxOYwQG2Pxf8AS2urx28Va__w=w120-h120-l90-rj\",\n            \"duration\": 232,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 78,\n            \"name\": \"lyhoptinh [DJ AM Remix] (feat. Han Sara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/DjEyYugzsZuJjR7qAtwgFDoelnngBUyPLYIVh5gG-sDaaSe3BYcFJudsleZpqY2I4b9hGgOqVlo642vA=w120-h120-l90-rj\",\n            \"duration\": 214,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 79,\n            \"name\": \"Mùa Hè Không Độ\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xykPLp6t1WlBPdRI0IP83kfdoVI7JfNctBelMzLDjawASpt-4DORCRrOe5jpsh3WbXksG74GV_8gES1j=w120-h120-l90-rj\",\n            \"duration\": 146,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 80,\n            \"name\": \"Có Bao Nhiêu Chơi Bấy Nhiêu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/S_cGdbdz9m0vukxJbMkeUqZA0lZK5dc-6U_oghNHwnKSCeD49_w4rcZfTGXDGu1c8N_Qa-l8eIFQIGa5=w120-h120-l90-rj\",\n            \"duration\": 257,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 81,\n            \"name\": \"Dream Team (feat. Anh Đạt, Hiền Mai, Anh Phong & Han Sara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/h2gk01C44hjrTHpaZZmMoE9W549ZKXoNrNq6FZcgjbr6KTvYdSS1CZDvXSREAW2dGLX_nUpXBeE17ZOdWQ=w120-h120-l90-rj\",\n            \"duration\": 228,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 82,\n            \"name\": \"Ba Chúng Ta (Three Of Us) [Beat]\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/BOnbIoyqrNUEgVvXdQ8XoMga97WxwRMrXt5OkzpDRAYrPJT9MfomrpdXwDMmuACVg1WutGvADK8Q2T8=w120-h120-l90-rj\",\n            \"duration\": 256,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 83,\n            \"name\": \"Tớ Thích Cậu [Acoustic] (feat. Huỳnh Hiền Năng)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/pJfnAu34ilcl18OYGkADmV7vUO_IOOfcF319t3EpzLefULZxbsWNpWuzAjpIBOj4sA3Psik5Htylf1Uw=w120-h120-l90-rj\",\n            \"duration\": 148,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 84,\n            \"name\": \"Vì Yêu Anh (Chill Version)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7sH73ESTfvx8grmzaO5ZXroka9nVaWUxpktJJEXqGQb5e1rvva_DYU1SFF8iXHDH1OhvELjX9oW6YDiSZg=w120-h120-l90-rj\",\n            \"duration\": 230,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 85,\n            \"name\": \"lyhoptinh [Sped Up] (feat. Han Sara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/p3MNq_IVTGdUhpjpW_4QI1XYsCsPQYaSQ-zSFInqxtVkwZ3qOHKXokwO0JXssDZarfnr4Jr3S_0eNSgZmQ=w120-h120-l90-rj\",\n            \"duration\": 176,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 86,\n            \"name\": \"Chúng Ta Không Thuộc Về Nhau\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/WyzaRYap78pVb2_5rJDGiYv9t3bfKVFCl6fXCPpTRvigGgHdZLKuOnhX6MvFDgv82AsCFCITLdyinS8=w120-h120-l90-rj\",\n            \"duration\": 234,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 87,\n            \"name\": \"Em Của Ngày Hôm Qua\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 226,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 89,\n            \"name\": \"Lạc Trôi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/3SHPY25c9LtPOVaWevZBKvKZBdhDIVglUDKCDvi033gds2oi5Bel9yzoKtiooxSZLqtDtPPyoZJWEZ4=w120-h120-l90-rj\",\n            \"duration\": 233,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 91,\n            \"name\": \"Hãy Trao Cho Anh (Sky Tour 2019)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/gMcFERB88U2z4cuSswYliZ2A6yaVvEbsKim63LSuyEFhvEvt2uwMJ-ANtzaUbdbUKCiUYxyjOh5_IEFuqA=w120-h120-l90-rj\",\n            \"duration\": 254,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 92,\n            \"name\": \"Không Phải Dạng Vừa Đâu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 248,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 93,\n            \"name\": \"Âm Thầm Bên Em\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 294,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 94,\n            \"name\": \"Có Chắc Yêu Là Đây\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/e9awC-yOmbq1BhHRdCKawHMmANrT7nrzeCz8CurFGUY7PMiwRdfcTQ4WsDGvHm99i78nM8naFNqIZexPng=w120-h120-l90-rj\",\n            \"duration\": 203,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 95,\n            \"name\": \"Chạy Ngay Đi (Sky Tour 2019)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/gMcFERB88U2z4cuSswYliZ2A6yaVvEbsKim63LSuyEFhvEvt2uwMJ-ANtzaUbdbUKCiUYxyjOh5_IEFuqA=w120-h120-l90-rj\",\n            \"duration\": 310,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 96,\n            \"name\": \"Như Ngày Hôm Qua\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 223,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 97,\n            \"name\": \"Chạy Ngay Đi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/aERXTqtD8F4FXprJ4D8ytAbKj0tLUsyaOSUgEDS3-sQoSCs8Z1uP8IMnMJgk_J3GjcO2tuTijjHb8OxY=w120-h120-l90-rj\",\n            \"duration\": 273,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 98,\n            \"name\": \"Một Năm Mới Bình An\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/pK94oIKa3kV8MKvW8bA3_q7BH-MihoiCjX2OyIKAYxPggR4grtEAD9H-5qmAD7k8eMqknS8lPKPGsyDVmg=w120-h120-l90-rj\",\n            \"duration\": 248,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 99,\n            \"name\": \"Hạnh Phúc Mới (Lofi) (feat. Sơn Tùng M-TP)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/JqGUw4vB16h3T4zf-7zYCdVOdoLf1oLdv5Ol6Q7XzC4tsWenY78m1smiiJDNG6rcqj-Hba0_YOQ7mjo=w120-h120-l90-rj\",\n            \"duration\": 93,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 100,\n            \"name\": \"Cơn Mưa Ngang Qua (Remix 2022)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/rBxDUA4g8JDb47Z83kzRhTw2ScytLaCOP3jEfftnkKeQcVQanIhV16xmcD-bB1Ahq9ft3dKp9Hoasxg=w120-h120-l90-rj\",\n            \"duration\": 234,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 101,\n            \"name\": \"Lạc Trôi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/v4CNYBSe1XGbJRk_L0gfh7hRsiucrZqMRWOvmMzq2rrrRAycKsZwD6L-qJ4b-N-mg6oeen-9d05opJc=w120-h120-l90-rj\",\n            \"duration\": 273,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 102,\n            \"name\": \"Buong Doi Tay Nhau Ra\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/blW3DNOg0hNm6zVmKj5u2E7Vd_VHmOx19mz46m2_46zrC1q1_-XA_9cdXnIJNZupZ85MPUzkB73_0ArfEA=w120-h120-l90-rj\",\n            \"duration\": 225,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 103,\n            \"name\": \"Cơn Mưa Ngang Qua\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 235,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 104,\n            \"name\": \"Nơi Này Có Anh (Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/0chmdyviCBGcRqzwtP4OSVL0DeAKD8FbyKdRDl1jd7iAyydt-joSgXfU3DESjnQ6u2iaYSm7Ascn6e6q=w120-h120-l90-rj\",\n            \"duration\": 215,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 105,\n            \"name\": \"Tung Tung Baje\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/JkFLyYEdVK3xpZTYLOeDQdc2F-8L8N4iqF-NB-ivmzcm_0MixymZj_KAlGVfPDNsBFHjzQ5jsCohB8zP=w120-h120-l90-rj\",\n            \"duration\": 284,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 106,\n            \"name\": \"Fortunate Son\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/pg6n6vM3BbQ6126KGEPbcGp8IT841yQqgom-T9_EtmwznXSa0vXHOhTM8pQAvV9Fuh-Pj3hPh0_DbeaCog=w120-h120-l90-rj\",\n            \"duration\": 141,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 107,\n            \"name\": \"Rabab Tang Tang Tang\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/WWY5grWF5IJhgFl7NClhp5FO8wDXaeKGRxw4sdaZ0giO_EOpJX0LyzaUSNdqTBaI5I63BMeV0HEYkUQ=w120-h120-l90-rj\",\n            \"duration\": 231,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 108,\n            \"name\": \"Sunroof\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ycWkUrLxkMX_xYBpoKA82FbkLdrDBC-sKP_e9-b84Qk-JNFDdiq2L777JcegI5M5z5C2SZNozPnCosUJ=w120-h120-l90-rj\",\n            \"duration\": 164,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 88,\n            \"name\": \"Nơi Này Có Anh 2\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w120-h120-l90-rj\",\n            \"duration\": 261,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": \"2024-04-29\"\n        },\n        {\n            \"id\": 109,\n            \"name\": \"Father And Son\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/T79nNCw5OY_iHeG0fThBvvBsBExED8Q4o27e6ZfivrNQfX2uA2-DiJezFdzTOzauMzpfjzcL5uk_qgyP=w120-h120-l90-rj\",\n            \"duration\": 221,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 110,\n            \"name\": \"Bad Boy (feat. Luana Kiara)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/vZoVcMsQI0ggXXTTLp0wITvlRFe2yK9dgwQr6xCljw_EbUp4rDBPUiAh-I-SpPZ6lHTZnzPE_05K_mA=w120-h120-l90-rj\",\n            \"duration\": 191,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 111,\n            \"name\": \"House of the Rising Sun (Season 4 Finale Version)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/IN48HFXRSsaXLRSim1a8xSPCIll1a_KqwwikiTWOqzUQlWIh7eMoYnhfrCXEoALVGG4g0SwBovfHrpj1=w120-h120-l90-rj\",\n            \"duration\": 322,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 112,\n            \"name\": \"Here Comes The Sun (Remastered 2009)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/bmG1q9eu3ub2CtYcgArvzpiehqUpZGuLsOa_B0Bxkwxdfsk9r7nRzAQy1P5dTjqerODLxq3LycWGWW5m=w120-h120-l90-rj\",\n            \"duration\": 186,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 113,\n            \"name\": \"Dreamers (Music from the FIFA World Cup Qatar 2022 Official Soundtrack) (feat. FIFA Sound)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/9I9Npz8KazIlvwuWmOgxjwn9-hvy9K3sFbgEpYZBHPFXIEdFdtbWKJKVO0p7sVdaXWwTaL-GSZAVkk4=w120-h120-l90-rj\",\n            \"duration\": 202,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 114,\n            \"name\": \"Goodbye Yellow Brick Road\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/unJnxDEPuJzB3e9NF9H49ZkIBsccjJabj0MnHjGNt6Rdtgz8DTGFMFTOACDwB4Fy6xzNkrEEm31hDg3m=w120-h120-l90-rj\",\n            \"duration\": 193,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 115,\n            \"name\": \"Axel F\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/c4WNiUJg22QrooqvaFxo0IIdT2m5lnVazQgii2snA-EFw7Jgx0qz_wMjgRg1fY9Opq2DUvFoqfqtKDJ0=w120-h120-l90-rj\",\n            \"duration\": 168,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 116,\n            \"name\": \"Right Now (Na Na Na)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/tt0GFjFjKqiSN8sPbK56ijVK6LjTe3q_2qSl0SZWXbKxf5MHfwjZhP8rM_I3Egd-BVZ1EEv-oTViQ3s2=w120-h120-s-l90-rj\",\n            \"duration\": 241,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 117,\n            \"name\": \"Please Go Away (feat. Alugalug Cat 2.0)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/RfmJivsNtFG4IKuwQUeujSahUm9tgLNqGSlzycHHAJgkzZDUbsZ67EgzYF2pWTS5z5uazRFMVtbUgJRB=w120-h120-l90-rj\",\n            \"duration\": 162,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 118,\n            \"name\": \"Go Down Deh (feat. Shaggy & Sean Paul)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Fpzuam9iaeclowWeZFFOqzQoRBDQYPPwfvtiTXPyoW5lIv4E8Ct5Jedc43-TVEtG2YiQ_RhLHcjyX9yV=w120-h120-l90-rj\",\n            \"duration\": 155,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 119,\n            \"name\": \"FOCUS DANCE BEAT (feat. Hagman & Abati)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/xI3X7yHPqn3FMHdhAIuvby1gS4rEb7-MjR7g4onQugJlkVL7pzQyo77XfCEC8BOfmh1z_dcFCofDE_2dDQ=w120-h120-l90-rj\",\n            \"duration\": 132,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 120,\n            \"name\": \"See Tình (Speed Up Version)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/zqPND9y1jfsHUWLOTHOBwBOmYAFqyE4qBG3_e15Sd-tbr9RpTd90V0Rhgh9U63fVCTCzZm7SkDzfI7y1=w120-h120-l90-rj\",\n            \"duration\": 143,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 121,\n            \"name\": \"Spider-Man 2 Main Title\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/TTVjkbSzJUMNxQuSSeJKSr0Ro5S8qtGOARDPjgiedoT4_uLSqzHHMN1oRAdZ8SQBPNYXpZ70keQGX7gj=w120-h120-l90-rj\",\n            \"duration\": 202,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 122,\n            \"name\": \"Take on Me\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/8YZqnYRc52GUz0iyQTRZvzh8RSbCNTTC0NSrpRlKf8UfSyu87K7ziegM8aFfAyMgUXBisxT_weHb4pFE=w120-h120-l90-rj\",\n            \"duration\": 226,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 123,\n            \"name\": \"Huggy Wuggy\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/gSVd3sq5uTvVubb1uZ6hgbskODgjN94DiJo69v8YkzMlol2B6g5lAvUHa2Opsm2AAOj8iebCSxhd86hr=w120-h120-l90-rj\",\n            \"duration\": 16,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 124,\n            \"name\": \"MOLLY (BABY MAMA)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/VA8f6D_Md4L-hPsLeMlZ9LAQ-QLOel8xJLgDgX7H4ghXJXq5i94ldggRDk_e8_KjM3wEogXhWQeUGllg=w120-h120-l90-rj\",\n            \"duration\": 241,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 125,\n            \"name\": \"Em Cua Ngay Hom Qua\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 264,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 126,\n            \"name\": \"There's No One At All (Another Version)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/gGPKCa01jxAgsWTSJF-6ffOAsFpFjrkWMQtDELP2tkrrqTGANls36IzZlzXux1F7rWPvpWVDJceZ_gE=w120-h120-l90-rj\",\n            \"duration\": 202,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 127,\n            \"name\": \"Tiến Lên Việt Nam Ơi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/uaohgDw9vOAfvysC76mbKKmJkhGu-PpfbI6CuDKmk_qysNfANReqv9vA4D0YLUiXCvtoWKQ77lIxBprB=w120-h120-l90-rj\",\n            \"duration\": 219,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 128,\n            \"name\": \"Thái Bình Mồ Hôi Rơi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/j-GQqBauHdkvuIn3s8rkPoHQBf8_SCqPztsu_8yaW-37o2LHhW3-uPD7ZvUTFkAbFETQ8vYUaqteGKIHHg=w120-h120-l90-rj\",\n            \"duration\": 319,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 129,\n            \"name\": \"Em Của Ngày Hôm Qua (80s)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/eBn5ZpiStjbWFagP2BkitnAMD9q6sdkDlzlX4aahKwdGkDFmzLhAm1zbKF__LLQjZ1aXZroAbyWQ3l4=w120-h120-l90-rj\",\n            \"duration\": 238,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 130,\n            \"name\": \"Chắc Ai Đó Sẽ Về\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 263,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 131,\n            \"name\": \"Ấn Nút Nhớ... Thả Giấc Mơ\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 245,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 132,\n            \"name\": \"Buông Đôi Tay Nhau Ra\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 228,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 133,\n            \"name\": \"Khuôn Mặt Đáng Thương\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/daxwckTRGIAe5uDdXMXmkBnAWsY_9bvQsT9Xga-0THMCeXxDkowgxl2_aXkvxTSRndkfqHtDld6ORAhpvw=w120-h120-l90-rj\",\n            \"duration\": 258,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 134,\n            \"name\": \"Chạy Ngay Đi (Onionn Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/oCBEX4IfXj7jqX6kAeIJj00TOXFJlM3RYJcs4jPPxcrEmi0t_pL-2Qh4S75_E-W2mQ5_06s4CZVuo784=w120-h120-l90-rj\",\n            \"duration\": 231,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 135,\n            \"name\": \"Anh Sai Rồi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ngVF3KN1kOURKqMJEBfDsUknmCkMzlFXEyACOFCIXNLdu8SfTcrbJR1Zgk2PxT6DiYlP2lBlIjxHxI4A=w120-h120-l90-rj\",\n            \"duration\": 253,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 136,\n            \"name\": \"Muộn Rồi Mà Sao Còn (Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/w6zqB8n_UwcgAts0u6pwd-fPqXRBCEB6xo5n5UoSOM3gbnTRo1qWqLiWL749D432qPkFGv1skosatWJKAA=w120-h120-l90-rj\",\n            \"duration\": 447,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 137,\n            \"name\": \"Nhu Ngay Hom Qua\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/blW3DNOg0hNm6zVmKj5u2E7Vd_VHmOx19mz46m2_46zrC1q1_-XA_9cdXnIJNZupZ85MPUzkB73_0ArfEA=w120-h120-l90-rj\",\n            \"duration\": 221,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 138,\n            \"name\": \"Remember Me (Onionn Remix Countdown 2021)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Vg3SVtgpTdsyu8Pc2XDBlvPln1ikskFZ9mQHNWz3x5hdC9LKGvvwQz-ybEQbHL6Nfbano_d6uI893nc=w120-h120-l90-rj\",\n            \"duration\": 198,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 139,\n            \"name\": \"Em Của Ngày Hôm Qua (Sky Tour 2019)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/gMcFERB88U2z4cuSswYliZ2A6yaVvEbsKim63LSuyEFhvEvt2uwMJ-ANtzaUbdbUKCiUYxyjOh5_IEFuqA=w120-h120-l90-rj\",\n            \"duration\": 247,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 140,\n            \"name\": \"You Of Yesterday (Khắc Hưng Remix)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/mXsSbqjAz2j7cbr5lvRg0kmWYYPTIwbzgKGMHutIcdR1MbIDL24Cc03cmPhglES4YuHjLRysBdJsyU8=w120-h120-l90-rj\",\n            \"duration\": 264,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 141,\n            \"name\": \"trời giấu trời mang đi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 254,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 142,\n            \"name\": \"thay mọi cô gái yêu anh\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/ijV7wY_kZH4FjfY0GugxKIcBvc_FSJrSV6mZoNEIZrD5-PrEIyZV0C8OVBtD9A7HF5PgS7ug0Y4OxQM=w120-h120-l90-rj\",\n            \"duration\": 216,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 143,\n            \"name\": \"sao anh chưa về nhà (feat. Ricky Star)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 244,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 144,\n            \"name\": \"Trời Giấu Trời Mang Đi\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/DhqIuUcwuBenWvbyLjvTZoP4R9QWw84Jh45DBALRs2gsD9J9twJvdcBvNKq173YLhcmcsyXtrzS23yAf=w120-h120-l90-rj\",\n            \"duration\": 259,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 145,\n            \"name\": \"ex's hate me, Pt. 2 (feat. B Ray)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 217,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 146,\n            \"name\": \"Em Về Tinh Khôi (25th Làn Sóng Xanh)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/sNg7JD74uqIwP4QsaxeR0-F_SM3zEcWpSGo0htOVfH0CL2elBOICAcfaJhItP8kAlQw95Yuu0zIUGZNzdw=w120-h120-l90-rj\",\n            \"duration\": 230,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 147,\n            \"name\": \"yêu thì yêu không yêu thì yêu\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 191,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 148,\n            \"name\": \"Em Bé\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/wR-UeCthZ2YC3lZFTmxAfi3kjoYmCWJ7Bgb-CJMVLHtSfwnOjsqVEpZtaFAHwiw0Jz1M8P6dmXYTQsaD=w120-h120-l90-rj\",\n            \"duration\": 193,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 149,\n            \"name\": \"Anh Nhà Ở Đâu Thế (feat. B Ray)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/m0HOg_pLyq88Sjwo9_zKCgj9aLRrjBjJ5OphNRtwO3pxWxTHtpX2Wd7aBCaWXZ0p-jSvC7ejaIx87pE=w120-h120-l90-rj\",\n            \"duration\": 218,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 150,\n            \"name\": \"mama boy\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/7C5RCiox3tK-FlJUnjlhrKFttQSi0YtXteGMaSsLiGmdkEoq3F0tZ6FpVs7JNaWYV0YFFsCRKw1CTV4=w120-h120-l90-rj\",\n            \"duration\": 205,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 151,\n            \"name\": \"nàng thơ... trời giấu trời mang đi (feat. Hoàng Dũng)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/Mjrll1B40vy-b2oVv4AdwwPRt-HYi54J1FUVaMD8uRo2GR9CIdC8PK_4HjCqnrfdDGvTRqM7OYEU3P2bsA=w120-h120-l90-rj\",\n            \"duration\": 263,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 152,\n            \"name\": \"HAI MƯƠI HAI\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/YR0w_8WypD_01zMAsRoLk3T-HUXKZSfT_jYQhPG5cUlVMnsnqiZB2OJAKU3qK9mXi2mdymoEcUitOADG=w120-h120-s-l90-rj\",\n            \"duration\": 239,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 153,\n            \"name\": \"Anh Đánh Rơi Người Yêu Này\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/HOtJ2H9L6OjBZDqIhlpHlhbVENCdQIwUYaf_38mLwB9Kz-nHzHv49mvpxd79SuvtDkXYhY01T3x0A7ce=w120-h120-l90-rj\",\n            \"duration\": 218,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 154,\n            \"name\": \"Chủ nhật boy\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/FxYpp2bMd-2b5tZaVe0MCuy3QAHNjA5HsYJoBQL68J1vyIYCJuxq0ZQKG4BmtDaAk8lC_S_ATmn19CW11g=w120-h120-l90-rj\",\n            \"duration\": 181,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 155,\n            \"name\": \"TÌNH BẠN DIỆU KỲ [Master Version] (feat. Amee & Lăng LD)\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/sDQsxLAHMAUnd25y4_dkz5zynEE64jfVWqWegPqS16-A7z9ng7J0syEYXhD8bpQf0DdNelgP_YrLmkI=w120-h120-l90-rj\",\n            \"duration\": 189,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 156,\n            \"name\": \"Câu Hẹn Câu Thề\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/_4VpkJVNv_LNsbvnq-OI7e6uJxwk2YUxkoArZ5hGuzZ0aeSNU-N03CUgpiZ65Myz--KSV91wTQo8hQA=w120-h120-l90-rj\",\n            \"duration\": 321,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 157,\n            \"name\": \"Hối Tiếc Muộn Màng\",\n            \"thumbnail\": \"https://static-images.vnncdn.net/files/publish/2023/5/27/batch-dd346143096-707163824751824-6416013366828335422-n-300.jpg\",\n            \"duration\": 282,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 158,\n            \"name\": \"Chỉ Yêu Mình Em\",\n            \"thumbnail\": \"https://static-images.vnncdn.net/files/publish/2023/5/27/batch-dd346143096-707163824751824-6416013366828335422-n-300.jpg\",\n            \"duration\": 286,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 159,\n            \"name\": \"Vợ Người Ta\",\n            \"thumbnail\": \"https://upload.wikimedia.org/wikipedia/commons/b/be/Phan_Mạnh_Quỳnh.jpg\",\n            \"duration\": 196,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 160,\n            \"name\": \"Thất Tình\",\n            \"thumbnail\": \"https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/06/04/b/9/b/0/1559630395269_600.jpg\",\n            \"duration\": 292,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 161,\n            \"name\": \"Nếu em còn tồn tại\",\n            \"thumbnail\": \"https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/06/04/b/9/b/0/1559630395269_600.jpg\",\n            \"duration\": 352,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 162,\n            \"name\": \"Sắp 30\",\n            \"thumbnail\": \"https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/06/04/b/9/b/0/1559630395269_600.jpg\",\n            \"duration\": 390,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 163,\n            \"name\": \"Bạn Đời\",\n            \"thumbnail\": \"https://vcdn-giaitri.vnecdn.net/2021/01/06/Karik-3463-1609901084.jpg\",\n            \"duration\": 318,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 164,\n            \"name\": \"Em Hát Ai Nghe\",\n            \"thumbnail\": \"https://images2.thanhnien.vn/528068263637045248/2023/12/27/qmg05852-1703686735132866224209.jpeg\",\n            \"duration\": 332,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 165,\n            \"name\": \"EM LÀ CON THUYỀN CÔ ĐƠN\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Feltcd.jpg?alt=media\",\n            \"duration\": 306,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 166,\n            \"name\": \"Điều Anh Biết\",\n            \"thumbnail\": \"https://images2.thanhnien.vn/528068263637045248/2023/4/4/chi-dan-16805906568881778204975.jpeg\",\n            \"duration\": 315,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 167,\n            \"name\": \"Vì Người Không Xứng Đáng\",\n            \"thumbnail\": \"https://nld.mediacdn.vn/291774122806476800/2021/7/26/tuan-hung-khuyen-ca-si-tre-khong-nen-lam-dung-cover-1-1627263641056652420635.jpg\",\n            \"duration\": 284,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 168,\n            \"name\": \"Hẹn Ước Từ Hư Vô\",\n            \"thumbnail\": \"https://images2.thanhnien.vn/528068263637045248/2023/7/11/my-tam-121-16890426245471165837760.jpeg\",\n            \"duration\": 246,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 169,\n            \"name\": \"Hơn Cả Yêu\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fdownload.jpg?alt=media\",\n            \"duration\": 343,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 170,\n            \"name\": \"Chạm đáy nỗi đau\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fcdnd.jpg?alt=media\",\n            \"duration\": 369,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 171,\n            \"name\": \"Tháng Tư là lời nói dối của em\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Ft4.jpg?alt=media\",\n            \"duration\": 376,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 172,\n            \"name\": \"ex's hate me\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fexhm.jpg?alt=media&token=c84b3afb-225d-4144-b34b-1a2537931c86\",\n            \"duration\": 268,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 173,\n            \"name\": \"Thương em là điều anh không thể ngờ\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fmaxresdefault.jpg?alt=media\",\n            \"duration\": 309,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 174,\n            \"name\": \"Ta cứ đi cùng nhau\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fab67616d0000b273eca90a2593e3e3f446dfe382.jpg?alt=media\",\n            \"duration\": 300,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 175,\n            \"name\": \"Mười năm\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fmn.jpg?alt=media\",\n            \"duration\": 246,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 176,\n            \"name\": \"Yêu 5 \",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fmaxresdefault%20(1).jpg?alt=media\",\n            \"duration\": 328,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 177,\n            \"name\": \"Bông hoa đẹp nhất \",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fmaxresdefault%20(2).jpg?alt=media\",\n            \"duration\": 316,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 178,\n            \"name\": \"Một bước yêu vạn dặm đau\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fmbyv%C4%91.jpg?alt=media\",\n            \"duration\": 300,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 179,\n            \"name\": \"Ngày mai người ta lấy chồng\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fnmntlc.jpg?alt=media\",\n            \"duration\": 353,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 180,\n            \"name\": \"Yêu em nhưng không với tới\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fyenkvt.jpg?alt=media\",\n            \"duration\": 285,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 181,\n            \"name\": \"Phía sau một cô gái\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2FB%C3%ACa_%C4%91%C4%A9a_Ph%C3%ADa_sau_m%E1%BB%99t_c%C3%B4_g%C3%A1i.png?alt=media\",\n            \"duration\": 273,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 182,\n            \"name\": \"nàng thơ\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fnang-tho.jpeg?alt=media\",\n            \"duration\": 322,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 183,\n            \"name\": \"hoa nở không màu\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fhnkm.jpg?alt=media\",\n            \"duration\": 341,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 184,\n            \"name\": \"cuộc sống em ổn không\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fcseok.jpg?alt=media\",\n            \"duration\": 348,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 185,\n            \"name\": \"BIGCITYBOI\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2FBinz_-_Bigcityboi.jpg?alt=media\",\n            \"duration\": 224,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 186,\n            \"name\": \"già cùng nhau là được\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2Fsddefault.jpg?alt=media\",\n            \"duration\": 231,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 187,\n            \"name\": \"2AM\",\n            \"thumbnail\": \"https://firebasestorage.googleapis.com/v0/b/music-142a0.appspot.com/o/thumbnail%2F1543213836132_640.jpg?alt=media\",\n            \"duration\": 268,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 188,\n            \"name\": \"\",\n            \"thumbnail\": \"\",\n            \"duration\": null,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        },\n        {\n            \"id\": 90,\n            \"name\": \"Nắng Ấm Xa Dần\",\n            \"thumbnail\": \"https://lh3.googleusercontent.com/JjZpaqyngChD0l8DbRDs2h5kkkb4S_AsCEu4XBXJvlOT0mWns9oINc8PlIhAcTWAXvgDt2fGk1xL04q9fQ=w120-h120-l90-rj\",\n            \"duration\": 192,\n            \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n            \"release_date\": null\n        }\n    ],\n    \"message\": \"Danh sách bài hát không ở trong album\"\n}"
+						}
+					]
+				},
+				{
 					"name": "Lấy ds album của nghệ sĩ",
 					"request": {
 						"method": "GET",
@@ -1339,7 +1600,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Nơi này có anh\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"artist_id\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"Nơi này có anh\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": null,\r\n    \"duration\": 310,\r\n    \"release_date\": null,\r\n    \"artist_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1365,7 +1626,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Nơi này có anh\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\"\r\n}",
+									"raw": "{\r\n    \"name\": \"Nơi này có anh\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"artist_id\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1393,15 +1654,15 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 01 Apr 2024 15:05:00 GMT"
+									"value": "Sat, 11 May 2024 07:25:06 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "297"
+									"value": "465"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"data\": {\n        \"id\": 6,\n        \"name\": \"Nơi này có anh\",\n        \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\n        \"path\": \"a.com\",\n        \"lyrics\": \"nơi này có anh\",\n        \"duration\": 310,\n        \"release_date\": \"2023-08-01\",\n        \"created_at\": \"2024-04-01T15:05:00.409466Z\",\n        \"updated_at\": null\n    },\n    \"messgae\": \"Created song successfully\"\n}"
+							"body": "{\n    \"data\": {\n        \"id\": 189,\n        \"name\": \"Nơi này có anh\",\n        \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\n        \"path\": \"a.com\",\n        \"lyrics\": \"nơi này có anh\",\n        \"duration\": 310,\n        \"release_date\": \"2023-08-01\",\n        \"created_at\": \"2024-05-11T07:25:06.565971Z\",\n        \"updated_at\": null,\n        \"artists\": [\n            {\n                \"avatar_url\": \"https://newsmd2fr.keeng.vn/tiin/archive/imageslead/2023/05/24/thumb4_37742f9ffa474ba1f40840eb7d9c708d.jpg\",\n                \"id\": 1,\n                \"name\": \"Sơn Tùng MTP\"\n            }\n        ]\n    },\n    \"message\": \"Created song successfully\"\n}"
 						}
 					]
 				},
@@ -1559,7 +1820,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ids\": [4,5,6]\r\n}",
+							"raw": "{\r\n    \"ids\": [4,5]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1567,14 +1828,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/admin/album/remove-song",
+							"raw": "{{base_url}}/admin/album/remove-song/:album_id",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"admin",
 								"album",
-								"remove-song"
+								"remove-song",
+								":album_id"
+							],
+							"variable": [
+								{
+									"key": "album_id",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -2052,7 +2320,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Nơi này có anh update\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"created_at\": \"2024-04-02T14:28:49.267458Z\",\r\n    \"updated_at\": null\r\n}",
+							"raw": "{\r\n    \"name\": \"Muộn Rồi Mà Sao Còn\",\r\n    \"thumbnail\": \"https://lh3.googleusercontent.com/P91TazxnU8veJCp9Uq8pb0lWCSd23QDO3_5xmVykXuFG98U_JgYLk4THqfqmSNp5SjHjB7M7KcQ_9bYQdQ=w120-h120-l90-rj\",\r\n    \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/dLoIOUe1oes.mp3\",\r\n    \"lyrics\": null,\r\n    \"duration\": 276,\r\n    \"release_date\": null,\r\n    \"created_at\": \"2024-04-29T08:17:52.561021Z\",\r\n    \"updated_at\": null,\r\n    \"artist_id\": 1,\r\n    \"category_id\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2072,64 +2340,12 @@
 							"variable": [
 								{
 									"key": "song_id",
-									"value": "1"
+									"value": "10"
 								}
 							]
 						}
 					},
 					"response": [
-						{
-							"name": "Cập nhật Album",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"artist_id\": 1,\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"name\": \"Sơn Tùng Collection update\",\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"created_at\": \"2024-04-01T15:17:50.273308Z\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/admin/album/:album_id",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"admin",
-										"album",
-										":album_id"
-									],
-									"variable": [
-										{
-											"key": "album_id",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 02 Apr 2024 14:17:15 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "261"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"artist_id\": 1,\n        \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\n        \"name\": \"Sơn Tùng Collection update\",\n        \"release_date\": \"2023-08-01T00:00:00Z\",\n        \"created_at\": \"2024-04-01T15:17:50.273308Z\"\n    },\n    \"messgae\": \"Cập nhật album thành công\"\n}"
-						},
 						{
 							"name": "Cập nhật bài hát",
 							"originalRequest": {
@@ -2137,7 +2353,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Nơi này có anh update\",\r\n    \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\r\n    \"path\": \"a.com\",\r\n    \"lyrics\": \"nơi này có anh\",\r\n    \"duration\": 310,\r\n    \"release_date\": \"2023-08-01T00:00:00Z\",\r\n    \"created_at\": \"2024-04-02T14:28:49.267458Z\",\r\n    \"updated_at\": null\r\n}",
+									"raw": "{\r\n    \"name\": \"Nơi Này Có Anh 2\",\r\n    \"thumbnail\": \"https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w120-h120-l90-rj\",\r\n    \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/qHpE45b4INk.mp3\",\r\n    \"lyrics\": \"\",\r\n    \"duration\": 261,\r\n    \"release_date\": \"2024-04-29T08:17:52.561021Z\",\r\n    \"created_at\": \"2024-04-29T08:17:52.561021Z\",\r\n    \"updated_at\": null,\r\n    \"artist_id\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2157,7 +2373,7 @@
 									"variable": [
 										{
 											"key": "song_id",
-											"value": "7"
+											"value": "88"
 										}
 									]
 								}
@@ -2172,15 +2388,15 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 02 Apr 2024 14:30:48 GMT"
+									"value": "Mon, 06 May 2024 04:39:42 GMT"
 								},
 								{
 									"key": "Content-Length",
-									"value": "314"
+									"value": "615"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Nơi này có anh update\",\n        \"thumbnail\": \"https://i.ytimg.com/vi/xj2SplvLuf4/maxresdefault.jpg\",\n        \"path\": \"a.com\",\n        \"lyrics\": \"nơi này có anh\",\n        \"duration\": 310,\n        \"release_date\": \"2023-08-01\",\n        \"created_at\": \"2024-04-02T14:28:49.267458Z\",\n        \"updated_at\": null\n    },\n    \"messgae\": \"Cập nhật bài hát thành công\"\n}"
+							"body": "{\n    \"data\": {\n        \"id\": 88,\n        \"name\": \"Nơi Này Có Anh 2\",\n        \"thumbnail\": \"https://lh3.googleusercontent.com/guPkUMfq6XoStEBVJwwWMD5dttVFgi0OXpzHZ0hvPD0kWxdVkrMbMCBNRDZlUy_N953vMI_r-6x1X_IEWQ=w120-h120-l90-rj\",\n        \"path\": \"https://storage.googleapis.com/harmony-music-x.appspot.com/songs/qHpE45b4INk.mp3\",\n        \"lyrics\": \"\",\n        \"duration\": 261,\n        \"release_date\": \"2024-04-29\",\n        \"created_at\": \"2024-04-29T08:17:52.561021Z\",\n        \"updated_at\": null,\n        \"artists\": [\n            {\n                \"avatar_url\": \"https://newsmd2fr.keeng.vn/tiin/archive/imageslead/2023/05/24/thumb4_37742f9ffa474ba1f40840eb7d9c708d.jpg\",\n                \"id\": 1,\n                \"name\": \"Sơn Tùng MTP\"\n            }\n        ]\n    },\n    \"message\": \"Cập nhật bài hát thành công\"\n}"
 						}
 					]
 				},
@@ -2449,7 +2665,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/public/artists?search=tay&page=1&size=50",
+							"raw": "{{base_url}}/public/artists?search=&page=1&size=50",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2460,7 +2676,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "tay"
+									"value": ""
 								},
 								{
 									"key": "page",
@@ -2553,7 +2769,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/public/artists/:artist_id/songs?search=tay&page=1&size=50",
+							"raw": "{{base_url}}/public/artists/:artist_id/songs?page=1&size=50",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2566,7 +2782,8 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "tay"
+									"value": "tay",
+									"disabled": true
 								},
 								{
 									"key": "page",
@@ -2580,7 +2797,7 @@
 							"variable": [
 								{
 									"key": "artist_id",
-									"value": "1"
+									"value": "5"
 								}
 							]
 						}
@@ -3045,7 +3262,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/public/songs?search=nơi",
+							"raw": "{{base_url}}/public/songs?search=anh",
 							"host": [
 								"{{base_url}}"
 							],
@@ -3056,7 +3273,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "nơi"
+									"value": "anh"
 								}
 							]
 						}
@@ -3116,6 +3333,37 @@
 					]
 				},
 				{
+					"name": "Danh sách bài hát random",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/public/songs/suggested",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"songs",
+								"suggested"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Tìm kiếm trên app",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -3133,7 +3381,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/public/search?search=c",
+							"raw": "{{base_url}}/public/search?search=trái",
 							"host": [
 								"{{base_url}}"
 							],
@@ -3144,7 +3392,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "c"
+									"value": "trái"
 								}
 							]
 						}
@@ -3306,6 +3554,110 @@
 							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Nơi này có anh\",\n            \"thumbnail\": null,\n            \"path\": null,\n            \"lyrics\": null,\n            \"duration\": null,\n            \"release_date\": null,\n            \"created_at\": \"2024-03-02T15:57:03.312548Z\",\n            \"updated_at\": null,\n            \"artist_name\": \"Sơn Tùng MTP\"\n        }\n    ],\n    \"messgae\": \"Tìm kiếm bài hát thành công\"\n}"
 						}
 					]
+				},
+				{
+					"name": "Lấy Album từ bài hát",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/public/album_from_song/:song_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"album_from_song",
+								":song_id"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "nơi",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "song_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Tìm kiếm bài hát theo danh mục",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/public/songs_by_categories/:categories_id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"public",
+										"songs_by_categories",
+										":categories_id"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "nơi",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "categories_id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 Apr 2024 14:24:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "264"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Nơi này có anh\",\n            \"thumbnail\": null,\n            \"path\": null,\n            \"lyrics\": null,\n            \"duration\": null,\n            \"release_date\": null,\n            \"created_at\": \"2024-03-02T15:57:03.312548Z\",\n            \"updated_at\": null,\n            \"artist_name\": \"Sơn Tùng MTP\"\n        }\n    ],\n    \"messgae\": \"Tìm kiếm bài hát thành công\"\n}"
+						}
+					]
 				}
 			]
 		},
@@ -3351,13 +3703,13 @@
 		{
 			"key": "base_url",
 			"value": "localhost/api/v1",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "base_url",
 			"value": "localhost:8080/api/v1",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }
