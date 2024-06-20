@@ -4,6 +4,7 @@ import (
 	"music-app-backend/internal/app/helper"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/message"
+	"music-app-backend/pkg/middleware"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
 	"net/http"
@@ -33,7 +34,13 @@ func NewServer(
 	rdb *redis.Client,
 ) *Server {
 	r := gin.Default()
-	r.Use(cors.Default())
+	cor_config := cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}
+	r.Use(cors.New(cor_config))
 	server := &Server{
 		store:         store,
 		config:        config,
@@ -54,6 +61,7 @@ func (s *Server) setupRouter() {
 	{
 		v1.GET("health-check", healthCheck)
 	}
+	v1.Use(middleware.CORSMiddleware())
 	s.UserRouter(v1)
 	s.AdminRouter(v1)
 	s.PublicRouter(v1)

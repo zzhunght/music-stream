@@ -78,6 +78,18 @@ services:
             - postgres
             - rabbitmq
         restart: on-failure
+    notification_services:
+        container_name: notification_services
+        build: ./nodejs/notification
+        ports:
+            - "3057:3057"
+        networks:
+            - music-networks
+        depends_on:
+            - redis
+            - postgres
+            - rabbitmq
+        restart: on-failure
 
 
 

@@ -17,7 +17,7 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 		user.POST("/refresh-token", s.RenewToken)
 		user.POST("/forget-password", s.ForgetPasswordRequest)
 		// user.Use(middleware.Authentication(s.token_maker))
-		user.Use(middleware.Authentication())
+		user.Use(middleware.Authentication(s.token_maker))
 
 		//  play list
 		user.GET("/playlist", s.GetUserPlaylists)
@@ -40,7 +40,7 @@ func (s *Server) UserRouter(route *gin.RouterGroup) {
 
 func (s *Server) AdminRouter(route *gin.RouterGroup) {
 	admin := route.Group("/admin")
-	admin.Use(middleware.Authentication(), middleware.Authorization([]string{"admin"}))
+	admin.Use(middleware.Authentication(s.token_maker), middleware.Authorization([]string{"admin"}))
 	{
 		//  admin artists
 		admin.GET("/statics", s.GetStatics)

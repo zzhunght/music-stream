@@ -27,7 +27,7 @@ func NewHandler(config *config.Config,
 func (h *Handler) Authentication(ctx *gin.Context) {
 
 	header := ctx.GetHeader("authorization")
-	fmt.Println("header: ", header)
+	fmt.Println("header :>>>>>>>>>>>>>>>>: ", header)
 
 	if len(header) == 0 {
 		ctx.Header("X-Error-Message", "Invalid authorization header")

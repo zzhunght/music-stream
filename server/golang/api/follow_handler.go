@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"music-app-backend/internal/app/helper"
 	"music-app-backend/pkg/middleware"
 	db "music-app-backend/sqlc"
 	"net/http"
@@ -14,7 +15,7 @@ type Follow struct {
 }
 
 func (s *Server) UnfollowArtist(ctx *gin.Context) {
-	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 
 	var body Follow
 
@@ -47,7 +48,7 @@ func (s *Server) UnfollowArtist(ctx *gin.Context) {
 }
 
 func (s *Server) FollowArtist(ctx *gin.Context) {
-	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 
 	var body Follow
 
