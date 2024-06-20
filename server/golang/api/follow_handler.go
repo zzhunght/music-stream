@@ -15,8 +15,8 @@ type Follow struct {
 }
 
 func (s *Server) UnfollowArtist(ctx *gin.Context) {
-	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
-
+	// authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
 	var body Follow
 
 	err := ctx.ShouldBindJSON(&body)

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"music-app-backend/internal/app/helper"
 	"music-app-backend/pkg/middleware"
 	"music-app-backend/sqlc"
 	"net/http"
@@ -139,7 +138,8 @@ func (s *Server) Register(c *gin.Context) {
 
 func (s *Server) ChangePassword(ctx *gin.Context) {
 	var requestBody ChangePasswordRequest
-	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
+	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
+	// authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 
 	// Đọc dữ liệu từ body của request và gán vào biến requestBody
 	err := ctx.ShouldBindJSON(&requestBody)
