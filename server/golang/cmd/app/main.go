@@ -12,6 +12,9 @@ import (
 	"music-app-backend/worker"
 	"net"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/hibiken/asynq"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
@@ -36,7 +39,7 @@ func main() {
 	defer rdb.Close()
 
 	store := initial.InitDB(env.DatabaseDestination)
-
+	DBMigration(env.DatabaseDestination)
 	go StartRedisWorker(redisOpt, mailsender, store, rdb)
 	go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
 	StartHttpServer(store, env, taskClient, mailsender, mq, rdb)
@@ -53,6 +56,22 @@ func StartHttpServer(
 	server := api.NewServer(store, config, task_client, mailsender, message_queue, rdb)
 	// defer config.CloseDB()
 	server.Run(":8080")
+}
+
+func DBMigration(dst string) {
+	m, err := migrate.New(
+		"file://db/migration",
+		dst,
+	)
+	if err != nil {
+		log.Fatal().Err(err).Msg("cannot create migration")
+	}
+
+	err = m.Up()
+
+	if err != nil && err != migrate.ErrNoChange {
+		log.Fatal().Err(err).Msg("cannot migrate")
+	}
 }
 
 func StartGRPCServer(

@@ -46,10 +46,7 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}
-	err = qtx.AssociateSongArtist(ctx, AssociateSongArtistParams{
-		SongID:   song.ID,
-		ArtistID: arg.ArtistID,
-	})
+
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}
@@ -104,10 +101,6 @@ func (store *SQLStore) UpateSongWithTx(ctx context.Context, arg UpateSongWithTx)
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}
-	err = qtx.UpdateAssociateSongArtist(ctx, UpdateAssociateSongArtistParams{
-		SongID:   arg.UpdateSongBody.ID,
-		ArtistID: arg.ArtistID,
-	})
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}

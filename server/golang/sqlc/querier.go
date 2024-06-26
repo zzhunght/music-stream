@@ -17,7 +17,6 @@ type Querier interface {
 	AddSongToCategory(ctx context.Context, arg AddSongToCategoryParams) error
 	AddSongToPlaylist(ctx context.Context, arg AddSongToPlaylistParams) error
 	AdminGetSongs(ctx context.Context) ([]AdminGetSongsRow, error)
-	AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error
 	ChangePassword(ctx context.Context, arg ChangePasswordParams) error
 	CheckEmailExists(ctx context.Context, email string) (int32, error)
 	CheckFollow(ctx context.Context, arg CheckFollowParams) (ArtistFollow, error)
@@ -50,7 +49,7 @@ type Querier interface {
 	GetArtistById(ctx context.Context, id int32) (Artist, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error)
-	GetPlaylistofUser(ctx context.Context, accountID int32) ([]Playlist, error)
+	GetPlaylistofUser(ctx context.Context, accountID pgtype.Int4) ([]Playlist, error)
 	GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
@@ -62,7 +61,6 @@ type Querier interface {
 	GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error)
 	GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams) ([]GetSongOfArtistRow, error)
 	GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error)
-	RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error
 	RemoveSongFromAlbum(ctx context.Context, arg RemoveSongFromAlbumParams) error
 	RemoveSongFromPlaylist(ctx context.Context, arg RemoveSongFromPlaylistParams) error
 	SearchAlbums(ctx context.Context, arg SearchAlbumsParams) ([]SearchAlbumsRow, error)
@@ -71,7 +69,6 @@ type Querier interface {
 	UnFollow(ctx context.Context, arg UnFollowParams) error
 	UpdateAlbum(ctx context.Context, arg UpdateAlbumParams) (Album, error)
 	UpdateArtist(ctx context.Context, arg UpdateArtistParams) (Artist, error)
-	UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error
 	UpdateCategories(ctx context.Context, arg UpdateCategoriesParams) (Category, error)
 	UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error)
 	UpdateSong(ctx context.Context, arg UpdateSongParams) error

@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	type_custom "music-app-backend/db/type"
 )
 
 const addManySongToAlbum = `-- name: AddManySongToAlbum :exec
@@ -189,30 +188,28 @@ func (q *Queries) GetAlbumInfoFromSongID(ctx context.Context, songID int32) (Get
 }
 
 const getAlbumSong = `-- name: GetAlbumSong :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 from albums_songs
 INNER JOIN songs s ON albums_songs.song_id = s.id 
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on a.id = s.artist_id
 WHERE albums_songs.album_id = $1
-GROUP BY s.id
 `
 
 type GetAlbumSongRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSongRow, error) {
@@ -228,13 +225,17 @@ func (q *Queries) GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSo
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}

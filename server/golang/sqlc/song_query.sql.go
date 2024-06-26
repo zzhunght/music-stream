@@ -9,22 +9,15 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	type_custom "music-app-backend/db/type"
 )
 
 const adminGetSongs = `-- name: AdminGetSongs :many
 
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists, 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at,
 c.category_id
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 LEFT JOIN song_categories c on s.id = c.song_id
-GROUP BY s.id, category_id
 ORDER BY s.created_at DESC
 `
 
@@ -32,13 +25,17 @@ type AdminGetSongsRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 	CategoryID  pgtype.Int4      `json:"category_id"`
 }
 
@@ -55,13 +52,17 @@ func (q *Queries) AdminGetSongs(ctx context.Context) ([]AdminGetSongsRow, error)
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 			&i.CategoryID,
 		); err != nil {
 			return nil, err
@@ -72,20 +73,6 @@ func (q *Queries) AdminGetSongs(ctx context.Context) ([]AdminGetSongsRow, error)
 		return nil, err
 	}
 	return items, nil
-}
-
-const associateSongArtist = `-- name: AssociateSongArtist :exec
-INSERT INTO songs_artist (song_id, artist_id, owner) VALUES ($1, $2, true)
-`
-
-type AssociateSongArtistParams struct {
-	SongID   int32 `json:"song_id"`
-	ArtistID int32 `json:"artist_id"`
-}
-
-func (q *Queries) AssociateSongArtist(ctx context.Context, arg AssociateSongArtistParams) error {
-	_, err := q.db.Exec(ctx, associateSongArtist, arg.SongID, arg.ArtistID)
-	return err
 }
 
 const createSong = `-- name: CreateSong :one
@@ -103,7 +90,7 @@ INSERT INTO songs (
     $4, 
     $5, 
     $6
-) RETURNING id, name, thumbnail, path, lyrics, duration, release_date, created_at, updated_at
+) RETURNING id, name, thumbnail, artist_id, path, lyrics, duration, release_date, created_at, updated_at
 `
 
 type CreateSongParams struct {
@@ -129,6 +116,7 @@ func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, e
 		&i.ID,
 		&i.Name,
 		&i.Thumbnail,
+		&i.ArtistID,
 		&i.Path,
 		&i.Lyrics,
 		&i.Duration,
@@ -149,15 +137,9 @@ func (q *Queries) DeleteSong(ctx context.Context, id int32) error {
 }
 
 const getRandomSong = `-- name: GetRandomSong :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
-GROUP BY s.id
+LEFT JOIN artist a on a.id = s.artist_id
 Order by RANDOM()
 limit 15
 `
@@ -166,13 +148,17 @@ type GetRandomSongRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error) {
@@ -188,13 +174,17 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -208,31 +198,29 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 
 const getSongByID = `-- name: GetSongByID :one
 
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists,
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.id, a.name, a.avatar_url, a.created_at, 
 c.category_id
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 LEFT JOIN song_categories c on s.id = c.song_id
 WHERE s.id = $1
-GROUP BY s.id, category_id
 `
 
 type GetSongByIDRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 	CategoryID  pgtype.Int4      `json:"category_id"`
 }
 
@@ -243,13 +231,17 @@ func (q *Queries) GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, er
 		&i.ID,
 		&i.Name,
 		&i.Thumbnail,
+		&i.ArtistID,
 		&i.Path,
 		&i.Lyrics,
 		&i.Duration,
 		&i.ReleaseDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.Artists,
+		&i.ID_2,
+		&i.Name_2,
+		&i.AvatarUrl,
+		&i.CreatedAt_2,
 		&i.CategoryID,
 	)
 	return i, err
@@ -257,29 +249,27 @@ func (q *Queries) GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, er
 
 const getSongById = `-- name: GetSongById :one
 
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 FROM songs s 
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id = $1
-GROUP BY s.id
 `
 
 type GetSongByIdRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongById(ctx context.Context, id int32) (GetSongByIdRow, error) {
@@ -289,30 +279,28 @@ func (q *Queries) GetSongById(ctx context.Context, id int32) (GetSongByIdRow, er
 		&i.ID,
 		&i.Name,
 		&i.Thumbnail,
+		&i.ArtistID,
 		&i.Path,
 		&i.Lyrics,
 		&i.Duration,
 		&i.ReleaseDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.Artists,
+		&i.ID_2,
+		&i.Name_2,
+		&i.AvatarUrl,
+		&i.CreatedAt_2,
 	)
 	return i, err
 }
 
 const getSongBySongCategory = `-- name: GetSongBySongCategory :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id in (
     SELECT song_id from song_categories WHERE category_id = $1
 ) 
-GROUP BY s.id
 LIMIT COALESCE($3::int, 50)
 OFFSET COALESCE($2::int, 0)
 `
@@ -327,13 +315,17 @@ type GetSongBySongCategoryRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error) {
@@ -349,13 +341,17 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -369,16 +365,10 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 
 const getSongOfArtist = `-- name: GetSongOfArtist :many
 
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 WHERE a.id = $1
-GROUP BY s.id
 OFFSET COALESCE($2::int, 0)
 LIMIT COALESCE($3::int, 50)
 `
@@ -393,13 +383,17 @@ type GetSongOfArtistRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams) ([]GetSongOfArtistRow, error) {
@@ -415,13 +409,17 @@ func (q *Queries) GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -435,14 +433,9 @@ func (q *Queries) GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams
 
 const getSongs = `-- name: GetSongs :many
 
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on s.artist_id = a.id
 GROUP BY s.id
 OFFSET COALESCE($1::int, 0)
 LIMIT COALESCE($2::int, 50)
@@ -457,13 +450,17 @@ type GetSongsRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error) {
@@ -479,13 +476,17 @@ func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsR
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -497,32 +498,11 @@ func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsR
 	return items, nil
 }
 
-const removeAssociateSongArtist = `-- name: RemoveAssociateSongArtist :exec
-
-DELETE FROM songs_artist  WHERE artist_id = $1 AND song_id = $2
-`
-
-type RemoveAssociateSongArtistParams struct {
-	ArtistID int32 `json:"artist_id"`
-	SongID   int32 `json:"song_id"`
-}
-
-func (q *Queries) RemoveAssociateSongArtist(ctx context.Context, arg RemoveAssociateSongArtistParams) error {
-	_, err := q.db.Exec(ctx, removeAssociateSongArtist, arg.ArtistID, arg.SongID)
-	return err
-}
-
 const searchSong = `-- name: SearchSong :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
+LEFT JOIN artist a on a.id = s.artist_id
 where s.name ilike $1 || '%'
-GROUP BY s.id
 OFFSET COALESCE($2::int, 0)
 LIMIT COALESCE($3::int, 50)
 `
@@ -537,13 +517,17 @@ type SearchSongRow struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	Artists     type_custom.JSON `json:"artists"`
+	ID_2        pgtype.Int4      `json:"id_2"`
+	Name_2      pgtype.Text      `json:"name_2"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error) {
@@ -559,13 +543,17 @@ func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]Searc
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Artists,
+			&i.ID_2,
+			&i.Name_2,
+			&i.AvatarUrl,
+			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -575,21 +563,6 @@ func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]Searc
 		return nil, err
 	}
 	return items, nil
-}
-
-const updateAssociateSongArtist = `-- name: UpdateAssociateSongArtist :exec
-UPDATE  songs_artist  SET artist_id =$1
-WHERE song_id = $2
-`
-
-type UpdateAssociateSongArtistParams struct {
-	ArtistID int32 `json:"artist_id"`
-	SongID   int32 `json:"song_id"`
-}
-
-func (q *Queries) UpdateAssociateSongArtist(ctx context.Context, arg UpdateAssociateSongArtistParams) error {
-	_, err := q.db.Exec(ctx, updateAssociateSongArtist, arg.ArtistID, arg.SongID)
-	return err
 }
 
 const updateSong = `-- name: UpdateSong :exec

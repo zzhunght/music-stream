@@ -9,3 +9,10 @@ func ConvertStringToText(input string) pgtype.Text {
 		Valid:  true,
 	}
 }
+
+func IntToPGType(num int32) pgtype.Int4 {
+	return pgtype.Int4{
+		Int32: num,
+		Valid: true,
+	}
+}

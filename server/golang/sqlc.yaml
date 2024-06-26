@@ -2,7 +2,7 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries: "./db/query/"
-    schema: "./db/migration/"
+    schema: "./db/schema/"
     gen:
       go:
         package: "sqlc"
@@ -14,6 +14,16 @@ sql:
         overrides:
           - db_type: "timestamp"
             go_type: "time.Time"
+          - db_type: "serial"
+            go_type: "int32"
+          - db_type: "pg_catalog.int4"
+            go_type: "int32"
+          - db_type: "int4"
+            go_type: "int32"
+          - db_type: "serial4"
+            go_type: "int32"
+          - db_type: "pg_catalog.serial4"
+            go_type: "int32"
           - db_type: "date"
             go_type: "time.Time"
           - db_type: "uuid"

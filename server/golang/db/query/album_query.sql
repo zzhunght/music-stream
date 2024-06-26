@@ -67,17 +67,11 @@ WHERE album_id = $1 AND song_id = ANY(sqlc.arg(song_ids)::int[]);
 
 
 -- name: GetAlbumSong :many
-SELECT s.*,
-CASE
-    WHEN COUNT(a.id) > 0 THEN jsonb_agg(jsonb_build_object('name', a.name, 'id', a.id, 'avatar_url', a.avatar_url))
-    ELSE '[]'::jsonb
-END AS artists 
+SELECT s.*,a.*
 from albums_songs
 INNER JOIN songs s ON albums_songs.song_id = s.id 
-LEFT JOIN songs_artist sa on s.id = sa.song_id
-LEFT JOIN artist a on a.id = sa.artist_id
-WHERE albums_songs.album_id = $1
-GROUP BY s.id;
+LEFT JOIN artist a on a.id = s.artist_id
+WHERE albums_songs.album_id = $1;
 
 -- name: GetSongNotInAlbum :many
 SELECT s.id ,s.name , s.thumbnail, s.duration, s.created_at, s.release_date from songs s

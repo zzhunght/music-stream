@@ -31,6 +31,7 @@ CREATE TABLE "songs" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "thumbnail" varchar,
+  "artist_id" int NOT NULL,
   "path" varchar,
   "lyrics" text,
   "duration" int,
@@ -58,19 +59,17 @@ CREATE TABLE "song_categories" (
   "category_id" int NOT NULL,
   "created_at" timestamp DEFAULT (now())
 );
-
+CREATE TABLE "song_plays" (
+  "id" SERIAL PRIMARY KEY,
+  "song_id" int NOT NULL,
+  "user_id" int ,
+  "play_at" timestamp DEFAULT (now())
+);
 CREATE TABLE "artist" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "avatar_url" varchar,
   "created_at" timestamp DEFAULT (now())
-);
-
-CREATE TABLE "songs_artist" (
-  "id" SERIAL PRIMARY KEY,
-  "song_id" int NOT NULL,
-  "artist_id" int NOT NULL,
-  "owner" boolean NOT NULL
 );
 
 CREATE TABLE "albums" (
@@ -92,7 +91,8 @@ CREATE TABLE "albums_songs" (
 CREATE TABLE "playlist" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
-  "account_id" int NOT NULL,
+  "account_id" int,
+  "artist_id" int,
   "description" varchar,
   "created_at" timestamp DEFAULT (now())
 );
@@ -118,9 +118,19 @@ CREATE TABLE "artist_follow" (
   "created_at" timestamp DEFAULT (now())
 );
 
+CREATE TABLE "comment" (
+  "id" serial,
+  "content" varchar NOT NULL,
+  "user_id" int NOT NULL,
+  "song_id" int NOT NULL,
+  "created_at" timestamp DEFAULT (now())
+);
+
 CREATE INDEX ON "songs" ("name");
 
 ALTER TABLE "accounts" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "songs" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "favorite_songs" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -130,9 +140,9 @@ ALTER TABLE "song_categories" ADD FOREIGN KEY ("category_id") REFERENCES "catego
 
 ALTER TABLE "song_categories" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "songs_artist" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "song_plays" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "songs_artist" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "song_plays" ADD FOREIGN KEY ("user_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "albums" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -141,6 +151,8 @@ ALTER TABLE "albums_songs" ADD FOREIGN KEY ("album_id") REFERENCES "albums" ("id
 ALTER TABLE "albums_songs" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "playlist" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "playlist" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "playlist_song" ADD FOREIGN KEY ("playlist_id") REFERENCES "playlist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -153,4 +165,10 @@ ALTER TABLE "favorite_albums" ADD FOREIGN KEY ("album_id") REFERENCES "albums" (
 ALTER TABLE "artist_follow" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "artist_follow" ADD FOREIGN KEY ("artist_id") REFERENCES "artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "comment" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "comment" ADD FOREIGN KEY ("user_id") REFERENCES "accounts" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 INSERT INTO roles (name) VALUES ('user'), ('admin');
+INSERT INTO "categories" (name) VALUES ('Pop'), ('Đồng quê'), ('Rock'), ('Chill'), ('Ascountic'), ('EDM'), ('Dance'), ('Jazz');

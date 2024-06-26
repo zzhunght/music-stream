@@ -7,6 +7,8 @@ package sqlc
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const addSongToPlaylist = `-- name: AddSongToPlaylist :exec
@@ -29,13 +31,13 @@ SELECT account_id, id FROM playlist WHERE account_id = $1 and id = $2
 `
 
 type CheckOwnerPlaylistParams struct {
-	AccountID int32 `json:"account_id"`
-	ID        int32 `json:"id"`
+	AccountID pgtype.Int4 `json:"account_id"`
+	ID        int32       `json:"id"`
 }
 
 type CheckOwnerPlaylistRow struct {
-	AccountID int32 `json:"account_id"`
-	ID        int32 `json:"id"`
+	AccountID pgtype.Int4 `json:"account_id"`
+	ID        int32       `json:"id"`
 }
 
 func (q *Queries) CheckOwnerPlaylist(ctx context.Context, arg CheckOwnerPlaylistParams) (CheckOwnerPlaylistRow, error) {
@@ -65,12 +67,12 @@ func (q *Queries) CheckSongInPlaylist(ctx context.Context, arg CheckSongInPlayli
 
 const createPlaylist = `-- name: CreatePlaylist :one
 INSERT INTO playlist (account_id, name)
-VALUES($1, $2) RETURNING id, name, account_id, description, created_at
+VALUES($1, $2) RETURNING id, name, account_id, artist_id, description, created_at
 `
 
 type CreatePlaylistParams struct {
-	AccountID int32  `json:"account_id"`
-	Name      string `json:"name"`
+	AccountID pgtype.Int4 `json:"account_id"`
+	Name      string      `json:"name"`
 }
 
 func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error) {
@@ -80,6 +82,7 @@ func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) 
 		&i.ID,
 		&i.Name,
 		&i.AccountID,
+		&i.ArtistID,
 		&i.Description,
 		&i.CreatedAt,
 	)
@@ -91,8 +94,8 @@ DELETE FROM playlist where account_id = $1 and id = $2
 `
 
 type DeletePlaylistParams struct {
-	AccountID int32 `json:"account_id"`
-	ID        int32 `json:"id"`
+	AccountID pgtype.Int4 `json:"account_id"`
+	ID        int32       `json:"id"`
 }
 
 func (q *Queries) DeletePlaylist(ctx context.Context, arg DeletePlaylistParams) error {
@@ -101,10 +104,10 @@ func (q *Queries) DeletePlaylist(ctx context.Context, arg DeletePlaylistParams) 
 }
 
 const getPlaylistofUser = `-- name: GetPlaylistofUser :many
-SELECT id, name, account_id, description, created_at FROM playlist where account_id = $1
+SELECT id, name, account_id, artist_id, description, created_at FROM playlist where account_id = $1
 `
 
-func (q *Queries) GetPlaylistofUser(ctx context.Context, accountID int32) ([]Playlist, error) {
+func (q *Queries) GetPlaylistofUser(ctx context.Context, accountID pgtype.Int4) ([]Playlist, error) {
 	rows, err := q.db.Query(ctx, getPlaylistofUser, accountID)
 	if err != nil {
 		return nil, err
@@ -117,6 +120,7 @@ func (q *Queries) GetPlaylistofUser(ctx context.Context, accountID int32) ([]Pla
 			&i.ID,
 			&i.Name,
 			&i.AccountID,
+			&i.ArtistID,
 			&i.Description,
 			&i.CreatedAt,
 		); err != nil {
@@ -131,7 +135,7 @@ func (q *Queries) GetPlaylistofUser(ctx context.Context, accountID int32) ([]Pla
 }
 
 const getSongInPlaylist = `-- name: GetSongInPlaylist :many
-SELECT s.id, s.name, s.thumbnail, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from playlist_song p INNER JOIN songs s ON p.song_id = s.id WHERE p.playlist_id = $1
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from playlist_song p INNER JOIN songs s ON p.song_id = s.id WHERE p.playlist_id = $1
 `
 
 func (q *Queries) GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error) {
@@ -147,6 +151,7 @@ func (q *Queries) GetSongInPlaylist(ctx context.Context, playlistID int32) ([]So
 			&i.ID,
 			&i.Name,
 			&i.Thumbnail,
+			&i.ArtistID,
 			&i.Path,
 			&i.Lyrics,
 			&i.Duration,
@@ -182,13 +187,13 @@ const updatePlaylist = `-- name: UpdatePlaylist :one
 UPDATE  playlist 
 SET name = $1
 WHERE id = $2 and account_id = $3
-RETURNING id, name, account_id, description, created_at
+RETURNING id, name, account_id, artist_id, description, created_at
 `
 
 type UpdatePlaylistParams struct {
-	Name      string `json:"name"`
-	ID        int32  `json:"id"`
-	AccountID int32  `json:"account_id"`
+	Name      string      `json:"name"`
+	ID        int32       `json:"id"`
+	AccountID pgtype.Int4 `json:"account_id"`
 }
 
 func (q *Queries) UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error) {
@@ -198,6 +203,7 @@ func (q *Queries) UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) 
 		&i.ID,
 		&i.Name,
 		&i.AccountID,
+		&i.ArtistID,
 		&i.Description,
 		&i.CreatedAt,
 	)

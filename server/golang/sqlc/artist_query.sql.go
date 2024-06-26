@@ -93,8 +93,7 @@ UNION
 
 SELECT a.id, a.name, a.avatar_url, a.created_at
 FROM songs s
-INNER JOIN songs_artist sa on s.id = sa.song_id
-INNER JOIN artist a on a.id = sa.artist_id
+INNER JOIN artist a on a.id = s.artist_id
 where s.name ilike $1 || '%'
 
 ORDER BY created_at DESC

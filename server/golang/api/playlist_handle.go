@@ -2,12 +2,14 @@ package api
 
 import (
 	"errors"
+	"music-app-backend/internal/app/utils"
 	"music-app-backend/pkg/middleware"
 	db "music-app-backend/sqlc"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type CreatePlayListRequest struct {
@@ -34,7 +36,7 @@ func (s *Server) CreatePlaylist(ctx *gin.Context) {
 
 	data, err := s.store.CreatePlaylist(ctx, db.CreatePlaylistParams{
 		Name:      body.Name,
-		AccountID: int32(authPayload.UserID),
+		AccountID: utils.IntToPGType(authPayload.UserID),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))
@@ -60,7 +62,7 @@ func (s *Server) UpdatePlaylistName(ctx *gin.Context) {
 	}
 	data, err := s.store.UpdatePlaylist(ctx, db.UpdatePlaylistParams{
 		Name:      body.Name,
-		AccountID: int32(authPayload.UserID),
+		AccountID: utils.IntToPGType(authPayload.UserID),
 		ID:        int32(playlist_id),
 	})
 	if err != nil {
@@ -86,7 +88,7 @@ func (s *Server) AddSongToPlaylist(ctx *gin.Context) {
 	}
 	check, err := s.store.CheckOwnerPlaylist(ctx, db.CheckOwnerPlaylistParams{
 		ID:        int32(playlist_id),
-		AccountID: authPayload.UserID,
+		AccountID: utils.IntToPGType(authPayload.UserID),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, ErrorResponse(err))
@@ -135,7 +137,7 @@ func (s *Server) RemoveSongFromPlaylist(ctx *gin.Context) {
 	}
 	check, err := s.store.CheckOwnerPlaylist(ctx, db.CheckOwnerPlaylistParams{
 		ID:        int32(playlist_id),
-		AccountID: authPayload.UserID,
+		AccountID: utils.IntToPGType(authPayload.UserID),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, ErrorResponse(err))
@@ -158,7 +160,7 @@ func (s *Server) GetUserPlaylists(ctx *gin.Context) {
 	// authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(*helper.TokenPayload)
 	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
 
-	data, err := s.store.GetPlaylistofUser(ctx, authPayload.UserID)
+	data, err := s.store.GetPlaylistofUser(ctx, utils.IntToPGType(authPayload.UserID))
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, ErrorResponse(err))
 		return
@@ -191,8 +193,11 @@ func (s *Server) DeletePlaylist(ctx *gin.Context) {
 	authPayload := ctx.MustGet(middleware.AuthorizationPayloadKey).(middleware.AuthenticationPayload)
 
 	err = s.store.DeletePlaylist(ctx, db.DeletePlaylistParams{
-		ID:        int32(playlist_id),
-		AccountID: authPayload.UserID,
+		ID: int32(playlist_id),
+		AccountID: pgtype.Int4{
+			Int32: authPayload.UserID,
+			Valid: true,
+		},
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, ErrorResponse(err))

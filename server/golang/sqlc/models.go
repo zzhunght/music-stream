@@ -59,6 +59,14 @@ type Category struct {
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 }
 
+type Comment struct {
+	ID        pgtype.Int4      `json:"id"`
+	Content   string           `json:"content"`
+	UserID    int32            `json:"user_id"`
+	SongID    int32            `json:"song_id"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+}
+
 type FavoriteAlbum struct {
 	ID        int32            `json:"id"`
 	AccountID int32            `json:"account_id"`
@@ -76,7 +84,8 @@ type FavoriteSong struct {
 type Playlist struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
-	AccountID   int32            `json:"account_id"`
+	AccountID   pgtype.Int4      `json:"account_id"`
+	ArtistID    pgtype.Int4      `json:"artist_id"`
 	Description pgtype.Text      `json:"description"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
@@ -109,6 +118,7 @@ type Song struct {
 	ID          int32            `json:"id"`
 	Name        string           `json:"name"`
 	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
 	Path        pgtype.Text      `json:"path"`
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
@@ -124,9 +134,9 @@ type SongCategory struct {
 	CreatedAt  pgtype.Timestamp `json:"created_at"`
 }
 
-type SongsArtist struct {
-	ID       int32 `json:"id"`
-	SongID   int32 `json:"song_id"`
-	ArtistID int32 `json:"artist_id"`
-	Owner    bool  `json:"owner"`
+type SongPlay struct {
+	ID     int32            `json:"id"`
+	SongID int32            `json:"song_id"`
+	UserID pgtype.Int4      `json:"user_id"`
+	PlayAt pgtype.Timestamp `json:"play_at"`
 }

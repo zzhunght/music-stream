@@ -72,9 +72,6 @@ func (s *Server) AdminRouter(route *gin.RouterGroup) {
 		admin.PUT("/album/:album_id", s.UpdateAlbum)
 		admin.DELETE("/album/:album_id", s.DeleteAlbum)
 
-		// song associated
-		admin.POST("/associate-song-artist", s.AssociateSongArtist)
-		admin.POST("/remove-associate-song-artist", s.RemoveAssociateSongArtist)
 	}
 }
 
