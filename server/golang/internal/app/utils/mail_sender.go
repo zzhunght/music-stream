@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/tls"
 	"fmt"
+	"music-app-backend/internal/app/config"
 
 	"gopkg.in/gomail.v2"
 )
@@ -11,13 +12,13 @@ type MailSender struct {
 	mail *gomail.Dialer
 }
 
-func NewMailSender(config *Config) *MailSender {
+func NewMailSender(config *config.Config) *MailSender {
 	return &MailSender{
 		mail: ConfigMail(config),
 	}
 }
 
-func ConfigMail(config *Config) *gomail.Dialer {
+func ConfigMail(config *config.Config) *gomail.Dialer {
 	d := gomail.NewDialer(
 		config.MailSenderHost,
 		config.MailSenderPort,

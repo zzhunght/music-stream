@@ -3,7 +3,7 @@ package message
 import (
 	"context"
 	"fmt"
-	"music-app-backend/internal/app/utils"
+	"music-app-backend/internal/app/config"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -11,10 +11,10 @@ import (
 type RabbitMQProvider struct {
 	amqpConn *amqp.Connection
 	ch       *amqp.Channel
-	config   *utils.Config
+	config   *config.Config
 }
 
-func NewRabbitMQ(config *utils.Config) (*RabbitMQProvider, error) {
+func NewRabbitMQ(config *config.Config) (*RabbitMQProvider, error) {
 	conn, err := amqp.Dial(config.RabbitMQUrl)
 	if err != nil {
 		return nil, err

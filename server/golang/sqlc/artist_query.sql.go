@@ -124,6 +124,38 @@ func (q *Queries) GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([
 	return items, nil
 }
 
+const getRecommentArtist = `-- name: GetRecommentArtist :many
+SELECT id, name, avatar_url, created_at FROM artist 
+ORDER BY RANDOM()
+OFFSET 0
+LIMIT 5
+`
+
+func (q *Queries) GetRecommentArtist(ctx context.Context) ([]Artist, error) {
+	rows, err := q.db.Query(ctx, getRecommentArtist)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Artist{}
+	for rows.Next() {
+		var i Artist
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.AvatarUrl,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateArtist = `-- name: UpdateArtist :one
 UPDATE artist 
 SET name = $2, avatar_url = $3 

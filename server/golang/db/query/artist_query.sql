@@ -1,6 +1,11 @@
 -- name: GetArtistById :one
 SELECT * FROM artist WHERE id = $1;
 
+-- name: GetRecommentArtist :many
+SELECT * FROM artist 
+ORDER BY RANDOM()
+OFFSET 0
+LIMIT 5;
 
 -- name: CreateArtist :one
 INSERT INTO artist (

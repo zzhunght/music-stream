@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"music-app-backend/api"
 	"music-app-backend/gapi"
+	"music-app-backend/internal/app/api"
+	"music-app-backend/internal/app/config"
 	"music-app-backend/internal/app/initial"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/message"
@@ -23,7 +24,7 @@ import (
 )
 
 func main() {
-	env, err := utils.LoadEnv(".")
+	env, err := config.LoadEnv(".")
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot load config")
 	}
@@ -40,14 +41,14 @@ func main() {
 
 	store := initial.InitDB(env.DatabaseDestination)
 	DBMigration(env.DatabaseDestination)
-	go StartRedisWorker(redisOpt, mailsender, store, rdb)
-	go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
+	// go StartRedisWorker(redisOpt, mailsender, store, rdb)
+	// go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
 	StartHttpServer(store, env, taskClient, mailsender, mq, rdb)
 }
 
 func StartHttpServer(
 	store *sqlc.SQLStore,
-	config *utils.Config,
+	config *config.Config,
 	task_client *worker.DeliveryTaskClient,
 	mailsender *utils.MailSender,
 	message_queue *message.RabbitMQProvider,
@@ -76,7 +77,7 @@ func DBMigration(dst string) {
 
 func StartGRPCServer(
 	store *sqlc.SQLStore,
-	config *utils.Config,
+	config *config.Config,
 	task_client *worker.DeliveryTaskClient,
 	mailsender *utils.MailSender,
 	message_queue *message.RabbitMQProvider,
@@ -114,7 +115,7 @@ func StartRedisWorker(
 	}
 }
 
-func StartRabbitMQ(config *utils.Config) *message.RabbitMQProvider {
+func StartRabbitMQ(config *config.Config) *message.RabbitMQProvider {
 	messageQueue, err := message.NewRabbitMQ(config)
 	if err != nil {
 		log.Fatal().Err(err).Msg(("can connect to message queue"))

@@ -1,6 +1,7 @@
 package gapi
 
 import (
+	"music-app-backend/internal/app/config"
 	"music-app-backend/internal/app/helper"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/message"
@@ -15,7 +16,7 @@ type Server struct {
 	pb.UnimplementedMusicAppServer
 	store         *sqlc.SQLStore
 	mailsender    *utils.MailSender
-	config        *utils.Config
+	config        *config.Config
 	token_maker   *helper.Token
 	task_client   *worker.DeliveryTaskClient
 	message_queue *message.RabbitMQProvider
@@ -24,7 +25,7 @@ type Server struct {
 
 func NewServer(
 	store *sqlc.SQLStore,
-	config *utils.Config,
+	config *config.Config,
 	task_client *worker.DeliveryTaskClient,
 	mailsender *utils.MailSender,
 	message_queue *message.RabbitMQProvider,

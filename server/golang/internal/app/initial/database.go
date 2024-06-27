@@ -26,12 +26,3 @@ func InitDB(dns string) (DB *sqlc.SQLStore) {
 	fmt.Println("Connected to database successfully.")
 	return DB
 }
-
-// func CloseDB() {
-// 	ctx := context.Background()
-// 	if Conn != nil {
-// 		if err := Conn.Close(ctx); err != nil {
-// 			log.Println("Failed to close database connection:", err)
-// 		}
-// 	}
-// }

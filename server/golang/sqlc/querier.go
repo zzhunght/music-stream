@@ -49,8 +49,11 @@ type Querier interface {
 	GetArtistById(ctx context.Context, id int32) (Artist, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error)
+	GetNewAlbum(ctx context.Context) ([]Album, error)
+	GetNewSongs(ctx context.Context) ([]GetNewSongsRow, error)
 	GetPlaylistofUser(ctx context.Context, accountID pgtype.Int4) ([]Playlist, error)
 	GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
+	GetRecommentArtist(ctx context.Context) ([]Artist, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, error)
@@ -59,7 +62,7 @@ type Querier interface {
 	GetSongCategories(ctx context.Context) ([]Category, error)
 	GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error)
 	GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error)
-	GetSongOfArtist(ctx context.Context, arg GetSongOfArtistParams) ([]GetSongOfArtistRow, error)
+	GetSongOfArtist(ctx context.Context, id int32) ([]Song, error)
 	GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error)
 	RemoveSongFromAlbum(ctx context.Context, arg RemoveSongFromAlbumParams) error
 	RemoveSongFromPlaylist(ctx context.Context, arg RemoveSongFromPlaylistParams) error

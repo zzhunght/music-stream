@@ -331,6 +331,41 @@ func (q *Queries) GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, erro
 	return items, nil
 }
 
+const getNewAlbum = `-- name: GetNewAlbum :many
+SELECT al.id, al.artist_id, al.name, al.thumbnail, al.release_date, al.created_at from albums al
+INNER JOIN artist a ON a.id = al.artist_id
+ORDER BY al.created_at DESC
+OFFSET 0
+LIMIT 7
+`
+
+func (q *Queries) GetNewAlbum(ctx context.Context) ([]Album, error) {
+	rows, err := q.db.Query(ctx, getNewAlbum)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Album{}
+	for rows.Next() {
+		var i Album
+		if err := rows.Scan(
+			&i.ID,
+			&i.ArtistID,
+			&i.Name,
+			&i.Thumbnail,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSongNotInAlbum = `-- name: GetSongNotInAlbum :many
 SELECT s.id ,s.name , s.thumbnail, s.duration, s.created_at, s.release_date from songs s
 where id not in (SELECT als.song_id FROM albums_songs als WHERE als.album_id = $1) and name ilike $2 || '%'

@@ -3,12 +3,11 @@ package api
 import (
 	"music-app-backend/internal/app/config"
 	"music-app-backend/internal/app/helper"
+	"music-app-backend/internal/app/router"
 	"music-app-backend/internal/app/utils"
 	"music-app-backend/message"
-	"music-app-backend/pkg/middleware"
 	"music-app-backend/sqlc"
 	"music-app-backend/worker"
-	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -52,39 +51,10 @@ func NewServer(
 	}
 	server.mailsender = mailsender
 	server.router = r
-	server.setupRouter()
+	router.SetupRouter(server.router, *server.store)
 	return server
-}
-
-func (s *Server) setupRouter() {
-
-	v1 := s.router.Group("/api/v1")
-	{
-		v1.GET("health-check", healthCheck)
-	}
-	v1.Use(middleware.CORSMiddleware())
-	s.UserRouter(v1)
-	s.AdminRouter(v1)
-	s.PublicRouter(v1)
-}
-
-func healthCheck(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
 
 func (s *Server) Run(address string) {
 	s.router.Run(address)
-}
-
-func SuccessResponse(data interface{}, message string) gin.H {
-	return gin.H{
-		"data":    data,
-		"message": message,
-	}
-}
-
-func ErrorResponse(err error) gin.H {
-	return gin.H{
-		"error": err.Error(),
-	}
 }

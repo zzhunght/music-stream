@@ -89,3 +89,11 @@ LIMIT 20;
 SELECT al.id, al.name , al.thumbnail, al.release_date from albums al
 INNER JOIN albums_songs abs on al.id = abs.album_id
 WHERE abs.song_id = $1 LIMIT 1;
+
+
+-- name: GetNewAlbum :many
+SELECT al.* from albums al
+INNER JOIN artist a ON a.id = al.artist_id
+ORDER BY al.created_at DESC
+OFFSET 0
+LIMIT 7;

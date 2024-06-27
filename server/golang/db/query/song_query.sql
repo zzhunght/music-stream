@@ -10,12 +10,21 @@ WHERE s.id = $1;
 
 -- name: GetSongs :many
 
-SELECT s.*,a.*
+SELECT s.*, a.*
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
-GROUP BY s.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
 LIMIT COALESCE(sqlc.arg(size)::int, 50);
+
+
+-- name: GetNewSongs :many
+
+SELECT s.*, a.*
+FROM songs s
+LEFT JOIN artist a on s.artist_id = a.id
+ORDER BY s.created_at DESC
+OFFSET 0
+LIMIT 15;
 
 
 -- name: AdminGetSongs :many
@@ -37,13 +46,10 @@ WHERE s.id = $1;
 
 
 -- name: GetSongOfArtist :many
-
-SELECT s.*, a.*
+SELECT s.*
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
-WHERE a.id = $1
-OFFSET COALESCE(sqlc.arg(start)::int, 0)
-LIMIT COALESCE(sqlc.arg(size)::int, 50);
+WHERE a.id = $1;
 
 -- name: GetRandomSong :many
 SELECT s.*,a.*
