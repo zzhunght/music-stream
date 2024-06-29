@@ -23,6 +23,7 @@ type CreateSongRequest struct {
 	ArtistID    int32     `json:"artist_id" binding:"required"`
 	CategoryID  int32     `json:"category_id" binding:"required"`
 }
+
 type UpdateSongRequest struct {
 	Name        string    `json:"name" binding:"required"`
 	Thumbnail   string    `json:"thumbnail" binding:"required"`
@@ -90,8 +91,8 @@ func (s *Server) CreateSong(ctx *gin.Context) {
 				Time:  body.ReleaseDate,
 				Valid: true,
 			},
+			ArtistID: body.ArtistID,
 		},
-		ArtistID:      body.ArtistID,
 		CategoryID:    body.CategoryID,
 		AfterFunction: s.message_queue.Publishing,
 	})

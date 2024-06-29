@@ -15,7 +15,6 @@ type UpateSongWithTx struct {
 
 type CreateSongWithTxParams struct {
 	CreateSongBody CreateSongParams
-	ArtistID       int32
 	CategoryID     int32
 	AfterFunction  func([]byte) error
 }
@@ -47,10 +46,6 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 		return GetSongByIDRow{}, err
 	}
 
-	if err != nil {
-		return GetSongByIDRow{}, err
-	}
-
 	err = qtx.AddSongToCategory(ctx, AddSongToCategoryParams{
 		SongID:     song.ID,
 		CategoryID: arg.CategoryID,
@@ -60,7 +55,7 @@ func (store *SQLStore) CreateSongWithTx(ctx context.Context, arg CreateSongWithT
 	}
 
 	// -----------------------------
-	artist, err := qtx.GetArtistById(ctx, arg.ArtistID)
+	artist, err := qtx.GetArtistById(ctx, song.ArtistID)
 	if err != nil {
 		return GetSongByIDRow{}, err
 	}

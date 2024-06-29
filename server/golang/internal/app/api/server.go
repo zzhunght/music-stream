@@ -51,7 +51,7 @@ func NewServer(
 	}
 	server.mailsender = mailsender
 	server.router = r
-	router.SetupRouter(server.router, *server.store)
+	router.SetupRouter(server.router, *server.store, task_client, message_queue, rdb, server.token_maker)
 	return server
 }
 

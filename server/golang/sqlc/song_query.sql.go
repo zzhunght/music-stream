@@ -13,7 +13,7 @@ import (
 
 const adminGetSongs = `-- name: AdminGetSongs :many
 
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at,
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url,
 c.category_id
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
@@ -32,10 +32,8 @@ type AdminGetSongsRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 	CategoryID  pgtype.Int4      `json:"category_id"`
 }
 
@@ -59,10 +57,8 @@ func (q *Queries) AdminGetSongs(ctx context.Context) ([]AdminGetSongsRow, error)
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 			&i.CategoryID,
 		); err != nil {
 			return nil, err
@@ -82,14 +78,16 @@ INSERT INTO songs (
     path,
     lyrics,
     duration,
-    release_date
+    release_date,
+    artist_id
 ) VALUES (
     $1, 
     $2, 
     $3, 
     $4, 
     $5, 
-    $6
+    $6,
+    $7
 ) RETURNING id, name, thumbnail, artist_id, path, lyrics, duration, release_date, created_at, updated_at
 `
 
@@ -100,6 +98,7 @@ type CreateSongParams struct {
 	Lyrics      pgtype.Text      `json:"lyrics"`
 	Duration    pgtype.Int4      `json:"duration"`
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
+	ArtistID    int32            `json:"artist_id"`
 }
 
 func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, error) {
@@ -110,6 +109,7 @@ func (q *Queries) CreateSong(ctx context.Context, arg CreateSongParams) (Song, e
 		arg.Lyrics,
 		arg.Duration,
 		arg.ReleaseDate,
+		arg.ArtistID,
 	)
 	var i Song
 	err := row.Scan(
@@ -138,7 +138,7 @@ func (q *Queries) DeleteSong(ctx context.Context, id int32) error {
 
 const getNewSongs = `-- name: GetNewSongs :many
 
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 ORDER BY s.created_at DESC
@@ -157,10 +157,8 @@ type GetNewSongsRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetNewSongs(ctx context.Context) ([]GetNewSongsRow, error) {
@@ -183,10 +181,8 @@ func (q *Queries) GetNewSongs(ctx context.Context) ([]GetNewSongsRow, error) {
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -199,7 +195,7 @@ func (q *Queries) GetNewSongs(ctx context.Context) ([]GetNewSongsRow, error) {
 }
 
 const getRandomSong = `-- name: GetRandomSong :many
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on a.id = s.artist_id
 Order by RANDOM()
@@ -217,10 +213,8 @@ type GetRandomSongRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error) {
@@ -243,10 +237,8 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -260,7 +252,7 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 
 const getSongByID = `-- name: GetSongByID :one
 
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.id, a.name, a.avatar_url, a.created_at, 
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url, 
 c.category_id
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
@@ -279,10 +271,8 @@ type GetSongByIDRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 	CategoryID  pgtype.Int4      `json:"category_id"`
 }
 
@@ -300,10 +290,8 @@ func (q *Queries) GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, er
 		&i.ReleaseDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.ID_2,
-		&i.Name_2,
+		&i.ArtistName,
 		&i.AvatarUrl,
-		&i.CreatedAt_2,
 		&i.CategoryID,
 	)
 	return i, err
@@ -311,7 +299,7 @@ func (q *Queries) GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, er
 
 const getSongById = `-- name: GetSongById :one
 
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s 
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id = $1
@@ -328,10 +316,8 @@ type GetSongByIdRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongById(ctx context.Context, id int32) (GetSongByIdRow, error) {
@@ -348,16 +334,14 @@ func (q *Queries) GetSongById(ctx context.Context, id int32) (GetSongByIdRow, er
 		&i.ReleaseDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.ID_2,
-		&i.Name_2,
+		&i.ArtistName,
 		&i.AvatarUrl,
-		&i.CreatedAt_2,
 	)
 	return i, err
 }
 
 const getSongBySongCategory = `-- name: GetSongBySongCategory :many
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id in (
@@ -384,10 +368,8 @@ type GetSongBySongCategoryRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error) {
@@ -410,10 +392,8 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -465,7 +445,7 @@ func (q *Queries) GetSongOfArtist(ctx context.Context, id int32) ([]Song, error)
 
 const getSongs = `-- name: GetSongs :many
 
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 OFFSET COALESCE($1::int, 0)
@@ -488,10 +468,8 @@ type GetSongsRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error) {
@@ -514,10 +492,8 @@ func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsR
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}
@@ -530,7 +506,7 @@ func (q *Queries) GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsR
 }
 
 const searchSong = `-- name: SearchSong :many
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at,a.id, a.name, a.avatar_url, a.created_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on a.id = s.artist_id
 where s.name ilike $1 || '%'
@@ -555,10 +531,8 @@ type SearchSongRow struct {
 	ReleaseDate pgtype.Timestamp `json:"release_date"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
-	ID_2        pgtype.Int4      `json:"id_2"`
-	Name_2      pgtype.Text      `json:"name_2"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
 	AvatarUrl   pgtype.Text      `json:"avatar_url"`
-	CreatedAt_2 pgtype.Timestamp `json:"created_at_2"`
 }
 
 func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]SearchSongRow, error) {
@@ -581,10 +555,8 @@ func (q *Queries) SearchSong(ctx context.Context, arg SearchSongParams) ([]Searc
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
+			&i.ArtistName,
 			&i.AvatarUrl,
-			&i.CreatedAt_2,
 		); err != nil {
 			return nil, err
 		}

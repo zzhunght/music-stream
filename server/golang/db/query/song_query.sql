@@ -1,7 +1,7 @@
 
 -- name: GetSongByID :one
 
-SELECT s.*, a.*, 
+SELECT s.*, a.name as artist_name, a.avatar_url, 
 c.category_id
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
@@ -10,7 +10,7 @@ WHERE s.id = $1;
 
 -- name: GetSongs :many
 
-SELECT s.*, a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 OFFSET COALESCE(sqlc.arg(start)::int, 0)
@@ -19,7 +19,7 @@ LIMIT COALESCE(sqlc.arg(size)::int, 50);
 
 -- name: GetNewSongs :many
 
-SELECT s.*, a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 ORDER BY s.created_at DESC
@@ -29,7 +29,7 @@ LIMIT 15;
 
 -- name: AdminGetSongs :many
 
-SELECT s.*,a.*,
+SELECT s.*, a.name as artist_name, a.avatar_url,
 c.category_id
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
@@ -39,7 +39,7 @@ ORDER BY s.created_at DESC;
 
 -- name: GetSongById :one
 
-SELECT s.*,a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s 
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id = $1;
@@ -52,14 +52,14 @@ LEFT JOIN artist a on s.artist_id = a.id
 WHERE a.id = $1;
 
 -- name: GetRandomSong :many
-SELECT s.*,a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on a.id = s.artist_id
 Order by RANDOM()
 limit 15;
 
 -- name: SearchSong :many
-SELECT s.*,a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on a.id = s.artist_id
 where s.name ilike sqlc.narg(search) || '%'
@@ -73,14 +73,16 @@ INSERT INTO songs (
     path,
     lyrics,
     duration,
-    release_date
+    release_date,
+    artist_id
 ) VALUES (
     $1, 
     $2, 
     $3, 
     $4, 
     $5, 
-    $6
+    $6,
+    $7
 ) RETURNING * ;
 
 -- name: UpdateSong :exec
@@ -91,7 +93,7 @@ path = sqlc.arg(path), lyrics = sqlc.arg(lyrics), duration = sqlc.arg(duration),
 WHERE id = sqlc.arg(id);
 
 -- name: GetSongBySongCategory :many
-SELECT s.*,a.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id in (
