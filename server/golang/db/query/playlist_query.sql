@@ -1,5 +1,5 @@
 
--- name: CreatePlaylist :one
+-- name: CreateUserPlaylist :one
 INSERT INTO playlist (account_id, name)
 VALUES($1, $2) RETURNING *;
 
@@ -7,7 +7,11 @@ VALUES($1, $2) RETURNING *;
 SELECT * FROM playlist where account_id = $1;
 
 -- name: GetSongInPlaylist :many
-SELECT s.* from playlist_song p INNER JOIN songs s ON p.song_id = s.id WHERE p.playlist_id = $1;
+SELECT s.* , a.name as artist_name, a.avatar_url 
+from playlist_song p 
+INNER JOIN songs s ON p.song_id = s.id 
+LEFT JOIN artist a on s.artist_id = a.id
+WHERE p.playlist_id = $1;
 
 
 -- name: UpdatePlaylist :one

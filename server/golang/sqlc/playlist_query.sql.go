@@ -65,18 +65,18 @@ func (q *Queries) CheckSongInPlaylist(ctx context.Context, arg CheckSongInPlayli
 	return count, err
 }
 
-const createPlaylist = `-- name: CreatePlaylist :one
+const createUserPlaylist = `-- name: CreateUserPlaylist :one
 INSERT INTO playlist (account_id, name)
 VALUES($1, $2) RETURNING id, name, account_id, artist_id, description, created_at
 `
 
-type CreatePlaylistParams struct {
+type CreateUserPlaylistParams struct {
 	AccountID pgtype.Int4 `json:"account_id"`
 	Name      string      `json:"name"`
 }
 
-func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error) {
-	row := q.db.QueryRow(ctx, createPlaylist, arg.AccountID, arg.Name)
+func (q *Queries) CreateUserPlaylist(ctx context.Context, arg CreateUserPlaylistParams) (Playlist, error) {
+	row := q.db.QueryRow(ctx, createUserPlaylist, arg.AccountID, arg.Name)
 	var i Playlist
 	err := row.Scan(
 		&i.ID,
@@ -135,18 +135,37 @@ func (q *Queries) GetPlaylistofUser(ctx context.Context, accountID pgtype.Int4) 
 }
 
 const getSongInPlaylist = `-- name: GetSongInPlaylist :many
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at from playlist_song p INNER JOIN songs s ON p.song_id = s.id WHERE p.playlist_id = $1
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at , a.name as artist_name, a.avatar_url 
+from playlist_song p 
+INNER JOIN songs s ON p.song_id = s.id 
+LEFT JOIN artist a on s.artist_id = a.id
+WHERE p.playlist_id = $1
 `
 
-func (q *Queries) GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error) {
+type GetSongInPlaylistRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+}
+
+func (q *Queries) GetSongInPlaylist(ctx context.Context, playlistID int32) ([]GetSongInPlaylistRow, error) {
 	rows, err := q.db.Query(ctx, getSongInPlaylist, playlistID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetSongInPlaylistRow{}
 	for rows.Next() {
-		var i Song
+		var i GetSongInPlaylistRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -158,6 +177,8 @@ func (q *Queries) GetSongInPlaylist(ctx context.Context, playlistID int32) ([]So
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
+			&i.AvatarUrl,
 		); err != nil {
 			return nil, err
 		}

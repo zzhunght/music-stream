@@ -41,7 +41,7 @@ func main() {
 
 	store := initial.InitDB(env.DatabaseDestination)
 	DBMigration(env.DatabaseDestination)
-	// go StartRedisWorker(redisOpt, mailsender, store, rdb)
+	go StartRedisWorker(redisOpt, mailsender, store, rdb)
 	// go StartGRPCServer(store, env, taskClient, mailsender, mq, rdb)
 	StartHttpServer(store, env, taskClient, mailsender, mq, rdb)
 }

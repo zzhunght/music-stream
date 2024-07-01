@@ -1,11 +1,7 @@
 package router
 
-import (
-	db "music-app-backend/sqlc"
+import "github.com/gin-gonic/gin"
 
-	"github.com/gin-gonic/gin"
-)
-
-func setUpAlbumRouter(r *gin.RouterGroup, store db.SQLStore) {
+func (r *Router) setUpAlbumRouter(route *gin.RouterGroup) {
 
 }

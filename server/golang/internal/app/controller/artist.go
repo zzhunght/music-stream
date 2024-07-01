@@ -50,8 +50,8 @@ func (c *ArtistController) GetArtistSong(ctx *gin.Context) {
 	}
 
 	data := struct {
-		Songs  []db.Song `json:"songs"`
-		Artist db.Artist `json:"artist"`
+		Songs  []db.GetSongOfArtistRow `json:"songs"`
+		Artist db.Artist               `json:"artist"`
 	}{
 		Songs:  songs,
 		Artist: artist,

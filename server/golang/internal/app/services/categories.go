@@ -6,10 +6,10 @@ import (
 )
 
 type CategoriesService struct {
-	store db.SQLStore
+	store *db.SQLStore
 }
 
-func NewCategoriesService(store db.SQLStore) *CategoriesService {
+func NewCategoriesService(store *db.SQLStore) *CategoriesService {
 	return &CategoriesService{
 		store: store,
 	}

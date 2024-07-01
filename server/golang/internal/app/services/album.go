@@ -6,10 +6,10 @@ import (
 )
 
 type AlbumService struct {
-	store db.SQLStore
+	store *db.SQLStore
 }
 
-func NewAlbumServices(store db.SQLStore) *AlbumService {
+func NewAlbumServices(store *db.SQLStore) *AlbumService {
 	return &AlbumService{
 		store: store,
 	}
@@ -17,4 +17,8 @@ func NewAlbumServices(store db.SQLStore) *AlbumService {
 
 func (s *AlbumService) GetNewAlbums(ctx context.Context) ([]db.Album, error) {
 	return s.store.GetNewAlbum(ctx)
+}
+
+func (s *AlbumService) GetAlbumSongs(ctx context.Context, album_id int32) ([]db.GetAlbumSongRow, error) {
+	return s.store.GetAlbumSong(ctx, album_id)
 }

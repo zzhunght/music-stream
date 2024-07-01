@@ -6,10 +6,10 @@ import (
 )
 
 type SongService struct {
-	store db.SQLStore
+	store *db.SQLStore
 }
 
-func NewSongService(store db.SQLStore) *SongService {
+func NewSongService(store *db.SQLStore) *SongService {
 	return &SongService{
 		store: store,
 	}

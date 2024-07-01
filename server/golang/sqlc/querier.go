@@ -30,12 +30,14 @@ type Querier interface {
 	CreateAlbum(ctx context.Context, arg CreateAlbumParams) (Album, error)
 	CreateArtist(ctx context.Context, arg CreateArtistParams) (Artist, error)
 	CreateCategories(ctx context.Context, name string) (Category, error)
-	CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error)
+	CreateComment(ctx context.Context, arg CreateCommentParams) (Comment, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateSong(ctx context.Context, arg CreateSongParams) (Song, error)
+	CreateUserPlaylist(ctx context.Context, arg CreateUserPlaylistParams) (Playlist, error)
 	DeleteAlbum(ctx context.Context, id int32) error
 	DeleteArtist(ctx context.Context, id int32) error
 	DeleteCategories(ctx context.Context, id int32) error
+	DeleteComment(ctx context.Context, id int32) error
 	DeleteManyArtist(ctx context.Context, ids []int32) error
 	DeletePlaylist(ctx context.Context, arg DeletePlaylistParams) error
 	DeleteSession(ctx context.Context, id uuid.UUID) error
@@ -47,6 +49,7 @@ type Querier interface {
 	GetAlbumSong(ctx context.Context, albumID int32) ([]GetAlbumSongRow, error)
 	GetAlbums(ctx context.Context, arg GetAlbumsParams) ([]Album, error)
 	GetArtistById(ctx context.Context, id int32) (Artist, error)
+	GetCommentById(ctx context.Context, id int32) (Comment, error)
 	GetLatestAlbum(ctx context.Context) ([]GetLatestAlbumRow, error)
 	GetListArtists(ctx context.Context, nameSearch pgtype.Text) ([]Artist, error)
 	GetNewAlbum(ctx context.Context) ([]Album, error)
@@ -56,13 +59,15 @@ type Querier interface {
 	GetRecommentArtist(ctx context.Context) ([]Artist, error)
 	GetSecretKey(ctx context.Context, email string) (pgtype.Text, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
+	GetSongByAlbum(ctx context.Context, arg GetSongByAlbumParams) ([]GetSongByAlbumRow, error)
 	GetSongByID(ctx context.Context, id int32) (GetSongByIDRow, error)
 	GetSongById(ctx context.Context, id int32) (GetSongByIdRow, error)
 	GetSongBySongCategory(ctx context.Context, arg GetSongBySongCategoryParams) ([]GetSongBySongCategoryRow, error)
 	GetSongCategories(ctx context.Context) ([]Category, error)
-	GetSongInPlaylist(ctx context.Context, playlistID int32) ([]Song, error)
+	GetSongComment(ctx context.Context, songID int32) ([]GetSongCommentRow, error)
+	GetSongInPlaylist(ctx context.Context, playlistID int32) ([]GetSongInPlaylistRow, error)
 	GetSongNotInAlbum(ctx context.Context, arg GetSongNotInAlbumParams) ([]GetSongNotInAlbumRow, error)
-	GetSongOfArtist(ctx context.Context, id int32) ([]Song, error)
+	GetSongOfArtist(ctx context.Context, id int32) ([]GetSongOfArtistRow, error)
 	GetSongs(ctx context.Context, arg GetSongsParams) ([]GetSongsRow, error)
 	RemoveSongFromAlbum(ctx context.Context, arg RemoveSongFromAlbumParams) error
 	RemoveSongFromPlaylist(ctx context.Context, arg RemoveSongFromPlaylistParams) error

@@ -3,21 +3,20 @@ package router
 import (
 	"music-app-backend/internal/app/controller"
 	"music-app-backend/internal/app/services"
-	db "music-app-backend/sqlc"
 
 	"github.com/gin-gonic/gin"
 )
 
-func setUpCategoriesRouter(r *gin.RouterGroup, store db.SQLStore) {
+func (r *Router) setUpCategoriesRouter(route *gin.RouterGroup) {
 
-	categoriesService := services.NewCategoriesService(store)
+	categoriesService := services.NewCategoriesService(r.store)
 	categoriesHandler := controller.NewCategoriesController(categoriesService)
 
-	route := r.Group("/artist")
+	categoriesRoute := route.Group("/categories")
 	{
-		route.GET("/categories", categoriesHandler.GetCategories)
-		route.POST("/categories", categoriesHandler.CreateCategory)
-		route.PUT("/categories", categoriesHandler.UpdateCategory)
-		route.DELETE("/categories/:category_id", categoriesHandler.DeleteCategory)
+		categoriesRoute.GET("/", categoriesHandler.GetCategories)
+		categoriesRoute.POST("", categoriesHandler.CreateCategory)
+		categoriesRoute.PUT("/", categoriesHandler.UpdateCategory)
+		categoriesRoute.DELETE("/:category_id", categoriesHandler.DeleteCategory)
 	}
 }

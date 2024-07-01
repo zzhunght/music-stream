@@ -6,10 +6,10 @@ import (
 )
 
 type ArtistService struct {
-	store db.SQLStore
+	store *db.SQLStore
 }
 
-func NewArtistService(store db.SQLStore) *ArtistService {
+func NewArtistService(store *db.SQLStore) *ArtistService {
 	return &ArtistService{
 		store: store,
 	}
@@ -19,7 +19,7 @@ func (s *ArtistService) RecommendedArtist(ctx context.Context) ([]db.Artist, err
 	return s.store.GetRecommentArtist(ctx)
 }
 
-func (s *ArtistService) GetArtistSong(ctx context.Context, artist_id int) ([]db.Song, error) {
+func (s *ArtistService) GetArtistSong(ctx context.Context, artist_id int) ([]db.GetSongOfArtistRow, error) {
 	return s.store.GetSongOfArtist(ctx, int32(artist_id))
 }
 

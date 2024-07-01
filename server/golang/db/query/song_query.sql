@@ -46,7 +46,7 @@ WHERE s.id = $1;
 
 
 -- name: GetSongOfArtist :many
-SELECT s.*
+SELECT s.*, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE a.id = $1;
@@ -98,6 +98,16 @@ FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE s.id in (
     SELECT song_id from song_categories WHERE category_id = $1
+) 
+LIMIT COALESCE(sqlc.arg(size)::int, 50)
+OFFSET COALESCE(sqlc.arg(start)::int, 0);
+
+-- name: GetSongByAlbum :many
+SELECT s.*, a.name as artist_name, a.avatar_url
+FROM songs s
+LEFT JOIN artist a on s.artist_id = a.id
+WHERE s.id in (
+    SELECT song_id from albums_songs WHERE album_id = $1
 ) 
 LIMIT COALESCE(sqlc.arg(size)::int, 50)
 OFFSET COALESCE(sqlc.arg(start)::int, 0);

@@ -3,17 +3,15 @@ package router
 import (
 	"music-app-backend/internal/app/controller"
 	"music-app-backend/internal/app/services"
-	"music-app-backend/message"
-	"music-app-backend/sqlc"
 
 	"github.com/gin-gonic/gin"
 )
 
-func setUpSongRouter(r *gin.RouterGroup, store sqlc.SQLStore, messageQueue *message.RabbitMQProvider) {
-	services := services.NewSongService(store)
-	handler := controller.NewSongController(services, messageQueue)
+func (r *Router) setUpSongRouter(route *gin.RouterGroup) {
+	services := services.NewSongService(r.store)
+	handler := controller.NewSongController(services, r.messageQueue)
 
-	song_routes := r.Group("/song")
+	song_routes := route.Group("/song")
 	{
 		song_routes.GET("/new-song", handler.GetNewsSong)
 		song_routes.GET("/admin", handler.AdminGetSong)

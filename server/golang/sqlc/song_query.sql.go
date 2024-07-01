@@ -250,6 +250,71 @@ func (q *Queries) GetRandomSong(ctx context.Context) ([]GetRandomSongRow, error)
 	return items, nil
 }
 
+const getSongByAlbum = `-- name: GetSongByAlbum :many
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
+FROM songs s
+LEFT JOIN artist a on s.artist_id = a.id
+WHERE s.id in (
+    SELECT song_id from albums_songs WHERE album_id = $1
+) 
+LIMIT COALESCE($3::int, 50)
+OFFSET COALESCE($2::int, 0)
+`
+
+type GetSongByAlbumParams struct {
+	AlbumID int32 `json:"album_id"`
+	Start   int32 `json:"start"`
+	Size    int32 `json:"size"`
+}
+
+type GetSongByAlbumRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+}
+
+func (q *Queries) GetSongByAlbum(ctx context.Context, arg GetSongByAlbumParams) ([]GetSongByAlbumRow, error) {
+	rows, err := q.db.Query(ctx, getSongByAlbum, arg.AlbumID, arg.Start, arg.Size)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSongByAlbumRow{}
+	for rows.Next() {
+		var i GetSongByAlbumRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Thumbnail,
+			&i.ArtistID,
+			&i.Path,
+			&i.Lyrics,
+			&i.Duration,
+			&i.ReleaseDate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.ArtistName,
+			&i.AvatarUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSongByID = `-- name: GetSongByID :one
 
 SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url, 
@@ -406,21 +471,36 @@ func (q *Queries) GetSongBySongCategory(ctx context.Context, arg GetSongBySongCa
 }
 
 const getSongOfArtist = `-- name: GetSongOfArtist :many
-SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at
+SELECT s.id, s.name, s.thumbnail, s.artist_id, s.path, s.lyrics, s.duration, s.release_date, s.created_at, s.updated_at, a.name as artist_name, a.avatar_url
 FROM songs s
 LEFT JOIN artist a on s.artist_id = a.id
 WHERE a.id = $1
 `
 
-func (q *Queries) GetSongOfArtist(ctx context.Context, id int32) ([]Song, error) {
+type GetSongOfArtistRow struct {
+	ID          int32            `json:"id"`
+	Name        string           `json:"name"`
+	Thumbnail   pgtype.Text      `json:"thumbnail"`
+	ArtistID    int32            `json:"artist_id"`
+	Path        pgtype.Text      `json:"path"`
+	Lyrics      pgtype.Text      `json:"lyrics"`
+	Duration    pgtype.Int4      `json:"duration"`
+	ReleaseDate pgtype.Timestamp `json:"release_date"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+	ArtistName  pgtype.Text      `json:"artist_name"`
+	AvatarUrl   pgtype.Text      `json:"avatar_url"`
+}
+
+func (q *Queries) GetSongOfArtist(ctx context.Context, id int32) ([]GetSongOfArtistRow, error) {
 	rows, err := q.db.Query(ctx, getSongOfArtist, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Song{}
+	items := []GetSongOfArtistRow{}
 	for rows.Next() {
-		var i Song
+		var i GetSongOfArtistRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -432,6 +512,8 @@ func (q *Queries) GetSongOfArtist(ctx context.Context, id int32) ([]Song, error)
 			&i.ReleaseDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ArtistName,
+			&i.AvatarUrl,
 		); err != nil {
 			return nil, err
 		}

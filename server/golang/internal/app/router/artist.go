@@ -3,19 +3,18 @@ package router
 import (
 	"music-app-backend/internal/app/controller"
 	"music-app-backend/internal/app/services"
-	db "music-app-backend/sqlc"
 
 	"github.com/gin-gonic/gin"
 )
 
-func setUpArtistRouter(r *gin.RouterGroup, store db.SQLStore) {
+func (r *Router) setUpArtistRouter(route *gin.RouterGroup) {
 
-	artistService := services.NewArtistService(store)
+	artistService := services.NewArtistService(r.store)
 	artistHandler := controller.NewArtistController(artistService)
 
-	route := r.Group("/artist")
+	artistRoute := route.Group("/artist")
 	{
-		route.GET("/recommendations", artistHandler.GetRecommendArtist)
-		route.GET("/song/:artist_id", artistHandler.GetArtistSong)
+		artistRoute.GET("/recommendations", artistHandler.GetRecommendArtist)
+		artistRoute.GET("/song/:artist_id", artistHandler.GetArtistSong)
 	}
 }
